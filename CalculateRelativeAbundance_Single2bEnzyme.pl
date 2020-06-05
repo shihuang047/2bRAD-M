@@ -34,7 +34,7 @@ DESCRIPTION
 USAGE
     perl $0
 Required:
-    -l <str>    The filepath of the input filepath list (the lines that begin with # will be ignored) e.g: sample_name<tab>data_path(fa|fq)(.gz).
+    -l <str>    The path of the input filepath list (the lines that begin with # will be ignored) e.g: sample_name<tab>data_path(fa|fq)(.gz).
     -d <str>    The database filepath.
     -t <str>    The taxonomy level of the taxa-specific 2b-RAD database used. It should be one of the following: kingdom,phylum,class,order,family,genus,specie,strain.
     -s <str>    One of the type 2b restriction enzymes (sites).

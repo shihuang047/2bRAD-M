@@ -33,7 +33,7 @@ DESCRIPTION
 USAGE
 	perl $0
 PARAMETERS
-	-l  <str> The filepath of the input filepath list (the line which begins with # will be ignored)
+	-l  <str> The path of the input filepath list (the line which begins with # will be ignored)
 	       eg: sample_name<tab>...
 	-s  <int> One or multiple type 2b restriction enzymes (sites). The selected sites should be separated by comma.
 	       [1]CspCI  [9]BplI
@@ -48,7 +48,7 @@ PARAMETERS
 	-io <str> The input and output directory
 OPTIONS
 	-m  <str> Whether the taxa idenfication or abundance estimation should take into account for the 2b-RAD taxa-specific markers from more than one restriction sites [combine]
-	-g  <int> The G-score threshold [$g_score_threshold, it means >=$g_score_threshold] To control the false-positive in the species identification, G score was derived for each speciesidentified within a sample, which is a harmonious mean of read coverage of 2b-RAD markers belongs to a species and number of all possible 2b-RAD markers of this species. Therecommended/default threshold is 5.
+	-g  <int> The G-score threshold [$g_score_threshold, it means >=$g_score_threshold] To control the false-positive in the species identification, G score was derived for each species identified within a sample, which is a harmonious mean of read coverage of 2b-RAD markers belongs to a species and number of all possible 2b-RAD markers of this species. Therecommended/default threshold is 5.
 AUTHOR:  $author $time\e[0m\n";
 }
 
