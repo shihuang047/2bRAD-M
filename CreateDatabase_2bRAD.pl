@@ -13,7 +13,7 @@ my $time="2020.06.03";
 my $cpu ||=10;
 my $remove_redundant ||="no";
 
-select STDOUT;$|=1;#标准输出清楚缓存
+select STDOUT;$|=1;# cache cleaning
 
 my($list,$site,$type,$outdir,$verbose);
 GetOptions(
@@ -24,10 +24,10 @@ GetOptions(
 
 		"c:i"  => \$cpu,
 		"v:s"  => \$verbose,
-		"r:s"  => \$remove_redundant,#移除冗余标签 yes or no
+		"r:s"  => \$remove_redundant,# yes or no, default value is "no"
 		);
 
-sub usage{#帮助
+sub usage{# help
 print STDERR "\e[;33;1m
 DESCRIPTION
   It constructs the taxa-specific 2b-RAD reference genome database from a whole-genome reference database.
@@ -35,7 +35,7 @@ USAGE
   perl $0
 PARAMETERS
   -l <str> genome classification list (the line which begins with # will be ignored)
-         eg:unique_name<tab>kingdom<tab>phylum<tab>class<tab>order<tab>family<tab>genus<tab>specie<tab>strain<tab>genome_path
+         eg:GCF<tab>kingdom<tab>phylum<tab>class<tab>order<tab>family<tab>genus<tab>species<tab>strain<tab>genome_path
   -s <int>  One or multiple type 2b restriction enzymes (sites).
          [1]CspCI  [9]BplI
          [2]AloI   [10]FalI
@@ -45,12 +45,12 @@ PARAMETERS
          [6]CjeI   [14]Hin4I
          [7]PpiI   [15]AlfI
          [8]PsrI   [16]BslFI
-  -t <str> The database level. One or more taxonomy level of the 2b-RAD reference database can be specified: kingdom,phylum,class,order,family,genus,specie,strain. Use 'all' for any levels. (comma separated).
+  -t <str> The database level. One or more taxonomy level of the 2b-RAD reference database can be specified: kingdom,phylum,class,order,family,genus,species,strain. Use 'all' for any levels. (comma separated).
   -o <str> outdir (if not exists,it will be created)
 OPTION
   -c <int> cpu [$cpu]
   -v <str> verbose
-AUTHOR:  $author $time\e[0m\n";
+Last update:  $time\e[0m\n";
 }
 
 unless($list && $site && $type && $outdir){
@@ -58,7 +58,7 @@ unless($list && $site && $type && $outdir){
 	exit;
 }
 
-my %hs_site2enzyme=(#酶切位点对应表
+my %hs_site2enzyme=(# enzymes
 	'1'  =>  'CspCI',	'2'  =>  'AloI',
 	'3'  =>  'BsaXI',	'4'  =>  'BaeI',
 	'5'  =>  'BcgI',	'6'  =>  'CjeI',
@@ -76,12 +76,12 @@ my %hs_type_database=(
 			'order'   => '4',
 			'family'  => '5',
 			'genus'   => '6',
-			'specie'  => '7',
+			'species'  => '7',
 			'strain'  => '8',
 			);
-my @head=('#Name','Kingdom','Phylum','Class','Order','Family','Genus','Specie','Strain');
+my @head=('#Name','Kingdom','Phylum','Class','Order','Family','Genus','Species','Strain');
 
-#判断需要分析的类别
+# check the parameter -t: specify the taxonomic level of 2b-RAD genome database
 my %hs_type;
 if($type=~/all/){
 	%hs_type=%hs_type_database;
@@ -97,40 +97,40 @@ if($type=~/all/){
 		}
 	}
 }
-#判断酶切位点是否存在
+# check the parameter -s:
 unless(exists $hs_site2enzyme{$site}){
 	&usage;
 	print STDERR "-s parameter error: cannot find $site\n";
 	exit;
 }
 
-#判断-r $remove_redundant参数
+#check the parameter -r: using default value "no"
 unless($remove_redundant eq "yes" || $remove_redundant eq "no"){
 	&usage;
 	print STDERR "-r parameter error: cannot find $remove_redundant\n";
 	exit;
 }
 
-&CheckDir($outdir);#创建文件夹
-&CheckDir("$outdir/$hs_site2enzyme{$site}");#创建某个酶的文件夹
+&CheckDir($outdir);# create the output directory
+&CheckDir("$outdir/$hs_site2enzyme{$site}");#within the output directory, create sub-directories for enzymes.
 
-#电子酶切
-&CheckDir("$outdir/$hs_site2enzyme{$site}/enzyme_result");#创建电子酶切结果文件夹
+# digital digestion
+&CheckDir("$outdir/$hs_site2enzyme{$site}/enzyme_result");# for each enzyme, create a directory for the fasta files with 2b-RAD reads by digital digestion from the whole genome
 
-print STDOUT "###Electron digestion start, ",`date`;#输出日志
+print STDOUT "###Electron digestion start, ",`date`;# output the log file
 open LIST,"$list" or die "cannot open $list\n";
-my $pm=new Parallel::ForkManager($cpu); #多线程
+my $pm=new Parallel::ForkManager($cpu); # multi-threads computation
 while(<LIST>){
 	my $pid=$pm->start and next;
 	my $line=$_;
-	if(/^#/ || /^$/){;}else{#去除注释行和空行
+	if(/^#/ || /^$/){;}else{# remove blank lines or lines starting with #
 		chomp($line);
 		my @tmp=split /\t/,$line;
-		if(-e $tmp[-1]){#检测文件是否存在
-			if(defined($verbose)){#冗长模式
+		if(-e $tmp[-1]){# check the availability of a genome fasta file
+			if(defined($verbose)){# verbose model
 				print STDOUT "[Electron digestion] Analyze $tmp[0]\n";
 			}
-			system("$Bin/EeTt.pl -i $tmp[-1] -t 1 -s $site -od $outdir/$hs_site2enzyme{$site}/enzyme_result/ -op $tmp[0] -gz no 1> /dev/null; mv $outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].$hs_site2enzyme{$site}.fa $outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa");#电子酶切，生成$tmp[0].fa
+			system("$Bin/2bRADExtraction.pl -i $tmp[-1] -t 1 -s $site -od $outdir/$hs_site2enzyme{$site}/enzyme_result/ -op $tmp[0] -gz no 1> /dev/null; mv $outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].$hs_site2enzyme{$site}.fa $outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa");# digital digestion
 		}else{
 			print STDERR "[ERROR] $tmp[-1] does not exist,please check your genome file\n";
 			exit;
@@ -140,32 +140,32 @@ while(<LIST>){
 }
 $pm->wait_all_children;
 close LIST;
-print STDOUT "###Electron digestion complete, ",`date`;#输出日志
+print STDOUT "###Electron digestion complete, ",`date`;# STDOUT
 
-#标签记录和鉴定
-print STDOUT "###Record tag and Identification label start, ",`date`;#输出日志
-for my $level(sort {$hs_type{$a}<=>$hs_type{$b}} keys %hs_type){
-	#记录每个标签的分类
-	print STDOUT "###($level) Record tag start, ",`date`;#输出日志
+# Record the taxonomies of each 2b-RAD tag and identify taxa-specifc 2b-RAD tags
+print STDOUT "###Record the taxonomies of each 2b-RAD tag and identification of taxa-specifc 2b-RAD tags -- start, ",`date`;#STDOUT
+for my $level(sort {$hs_type{$a}<=>$hs_type{$b}} keys %hs_type){ iterate all taxonomic levels of 2b-RAD database
+	#Record the taxonomies of each 2b-RAD tag
+	print STDOUT "###($level) Record the taxonomies of each 2b-RAD tag -- start, ",`date`;#STDOUT
 	my %hash;
 	open LIST,"$list" or die "cannot open $list\n";
 	while(<LIST>){
-		next if(/^#/ || /^$/);#去除注释行和空行
+		next if(/^#/ || /^$/);# remove blank lines or lines starting with #
 		my $line=$_;
 		chomp($line);
-		my @tmp=split /\t/,$line;
-		my $class=join("\t",@tmp[1..$hs_type{$level}]);
-		if(defined($verbose)){#冗长模式
+		my @tmp=split /\t/,$line; # separate list items by \t
+		my $class=join("\t",@tmp[1..$hs_type{$level}]); # concatenate the full taxonomic annotation
+		if(defined($verbose)){# verbose model
 			print STDOUT "[($level) Record tag] Analyze $tmp[0]\n";
 		}
-		open EN,"$outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa" or die "cannot open $outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa\n";
+		open EN,"$outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa" or die "cannot open $outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa\n"; # open the 2b-RAD genome file by digital digestion
 		while(<EN>){
 			chomp;
 			next if(/^>/);
 			my $tag=$_;
-			if(exists $hash{$tag}){#标签正向是否存在判断
-				$hash{$tag}{$class}++;
-			}else{#标签反向互补，并记录
+			if(exists $hash{$tag}){# read in all 2b-RAD tags
+				$hash{$tag}{$class}++; # record the corresponding taxonomies of each 2b-RAD tag
+			}else{# check the reverse compliment
 				$tag=~tr/ATCG/TAGC/;
 				$tag=reverse($tag);
 				$hash{$tag}{$class}++;
@@ -174,33 +174,34 @@ for my $level(sort {$hs_type{$a}<=>$hs_type{$b}} keys %hs_type){
 		close EN;
 	}
 	close LIST;
-	print STDOUT "###($level) Record tag complete, ",`date`;#输出日志
+	print STDOUT "###($level) Record the taxonomies of each 2b-RAD tag -- complete, ",`date`;# STDOUT
 
-	print STDOUT "###($level) Identification label start, ",`date`;#输出日志
+	print STDOUT "###($level) Identification of taxa-specifc 2b-RAD tags -- start, ",`date`;# STDOUT
 #	&CheckDir("$outdir/$hs_site2enzyme{$site}/database");
 	open OU,"|gzip > $outdir/$hs_site2enzyme{$site}/$level.gz" or die "can not open $outdir/$hs_site2enzyme{$site}/$level.gz\n";
-	print OU join("\t",@head[0..$hs_type{$level}]),"\tTags...\n";
-	#计算每个基因组在各水平下unique标签数目，并输出每个水平每个基因组unique标签
+	print OU join("\t",@head[0..$hs_type{$level}]),"\tTags...\n"; # output headers including taxonomies of each 2b-RAD tag
+	# compute the number of 2b-RAD tags specific to a taxon for a genome
+    # output all taxa-specific 2b-RAD tags of a genome into the filepath specified
 	open LIST,"$list" or die "cannot open $list\n";
 	while(<LIST>){
-		next if(/^#/ || /^$/);#去除注释行和空行
+		next if(/^#/ || /^$/);# remove blank lines and lines starting with #
 		chomp;
 		my @tmp=split /\t/;
-		if(defined($verbose)){#冗长模式
+		if(defined($verbose)){# verbose model
 			print STDOUT "[(level) Identification label] Analyze $tmp[0]\n";
 		}
-		print OU join("\t",@tmp[0..$hs_type{$level}]);
+		print OU join("\t",@tmp[0..$hs_type{$level}]); # concatenate the full taxonomy annotation
 		open EN,"$outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa" or die "cannot open $outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa\n";
 		while(<EN>){
 			chomp;
 			next if(/^>/);
-			my $detection_tag=$_;#待检测的标签
-			unless(exists $hash{$detection_tag}){#判断标签是否正向存在，不存在则进行反向互补
+			my $detection_tag=$_;# 2b-RAD tags to be examined
+			unless(exists $hash{$detection_tag}){# check if a 2b-RAD tag exist in the hash table, otherwise it should exist in the hash table in the reverse-compliment format
 				$detection_tag=~tr/ATCG/TAGC/;
 				$detection_tag=reverse($detection_tag);
 			}
-			if(keys %{$hash{$detection_tag}}==1){
-				print OU "\t$detection_tag";
+			if(keys %{$hash{$detection_tag}}==1){ # examine if a 2b-RAD tag specific to a given taxon
+				print OU "\t$detection_tag"; # output the 2b-RAD tag sequence into database file (last column)
 			}
 		}
 		close EN;
@@ -209,28 +210,29 @@ for my $level(sort {$hs_type{$a}<=>$hs_type{$b}} keys %hs_type){
 	close LIST;
 	close OU;
 	undef %hash;
-	print STDOUT "###($level) Identification label complete, ",`date`;#输出日志
-	#去除冗余标签
-	if($remove_redundant eq "yes"){
-		print STDOUT "###($level) Remove redundant start, ",`date`;#输出日志
-		open IN,"gzip -dc $outdir/$hs_site2enzyme{$site}/$level.gz|" or die "can not open $outdir/$hs_site2enzyme{$site}/$level.gz\n";#打开冗余标签
-		open OU,"|gzip > $outdir/$hs_site2enzyme{$site}/$level\_norebundancy.gz" or die "cannot open $outdir/$hs_site2enzyme{$site}/$level\_norebundancy.gz\n"; #输出去除冗余标签后文件
+	print STDOUT "###($level) Identification of taxa-specifc 2b-RAD tags -- complete, ",`date`; #STDOUT
+	# remove the redundant 2b-RAD markers within a given genome
+    # The definition of a "redundant" 2bRAD marker: a 2b-RAD tag can be identified as a taxa-specific marker but occurs more than once in the original genome.
+	if($remove_redundant eq "yes"){ # The default value is "no" not displaying to users in the help information
+		print STDOUT "###($level) Remove redundant 2b-RAD markers -- start, ",`date`;# STDOUT
+		open IN,"gzip -dc $outdir/$hs_site2enzyme{$site}/$level.gz|" or die "can not open $outdir/$hs_site2enzyme{$site}/$level.gz\n";# open the database file
+		open OU,"|gzip > $outdir/$hs_site2enzyme{$site}/$level\_norebundancy.gz" or die "cannot open $outdir/$hs_site2enzyme{$site}/$level\_norebundancy.gz\n"; #output the de-redundant database file
 		my $num_tag_col;
 		while(<IN>){
 			chomp;
 			my $line=$_;
 			my %hs_unique_tag;
 			my @tmp=split /\t/,$line;
-			if($.==1){
+			if($.==1){ # line number ==1 or header
 				$num_tag_col=$#tmp;
 				print OU "$line\n";
 				next;
 			}
-			for my $i($num_tag_col .. $#tmp){
+			for my $i($num_tag_col .. $#tmp){ # iterate columns for each line
 				$hs_unique_tag{$tmp[$i]}++;
 			}
 			print OU join("\t",@tmp[0 .. $num_tag_col-1]);
-			for my $i($num_tag_col .. $#tmp){
+			for my $i($num_tag_col .. $#tmp){ # check how many times a 2b-RAD tag show up within a genome
 				if($hs_unique_tag{$tmp[$i]}==1){
 					print OU "\t$tmp[$i]";
 				}
@@ -240,54 +242,54 @@ for my $level(sort {$hs_type{$a}<=>$hs_type{$b}} keys %hs_type){
 		}
 		close IN;
 		close OU;
-		print STDOUT "###($level) Remove redundant complete, ",`date`;#输出日志
+		print STDOUT "###($level) Remove redundant 2b-RAD markers -- complete, ",`date`;# STDOUT
 	}
 }
-print STDOUT "###Record tag and Identification label complete, ",`date`;#输出日志
+print STDOUT "###Record the taxonomies of each 2b-RAD tag and identification of taxa-specifc 2b-RAD tags -- complete, ",`date`;#STDOUT
 
-print STDOUT "###Data stat start, ",`date`;#输出日志
+print STDOUT "###The statistical summary of 2b-RAD markers -- start, ",`date`;# STDOUT
 my %stat;
-#统计每个基因组总标签数
-open LIST,"$list" or die "cannot open $list\n";
+# compute the total number of 2b-RAD tags within a genome
+open LIST,"$list" or die "cannot open $list\n"; # open each genome in the genome classification list
 while(<LIST>){
-	next if(/^#/ || /^$/);#去除注释行和空行
+	next if(/^#/ || /^$/);# remove blank lines and lines starting with #
 	chomp;
 	my @tmp=split /\t/;
 	open EN,"$outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa" or die "cannot open $outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa\n";
 	while(<EN>){
 		chomp;
-		$stat{$tmp[0]}{"all"}++ if(/^>/);
+		$stat{$tmp[0]}{"all"}++ if(/^>/); # the total number of 2b-RAD tags in the genome
 	}
 	close EN;
-#	system("gzip -f $outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa"); #压缩酶切文件
+#	system("gzip -f $outdir/$hs_site2enzyme{$site}/enzyme_result/$tmp[0].fa"); # compress
 }
 close LIST;
 
-#统计每个基因组各水平unique标签数
-for my $i(keys %hs_type_database){
+# compute the total number of 2b-RAD taxa-specific markers within a genome
+for my $i(keys %hs_type_database){ #iterate databases at different taxonomic levels
 	next unless(-e "$outdir/$hs_site2enzyme{$site}/$i.gz");
-	open IN,"gzip -dc $outdir/$hs_site2enzyme{$site}/$i.gz|" or die "cannot open $outdir/$hs_site2enzyme{$site}/$i.gz\n";
+	open IN,"gzip -dc $outdir/$hs_site2enzyme{$site}/$i.gz|" or die "cannot open $outdir/$hs_site2enzyme{$site}/$i.gz\n"; # open the file that have redundant 2b-RAD markers within a genome
 	while(<IN>){
 		chomp;
 		my $line=$_;
 		my @tmp=split /\t/,$line;
 		next if($.==1 && $line=~/^#/);
-		$stat{$tmp[0]}{$i}=$#tmp-$hs_type_database{$i};
+		$stat{$tmp[0]}{$i}=$#tmp-$hs_type_database{$i}; # the total number of 2b-RAD taxa-specific markers in the genome
 	}
 	close IN;
 }
 
-#输出
+# output
 open OU,">$outdir/$hs_site2enzyme{$site}/stat.xls" or die "cannot open $outdir/$hs_site2enzyme{$site}/stat.xls\n";
-print OU "#Unique_Name\tKingdom\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecie\tStrain\t";
-print OU "All_Tag\tKingdom_Unique\tPhylum_Unique\tClass_Unique\tOrder_Unique\tFamily_Unique\tGenus_Unique\tSpecie_Unique\tStrain_Unique\n";
+print OU "#Unique_Name\tKingdom\tPhylum\tClass\tOrder\tFamily\tGenus\tSpecies\tStrain\t";
+print OU "All_Tag\tKingdom_Unique\tPhylum_Unique\tClass_Unique\tOrder_Unique\tFamily_Unique\tGenus_Unique\tSpecies_Unique\tStrain_Unique\n";
 open LIST,"$list" or die "cannot open $list\n";
 while(<LIST>){
-	next if(/^#/ || /^$/);#去除注释行和空行
+	next if(/^#/ || /^$/);# remove blank lines and lines starting with #
 	chomp;
 	my @tmp=split /\t/;
 	$stat{$tmp[0]}{"all"}=0 unless(exists $stat{$tmp[0]}{"all"});
-	print OU join("\t",@tmp[0..$#tmp-1]),"\t",$stat{$tmp[0]}{"all"};#输出表头
+	print OU join("\t",@tmp[0..$#tmp-1]),"\t",$stat{$tmp[0]}{"all"};# headers
 	for my $i(sort {$hs_type_database{$a} <=> $hs_type_database{$b}} keys %hs_type_database){
 		if(exists $stat{$tmp[0]}{$i}){
 			print OU "\t$stat{$tmp[0]}{$i}";
@@ -300,20 +302,20 @@ while(<LIST>){
 close LIST;
 close OU;
 undef %stat;
-print STDOUT "###Data stat complete, ",`date`;#输出日志
+print STDOUT "###The statistical summary of 2b-RAD markers -- complete, ",`date`;# STDOUT
 
-print STDOUT "###Delete enzyme result start, ",`date`;#输出日志
-system("rm -rf $outdir/$hs_site2enzyme{$site}/enzyme_result/");#删除酶切结果
-print STDOUT "###Delete enzyme result complete, ",`date`;#输出日志
+print STDOUT "###Delete enzyme result start, ",`date`;# STDOUT
+system("rm -rf $outdir/$hs_site2enzyme{$site}/enzyme_result/");# delete the 2b-RAD genome fasta files generated from the whole genome
+print STDOUT "###Delete enzyme result complete, ",`date`;# STDOUT
 
 print STDOUT "ALL DONE, ",`date`;
 
-sub execute{#打印出并执行命令
+sub execute{# print the command line and execute
 	my $cmd = shift;
 	print "$cmd\n";
 	system($cmd);
 }
-sub CheckDir{#创建目录
+sub CheckDir{# create the directory
 	my $file = shift;
 	unless( -d $file ){
 		if( -d dirname($file) && -w dirname($file) ){system("mkdir $file");}

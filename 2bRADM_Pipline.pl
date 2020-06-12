@@ -149,7 +149,7 @@ unless($qual eq "no" || $qual eq "yes"){
 	exit;
 }
 #定性鉴定水平检测
-unless($level1 eq "kingdom" || $level1 eq "phylum" || $level1 eq "class" || $level1 eq "order" || $level1 eq "family" || $level1 eq "genus" || $level1 eq "specie" || $level1 eq "strain"){
+unless($level1 eq "kingdom" || $level1 eq "phylum" || $level1 eq "class" || $level1 eq "order" || $level1 eq "family" || $level1 eq "genus" || $level1 eq "species" || $level1 eq "strain"){
 	&usage;
 	print STDERR "Parameter -t is wrong. Cannot get $level1\n";
 	exit;
@@ -174,7 +174,7 @@ for my $i(@site1){
 
 #定量参数检测
 #定性鉴定水平检测
-unless($level2 eq "kingdom" || $level2 eq "phylum" || $level2 eq "class" || $level2 eq "order" || $level2 eq "family" || $level2 eq "genus" || $level2 eq "specie" || $level2 eq "strain"){
+unless($level2 eq "kingdom" || $level2 eq "phylum" || $level2 eq "class" || $level2 eq "order" || $level2 eq "family" || $level2 eq "genus" || $level2 eq "species" || $level2 eq "strain"){
 	&usage;
 	print STDERR "Parameter -t is wrong. Cannot get $level2\n";
 	exit;
@@ -319,7 +319,7 @@ my %gcf2classify_path;
 open ABFH,"$database/abfh_classify.txt" or die "cannot open $database/abfh_classify.txt\n";
 while(<ABFH>){
 	chomp;
-	next if(/^#unique_name/); #unique_name    kingdom phylum  class   order   family  genus   specie  strain  genome_pat
+	next if(/^#unique_name/); #unique_name    kingdom phylum  class   order   family  genus   species  strain  genome_pat
 	my @tmp=split /\t/;
 	$gcf2classify_path{$tmp[0]}=$_;
 }
