@@ -8,7 +8,7 @@ use FindBin qw($Bin);
 use File::Basename qw(dirname basename);
 use Parallel::ForkManager;
 
-my $author="Sunzheng, Zhangrongchao";
+my $author="Zheng Sun, Rongchao Zhang, Shi Huang";
 my $time="20200301";
 
 #定性参数
