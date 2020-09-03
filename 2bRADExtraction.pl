@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
-# Authors: Zheng Sun, Rongchao Zhang, Shi Huang 2020.06.03
+# Authors: Zheng Sun, Rongchao Zhang, Shi Huang 
+# Last update: 2020.06.03
 use strict;
 use warnings;
 use Getopt::Long;
