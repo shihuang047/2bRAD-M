@@ -31,5 +31,5 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  * [Species profiling for a single sample](doc/profile_single_sample.md)
  * [Merge species profiles for multiple samples](doc/profile_single_sample.md)
  
-## [Citing](docs/citing.md)
+## Citing
 
