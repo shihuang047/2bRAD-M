@@ -150,7 +150,7 @@ while(<LI>){
 				$hs_detected_GCF_tag{$class}{$hs_tag2GCF{$tag}[$i]}{$tag}=$hs_tag_theory_num{$class}{$hs_tag2GCF{$tag}[$i]}{$tag};
 			}
 		}else{#反向互补
-			$tag=~s/ATCG/TAGC/;
+			$tag=~tr/ATCG/TAGC/;
 			$tag=reverse($tag);
 			if(exists $hs_tag2GCF{$tag}){
 				my $class=$hs_GCF2class{$hs_tag2GCF{$tag}[0]};
