@@ -15,7 +15,7 @@ my $g_score_threshold ||=0;
 #Standard output for clearing cache
 select STDOUT;$|=1;
 
-my ($list,$site,$outdir);
+my ($list,$site,$outdir,$help);
 GetOptions(
 		"l:s" => \$list,
 		"s:s" => \$site,
@@ -23,6 +23,7 @@ GetOptions(
 
 		"m:s" => \$mark,
 		"g:i" => \$g_score_threshold,
+		"h|help:s" => \$help,
 		);
 
 
@@ -34,24 +35,29 @@ USAGE
 	perl $0
 PARAMETERS
 	-l  <str> The path of the input filepath list (the line which begins with # will be ignored)
-	       eg: sample_name<tab>...
+	          eg: sample_name<tab>...
 	-s  <int> One or multiple type 2b restriction enzymes (sites). The selected sites should be separated by comma.
-	       [1]CspCI  [9]BplI
-	       [2]AloI   [10]FalI
-	       [3]BsaXI  [11]Bsp24I
-	       [4]BaeI   [12]HaeIV
-	       [5]BcgI   [13]CjePI
-	       [6]CjeI   [14]Hin4I
-	       [7]PpiI   [15]AlfI
-	       [8]PsrI   [16]BslFI
-	       [17]All_Detected_Enzyme
+	          [1]CspCI  [9]BplI
+	          [2]AloI   [10]FalI
+	          [3]BsaXI  [11]Bsp24I
+	          [4]BaeI   [12]HaeIV
+	          [5]BcgI   [13]CjePI
+	          [6]CjeI   [14]Hin4I
+	          [7]PpiI   [15]AlfI
+	          [8]PsrI   [16]BslFI
+	          [17]All_Detected_Enzyme
 	-io <str> The input and output directory
 OPTIONS
 	-m  <str> Whether the taxa idenfication or abundance estimation should take into account for the 2b-RAD taxa-specific markers from more than one restriction sites [combine]
-	-g  <int> The G-score threshold [$g_score_threshold, it means >=$g_score_threshold] To control the false-positive in the species identification, G score was derived for each species identified within a sample, which is a harmonious mean of read coverage of 2b-RAD markers belongs to a species and number of all possible 2b-RAD markers of this species. Therecommended/default threshold is 5.
+	-g  <int> The G-score threshold [$g_score_threshold, it means >=$g_score_threshold] To control the false-positive in the species identification, G score was derived for each species identified within a sample, which is a harmonious mean of read coverage of 2b-RAD markers belongs to a species and number of all possible 2b-RAD markers of this species. Therecommended/default threshold is $g_score_threshold.
+	-h|help   print this help.
 AUTHOR:  $author $time\e[0m\n";
 }
 
+if(defined($help)){
+	&usage;
+	exit 0;
+}
 
 my %hs_site2enzyme=(#the codes for all restriction enzymes
 	'1'  =>  'CspCI',   '2'  =>  'AloI',
@@ -65,9 +71,8 @@ my %hs_site2enzyme=(#the codes for all restriction enzymes
 	);
 
 unless($list && $site && $outdir){
-	print "1\n";
 	&usage;
-	exit;
+	exit 1;
 }
 
 # check the availability of the taxa-specific 2b-RAD reference genome database
@@ -79,7 +84,7 @@ for $site(@site){
 	unless(exists $hs_site2enzyme{$site}){#检测酶切位点是否存在
 		&usage;
 		print STDERR "Parameter -s is wrong\n";
-		exit;
+		exit 1;
 	}
 }
 =pod
@@ -114,7 +119,7 @@ while(<LI>){#循环样品
 		if(-e "$outdir/$sample_name/$sample_name.$hs_site2enzyme{$site}.xls"){
 			push @use_site,$hs_site2enzyme{$site};
 		}else{
-			print STDERR "warning: cannot open $outdir/$sample_name/$sample_name.$hs_site2enzyme{$site}.xls\n";
+			print STDERR "warning: $sample_name cannot open $outdir/$sample_name/$sample_name.$hs_site2enzyme{$site}.xls\n";
 			next;#跳过没有鉴定的酶 文件
 		}
 		$cnt++;

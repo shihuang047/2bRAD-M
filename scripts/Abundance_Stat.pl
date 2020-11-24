@@ -1,4 +1,4 @@
-#!/data/software/install/miniconda3/envs/perl.5.26.2/bin/perl 
+#!/usr/bin/env perl
 use warnings;
 use strict;
 use Getopt::Long;

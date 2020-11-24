@@ -1,5 +1,5 @@
 #!/usr/bin/env perl
-# Authors: Zheng Sun, Rongchao Zhang, Shi Huang 
+# Authors: Zheng Sun, Rongchao Zhang, Shi Huang
 # Last update: 2020.06.03
 use strict;
 use warnings;
@@ -19,10 +19,14 @@ my $qbase ||=33;
 my $format ||="fa";
 my $gz ||="yes";
 my $q_control ||="yes";
+my $pear_cpu ||=1;
+#set software path
+my $pear ||="pear";
 
 select STDOUT;$|=1;# Standard output for clearing cache
 
 my (@input,$type,$site,$outdir,@outprefix);
+my $help;
 GetOptions(
 	"i:s{1,2}"  => \@input,# single-end or double-end reads
 	"t:i"  => \$type, #fa：reference genome data；fq：shotgun metagenomics data，single 2b-RAD tags，five concatenated 2b-RAD tags
@@ -38,7 +42,13 @@ GetOptions(
 	"p:i"  => \$percent, # Minimum percentage of bases that must have per-base quality score over [-q]
 	"b:i"  => \$qbase, # Quality values of bases
 	"fm:s" => \$format, # The output file format: fa/fq
-	); 
+
+	#software
+	"pe:s" => \$pear,#pear soft
+	"pc:i" => \$pear_cpu,#cpu of pear soft
+
+	"h|help:s" => \$help,
+	);
 
 sub usage{
 	print STDERR "\e[;33;1m
@@ -70,6 +80,7 @@ Required:
     -op <str>    The output prefix (recommended: sample name(s))
 Optional:
     -gz <str>    Whether the output file is compressed (yes or no) [$gz]
+    -h|help      print this help
 Optional (only applicable when -t equals 2, or 3, or 4, i.e. taking fastq data as input):
     -qc <str>    Whether quality control is required (yes or no) [$q_control]
     -n  <float>  Maximum percentage of ambiguity bases \"N\" [default: $ncount]
@@ -77,37 +88,43 @@ Optional (only applicable when -t equals 2, or 3, or 4, i.e. taking fastq data a
     -p  <int>    Minimum percentage of bases that must have per-base quality score over [-q] [default: $percent]
     -b  <int>    Phred quality score type [default: $qbase]
     -fm <str>    Output file format (fa or fq) [default: $format]
+    -pe  <str>   Path of pear soft [$pear]
+    -pc  <int>   Cpu of pear soft [$pear_cpu]
 Author  $author $time\e[0m\n";
+}
+
+if(defined($help)){
+	&usage;
+	exit 0;
 }
 
 unless(@input && $type && $site && $outdir && @outprefix){# parameters checking
 	&usage;
-	exit;
+	print STDERR "Please check parameter -i -t -s -od -op\n";
+	exit 1;
 }
 
 
-# set software
-my $flash="$Bin/flash";
 
 # checking input args
 unless($gz eq "yes" || $gz eq "no"){
 	&usage;
 	print STDERR "Parameter -gz is wrong\n";
-	exit;
+	exit 1;
 }
 unless($format eq "fa" || $format eq "fq"){
 	&usage;
 	print STDERR "Parameter -fm is wrong\n";
-	exit;
+	exit 1;
 }
 unless($q_control eq "yes" || $q_control eq "no"){
 	&usage;
 	print STDERR "Parameter -qc is wrong\n";
-	exit;
+	exit 1;
 }
 
 # Define the DNA sequences at a given restriction enzyme site
-my ($enzyme,@site,@start,@end);
+my ($enzyme,@site,@start,@end,$minpear,$maxpear);
 if( 1 == $site ){#CspCI
     @site = (
             '[AGCT]{11}CAA[AGCT]{5}GTGG[AGCT]{10}',
@@ -132,6 +149,8 @@ if( 1 == $site ){#CspCI
 	$enzyme="BsaXI";
 	@start = (0,33,69,105,141);
 	@end   = (35,71,107,143,180);
+	$minpear ||=173;
+	$maxpear ||=181;
 }elsif( 4 == $site ){#BaeI
     @site = (
             '[AGCT]{10}AC[AGCT]{4}GTA[CT]C[AGCT]{7}',
@@ -140,6 +159,8 @@ if( 1 == $site ){#CspCI
 	$enzyme="BaeI";
 	@start = (0,38,79,120,161);
 	@end   = (40,81,122,163,205);
+	$minpear ||=198;
+	$maxpear ||=206;
 }elsif( 5 == $site ){#BcgI
     @site = (
             '[AGCT]{10}CGA[AGCT]{6}TGC[AGCT]{10}',
@@ -148,6 +169,8 @@ if( 1 == $site ){#CspCI
 	$enzyme="BcgI";
 	@start = (0,36,75,114,153);
 	@end   = (38,77,116,155,195);
+	$minpear ||=188;
+	$maxpear ||=196;
 }elsif( 6 == $site ){#CjeI
     @site = (
             '[AGCT]{8}CCA[AGCT]{6}GT[AGCT]{9}',
@@ -186,6 +209,8 @@ if( 1 == $site ){#CspCI
 	$enzyme="FalI";
 	@start = (0,37,77,117,157);
 	@end   = (39,79,119,159,200);
+	$minpear ||=193;
+	$maxpear ||=201;
 }elsif( 11 == $site ){#Bsp24I
     @site = (
             '[AGCT]{8}GAC[AGCT]{6}TGG[AGCT]{7}',
@@ -236,11 +261,11 @@ if( 1 == $site ){#CspCI
 }else{
 	&usage;
 	print STDERR "The parameter -s is wrong\n";
-	exit;
+	exit 1;
 }
 
 &CheckDir($outdir);
-my $raw_reads_num=0; # check # of raw reads
+my $raw_reads_num=0;# check # of raw reads 如果涉及到拼接，shotgun双端 需要单独记录拼接前的reads数目
 
 if($#input==0 && $type==1 && $#outprefix==0){# reference genome(s)
 	print STDOUT "COMMAND: perl $0 -i $input[0] -t 1 -s $site -od $outdir -op $outprefix[0] -gz $gz\n";
@@ -248,50 +273,50 @@ if($#input==0 && $type==1 && $#outprefix==0){# reference genome(s)
 	&Electronic_enzyme;
 	print STDOUT "Electronic enzyme digestion of input genome(s) -- End, ",`date`;
 }elsif($#input==0 && $type==2 && $#outprefix==0){# single-end reads from shotgun metagenomics
-	if($q_control eq "yes"){
+	if($q_control eq "yes"){# need QC
 		print STDOUT "COMMAND: perl $0 -i $input[0] -t 2 -s $site -od $outdir -op $outprefix[0] -gz $gz -qc $q_control -n $ncount -q $quality -p $percent -b $qbase -fm $format\n";
-	}else{
+	}else{#no QC
 		print STDOUT "COMMAND: perl $0 -i $input[0] -t 2 -s $site -od $outdir -op $outprefix[0] -gz $gz -qc $q_control -fm $format\n";
 	}
 	print STDOUT "Tags extraction from shotgun metagenomics data -- Start, ",`date`;
 	&fastq;
 	print STDOUT "Tags extraction from shotgun metagenomics data -- End, ",`date`;
 }elsif($#input==1 && $type==2 && $#outprefix==0){# paired-end reads from shotgun metagenomics
-	unless(-e "$Bin/flash"){
-		&usage;
-		print STDERR "Can not find $Bin/flash\n";
-		exit;
-	}
-	if($q_control eq "yes"){
-		print STDOUT "COMMAND: perl $0 -i $input[0] $input[1] -t 2 -s $site -od $outdir -op $outprefix[0] -gz $gz -qc $q_control -n $ncount -q $quality -p $percent -b $qbase -fm $format\n";
-	}else{
-		print STDOUT "COMMAND: perl $0 -i $input[0] $input[1] -t 2 -s $site -od $outdir -op $outprefix[0] -gz $gz -qc $q_control -fm $format\n";
+#	unless(-e "$pear"){
+#		&usage;
+#		print STDERR "Can not find software $pear\n";
+#		exit 1;
+#	}
+	if($q_control eq "yes"){# need QC
+		print STDOUT "COMMAND: perl $0 -i $input[0] $input[1] -t 2 -s $site -od $outdir -op $outprefix[0] -gz $gz -qc $q_control -n $ncount -q $quality -p $percent -b $qbase -fm $format -pe $pear -pc $pear_cpu\n";
+	}else{# no QC
+		print STDOUT "COMMAND: perl $0 -i $input[0] $input[1] -t 2 -s $site -od $outdir -op $outprefix[0] -gz $gz -qc $q_control -fm $format -pe $pear -pc $pear_cpu\n";
 	}
 	print STDOUT "Tags extraction from shotgun metagenomics data -- Start, ",`date`;
-	&flash; # Merge the paired-end reads using FLASH. FLASH (Fast Length Adjustment of SHort reads) is a very fast and accurate software tool to merge paired-end reads from next-generation sequencing experiments.
-	$input[0]="$outdir/$outprefix[0].flash.fastq.gz";
+	&pear; # Merge the paired-end reads using PEAR. PEAR is a very fast and accurate software tool to merge paired-end reads from next-generation sequencing experiments.
+	$input[0]="$outdir/$outprefix[0].$enzyme.pear.fastq.gz";
 	&fastq;
-	&execute("rm -f $outdir/$outprefix[0].flash.fastq.gz");
+	&execute("rm -f $outdir/$outprefix[0].$enzyme.pear.fastq.gz");
 	print STDOUT "Tags extraction from shotgun metagenomics data -- End, ",`date`;
 }elsif($#input==0 && $type==3 && $#outprefix==0){# single iso-RAD tags
-	if($q_control eq "yes"){
+	if($q_control eq "yes"){# need QC
 		print STDOUT "COMMAND: perl $0 -i $input[0] -t 3 -s $site -od $outdir -op $outprefix[0] -gz $gz -qc $q_control -n $ncount -q $quality -p $percent -b $qbase -fm $format\n";
-	}else{
+	}else{#no QC
 		print STDOUT "COMMAND: perl $0 -i $input[0] -t 3 -s $site -od $outdir -op $outprefix[0] -gz $gz -qc $q_control -fm $format\n";
 	}
 	print STDOUT "Data Split for single isoRAD tags from SE Platform  -- Start, ",`date`;
 	&Single_Lable;
 	print STDOUT "Data Split for Single isoRAD tags from SE Platform -- End, ",`date`;
 }elsif($#input==1 && $type==4 && $#outprefix==4){# five concatenated isoRAD tags
-	unless(-e "$Bin/flash"){
-		&usage;
-		print STDERR "Can not find $Bin/flash\n";
-		exit;
-	}
-	if($q_control eq "yes"){
-		print STDOUT "COMMAND: perl $0 -i $input[0] $input[1] -t 4 -s $site -od $outdir -op ",join(" ",@outprefix[0..4])," -gz $gz -qc $q_control -n $ncount -q $quality -p $percent -b $qbase -fm $format\n";
-	}else{
-		print STDOUT "COMMAND: perl $0 -i $input[0] $input[1] -t 4 -s $site -od $outdir -op ",join(" ",@outprefix[0..4])," -gz $gz -qc $q_control -fm $format\n";
+#	unless(-e "$pear"){
+#		&usage;
+#		print STDERR "Can not find $pear\n";
+#		exit 1;
+#	}
+	if($q_control eq "yes"){# need QC
+		print STDOUT "COMMAND: perl $0 -i $input[0] $input[1] -t 4 -s $site -od $outdir -op ",join(" ",@outprefix[0..4])," -gz $gz -qc $q_control -n $ncount -q $quality -p $percent -b $qbase -fm $format -pe $pear -pc $pear_cpu\n";
+	}else{#不需要质控
+		print STDOUT "COMMAND: perl $0 -i $input[0] $input[1] -t 4 -s $site -od $outdir -op ",join(" ",@outprefix[0..4])," -gz $gz -qc $q_control -fm $format -pe $pear -pc $pear_cpu\n";
 	}
 	print STDOUT "Data split for five concatenated isoRAD tags from PE platform   -- Start, ",`date`;
 	&Five_Lable;
@@ -299,11 +324,11 @@ if($#input==0 && $type==1 && $#outprefix==0){# reference genome(s)
 }else{
 	&usage;
 	print STDERR "Please check parameter -i -t -op\n";
-	exit;
+	exit 1;
 }
 
 
-sub flash{
+sub pear{
 	my $r1=$input[0];
 	my $r2=$input[1];
 	if($r1=~/\.gz$/){# count the # of raw reads
@@ -311,18 +336,18 @@ sub flash{
 	}else{
 		open R,"$r1" or die "cannot open $r1\n";
 	}
-	while(<R>){
+	while(<R>){#统计双端shotgun数据reads数
 		$raw_reads_num++;
 		<R>;
 		<R>;
 		<R>;
 	}
 	close R;
-	my $outprefix=$outprefix[0];
-	&execute("$flash -t 1 -z -q -o $outdir/$outprefix $r1 $r2");# 拼接，当插入片段过短时，需要调整flash参数，默认参数会偏低
-	&execute("cat $outdir/$outprefix.extendedFrags.fastq.gz $outdir/$outprefix.notCombined_1.fastq.gz $outdir/$outprefix.notCombined_2.fastq.gz > $outdir/$outprefix.flash.fastq.gz");
-	&execute("rm -f $outdir/$outprefix.extendedFrags.fastq.gz $outdir/$outprefix.notCombined_1.fastq.gz $outdir/$outprefix.notCombined_2.fastq.gz");
-	&execute("rm -f $outdir/$outprefix.hist $outdir/$outprefix.histogram");
+	my $outprefix="$outprefix[0].$enzyme";
+	&execute("$pear -f $r1 -r $r2 -e -o $outdir/$outprefix -j $pear_cpu");#pear 拼接，当插入片段过短时，会无法拼接
+	&execute("cat $outdir/$outprefix.assembled.fastq $outdir/$outprefix.unassembled.forward.fastq $outdir/$outprefix.unassembled.reverse.fastq | gzip > $outdir/$outprefix.pear.fastq.gz");#拼接后的reads和不能拼接的R1R2合并
+	&execute("rm -f $outdir/$outprefix.assembled.fastq $outdir/$outprefix.unassembled.forward.fastq $outdir/$outprefix.unassembled.reverse.fastq");
+	&execute("rm -f $outdir/$outprefix.discarded.fastq");
 }
 sub fastq{
 	my $fastq=$input[0];
@@ -340,13 +365,13 @@ sub fastq{
 	open STAT,">$outdir/$outprefix.$enzyme.stat.xls" or die "cannot open $outdir/$outprefix.$enzyme.stat.xls\n";
 	if($raw_reads_num==0){# single-end reads from shotgun metagenomics
 		print STAT "sample\tenzyme\tinput_reads_num\tenzyme_reads_num\tpercent\n";
-	}else{
-		print STAT "sample\tenzyme\tinput_reads_num\tcombine_reads_num\tenzyme_reads_num\tpercent\n";
+	}else{#双端shotgun数据
+		print STAT "sample\tenzyme\tinput_reads_num\tcombine_uncombineR1R2_reads_num\tenzyme_reads_num\tpercent\n";
 	}
 	my($input_reads_num,$enzyme_reads_num,$percent_sub);
 	$enzyme_reads_num=0;
 	while(<IN>){
-		$input_reads_num++;# When inputting paired-end shotgun metagenomics reads，we only record the # of merged reads
+		$input_reads_num++;# When inputting paired-end shotgun metagenomics reads，we only record the # of merged reads 当输入数据是双端shotgun数据时，此时记录的是拼接后的reads数以及未能拼接的R1R2之和
 		my $line=$_ . <IN> . <IN> . <IN>;
 		if($q_control eq "yes"){# QC
 			next unless(&CheckN($line));
@@ -384,7 +409,7 @@ sub fastq{
 	if($raw_reads_num==0){#single-end reads from shotgun metagenomics
 		$percent_sub=sprintf "%.2f",$enzyme_reads_num/$input_reads_num*100;
 		print STAT "$outprefix\t$enzyme\t$input_reads_num\t$enzyme_reads_num\t$percent_sub%\n";
-	}else{
+	}else{#双端shotgun数据
 		$percent_sub=sprintf "%.2f",$enzyme_reads_num/$raw_reads_num*100;
 		print STAT "$outprefix\t$enzyme\t$raw_reads_num\t$input_reads_num\t$enzyme_reads_num\t$percent_sub%\n";
 	}
@@ -397,7 +422,7 @@ sub Five_Lable{# Data split for five concanated 2b-RAD tags
 	my $r1=$input[0];
 	my $r2=$input[1];
 	my ($output,@fhandle);
-	my $outprefix=$outprefix[0]; # rename intermediate files using the first sample name
+	my $outprefix=$outprefix[0];# rename intermediate files using the first sample name
 	my $input_reads_num;
 	if($r1=~/\.gz$/){# record the # of raw reads
 		open R,"gzip -dc $r1|" or die "cannot open $r1\n";
@@ -411,8 +436,8 @@ sub Five_Lable{# Data split for five concanated 2b-RAD tags
 		<R>;
 	}
 	close R;
-	&execute("$flash -t 1 -z -q -o $outdir/$outprefix $r1 $r2");# merge data
-	open IN,"gzip -dc $outdir/$outprefix.extendedFrags.fastq.gz|" or die "cannot open $outdir/$outprefix.extendedFrags.fastq.gz\n";
+	&execute("$pear -f $r1 -r $r2 -e -n $minpear -m $maxpear -o $outdir/$outprefix -j $pear_cpu");# merge data
+	open IN,"$outdir/$outprefix.assembled.fastq" or die "cannot open $outdir/$outprefix.assembled.fastq\n";
 	for my $i(1..$#start+1){# open file handle
 		my $fh="OU" . $i;
 		my $j=$i-1;
@@ -426,14 +451,15 @@ sub Five_Lable{# Data split for five concanated 2b-RAD tags
 	}
 	my $stat_name=join("-",@outprefix[0..4]);
 	open STAT,">$outdir/$stat_name.$enzyme.stat.xls" or die "cannot open $outdir/$stat_name.$enzyme.stat.xls\n";
-	print STAT "sample\tenzyme\tinput_reads_num\tcombine_reads_num\tenzyme_reads_num\tpercent\n";
-	my($combine_reads_num,%enzyme_reads_num);
+	print STAT "sample\tenzyme\tinput_reads_num\tcombine_reads_num\tenzyme_reads_num\tqc_reads_num\tpercent\n";
+	my($combine_reads_num,%enzyme_reads_num,%qc_reads_num);
 	$combine_reads_num=0;
 	for my $i(0..$#start){
+		$qc_reads_num{$i}=0;
 		$enzyme_reads_num{$i}=0;
 	}
 	while(<IN>){
-		$combine_reads_num++;
+		$combine_reads_num++;#拼接后reads统计
 		my $line=$_ . <IN> . <IN> .<IN>;
 		my @tmp=split /\n/,$line;
 		for my $i(0..$#start){
@@ -444,6 +470,7 @@ sub Five_Lable{# Data split for five concanated 2b-RAD tags
 			my $qual=substr($tmp[3],$start[$i],$end[$i]-$start[$i]+1);#4
 			for my $j(0..$#site){
 				if($seq=~s/^(\S*?)($site[$j])\S*/$2/){
+					$enzyme_reads_num{$i}++;#含酶切位点reads
 					my $begin=length($1);
 					my $len=length($2);
 					$qual=substr($qual,$begin,$len);
@@ -452,7 +479,7 @@ sub Five_Lable{# Data split for five concanated 2b-RAD tags
 						next unless(&CheckN($sub_line));
 						next unless(&CheckQ($sub_line));
 					}
-					$enzyme_reads_num{$i}++;
+					$qc_reads_num{$i}++;#质控后reads
 					if($format eq "fa"){
 						$id=~s/^@/>/;
 						print $fh "$id\n$seq\n";
@@ -469,15 +496,13 @@ sub Five_Lable{# Data split for five concanated 2b-RAD tags
 		close $_;
 	}
 	for my $i(0..$#start){
-		my $percent_sub=sprintf "%.2f",$enzyme_reads_num{$i}/$input_reads_num*100;
-		print STAT "$outprefix[$i]\t$enzyme\t$input_reads_num\t$combine_reads_num\t$enzyme_reads_num{$i}\t$percent_sub%\n";
+		my $percent_sub=sprintf "%.2f",$qc_reads_num{$i}/$input_reads_num*100;
+		print STAT "$outprefix[$i]\t$enzyme\t$input_reads_num\t$combine_reads_num\t$enzyme_reads_num{$i}\t$qc_reads_num{$i}\t$percent_sub%\n";
 	}
 	close STAT;
-	&execute("rm -f $outdir/$outprefix.extendedFrags.fastq.gz")
-	&execute("rm -f $outdir/$outprefix.hist")
-	&execute("rm -f $outdir/$outprefix.histogram")
-	&execute("rm -f $outdir/$outprefix.notCombined_1.fastq.gz")
-	&execute("rm -f $outdir/$outprefix.notCombined_2.fastq.gz")
+	&execute("rm -f $outdir/$outprefix.assembled.fastq");
+	&execute("rm -f $outdir/$outprefix.unassembled.forward.fastq $outdir/$outprefix.unassembled.reverse.fastq");
+	&execute("rm -f $outdir/$outprefix.discarded.fastq");
 }
 
 
@@ -494,14 +519,14 @@ sub Single_Lable{
 	if($gz eq "yes"){
 		open OU,"|gzip > $output.gz" or die "cannot open $output.gz\n";
 	}elsif($gz eq "no"){
-		open OU,"> $output" or die "cannot open $output.gz\n";
+		open OU,"> $output" or die "cannot open $output\n";
 	}
 	open STAT,">$outdir/$outprefix.$enzyme.stat.xls" or die "cannot open $outdir/$outprefix.$enzyme.stat.xls\n";
-	print STAT "sample\tenzyme\tinput_reads_num\tenzyme_reads_num\tpercent\n";
-	my ($input_reads_num,$enzyme_reads_num,$percent_sub);
-	$enzyme_reads_num=0;
+	print STAT "sample\tenzyme\tinput_reads_num\tenzyme_reads_num\tqc_reads_num\tpercent\n";
+	my ($input_reads_num,$enzyme_reads_num,$qc_reads_num,$percent_sub);
+	$qc_reads_num=0;
 	while(<IN>){
-		$input_reads_num++;
+		$input_reads_num++;#原始数据reads
 		my $line=$_ . <IN> . <IN> . <IN>;
 		my @tmp=split /\n/,$line;
 		if(length($tmp[1])>50){# if input read length exceeds 50bp (such as those from PE150 platform), we will chop the sequence to the first 50-bp for the following analysis
@@ -510,6 +535,7 @@ sub Single_Lable{
 		}
 		for my $i(0..$#site){
 			if($tmp[1]=~s/^(\S*?)($site[$i])\S*/$2/){#取的是第一个酶切序列，非贪婪匹配
+				$enzyme_reads_num++;#有酶切位点的reads
 				my $begin=length($1);
 				my $len=length($2);
 				$tmp[3]=substr($tmp[3],$begin,$len);# quality score
@@ -518,7 +544,7 @@ sub Single_Lable{
 					next unless(&CheckN($sub_line));
 					next unless(&CheckQ($sub_line));
 				}
-				$enzyme_reads_num++;
+				$qc_reads_num++;#质控后的reads
 				if($format eq "fa"){
 					$tmp[0]=~s/^@/>/;
 					print OU "$tmp[0]\n$tmp[1]\n";
@@ -531,8 +557,8 @@ sub Single_Lable{
 	}
 	close IN;
 	close OU;
-	$percent_sub=sprintf "%.2f",$enzyme_reads_num/$input_reads_num*100;
-	print STAT "$outprefix\t$enzyme\t$input_reads_num\t$enzyme_reads_num\t$percent_sub%\n";
+	$percent_sub=sprintf "%.2f",$qc_reads_num/$input_reads_num*100;
+	print STAT "$outprefix\t$enzyme\t$input_reads_num\t$enzyme_reads_num\t$qc_reads_num\t$percent_sub%\n";
 	close STAT;
 }
 
@@ -589,7 +615,7 @@ sub Electronic_enzyme{
 	if($gz eq "yes"){
 		open OU,"|gzip > $outdir/$outprefix.$enzyme.fa.gz" or die "cannot open $outdir/$outprefix.$enzyme.fa.gz\n";
 	}else{
-		open OU,">$outdir/$outprefix.$enzyme.fa" or die "cannot open $outdir/$outprefix.$enzyme.fa.gz\n";
+		open OU,">$outdir/$outprefix.$enzyme.fa" or die "cannot open $outdir/$outprefix.$enzyme.fa\n";
 	}
 	open STAT,">$outdir/$outprefix.$enzyme.stat.xls" or die "cannot open $outdir/$outprefix.$enzyme.stat.xls\n";
 	print STAT "sample\tenzyme\tinput_reads_num\tenzyme_reads_num\tpercent\n";
@@ -611,7 +637,7 @@ sub Electronic_enzyme{
 				my $pos=pos($seq);
 				$pos=$pos-$len+1;
 				my $pos_end=$pos+$len-1;
-				pos($seq)=$pos; # 调整位置
+				pos($seq)=$pos; #调整位置
 				$hash{$pos}{$pos_end}="$id-$pos-$pos_end";
 				$hash_tag{$pos}{$pos_end}=$tag;
 			}
@@ -640,13 +666,17 @@ sub Electronic_enzyme{
 sub execute{
 	my $cmd = shift;
 	print "$cmd\n";
-	system($cmd);
+	my $exit_code=system($cmd);
+	if($exit_code!=0){
+		print STDERR "Command $cmd failed with an exit code of $exit_code.\n";
+		exit($exit_code >> 8);
+	}
 }
 sub CheckDir{
 	my $file = shift;
 	unless( -d $file ){
 		if( -d dirname($file) && -w dirname($file) ){system("mkdir $file");}
-		else{print STDERR "$file does not exists and cannot be built\n";exit;}
+		else{print STDERR "$file not exists and cannot be built\n";exit 1;}
 		}
 		return 1;
 }
