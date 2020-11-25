@@ -23,11 +23,13 @@ chomp(my $last_genome=`gzip -dc $input_list|tail -l`);#获取最后一个
 
 open OU,">$output" or die "cannot open $output\n";
 #print OU "#Download directory is \$(outdir).\" >&2\n";
+print OU "#Author: zhangrongchao; Email: zhangrongchaoxx@163.com.\n";
 print OU "#Usage: make -f $output Database_path=yourpath(default:./2B-RAD-M-ref_db/).\n\n\n";
 print OU "Database_path?=./2B-RAD-M-ref_db/\n";
 print OU "outdir=\$(abspath \$(Database_path))\n\n";
 
 my $num=0;
+my %hash;
 open IN,"gzip -dc $input_list|" or die "cannot open $input_list\n";
 while(<IN>){
 	chomp;
@@ -55,9 +57,10 @@ while(<IN>){
 	print OU "\t\@sed -i '/^>/! s/[^AGCT]/N/g' \$(outdir)/genome_ref/$tmp[-1]\_dustmasked.fna\n";
 	print OU "\t\@gzip \$(outdir)/genome_ref/$tmp[-1]\_dustmasked.fna\n";
 	print OU "\t\@rm -f \$(outdir)/genome_ref/$tmp[-1].fna\n";
-	for (my $i=100;$i>=0;$i=$i-5){
+	for (my $i=100;$i>0;$i=$i-5){
 		if($num/$total*100>=$i){
-			print OU "\t\@echo \"complete $i%\" >&2\n";
+			print OU "\t\@echo \"complete $i%\" >&2\n" unless(exists $hash{$i});#仅没输出过的才会输出日志
+			$hash{$i}++;
 			last;
 		}
 	}
