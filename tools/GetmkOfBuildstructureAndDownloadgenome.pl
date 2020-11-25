@@ -55,7 +55,7 @@ while(<IN>){
 	print OU "\t\@dustmasker -infmt fasta -in \$(outdir)/genome_ref/$tmp[-1].fna -level 20 -outfmt fasta ";
 	print OU ">\$(outdir)/genome_ref/$tmp[-1]\_dustmasked.fna\n";
 	print OU "\t\@sed -i '/^>/! s/[^AGCT]/N/g' \$(outdir)/genome_ref/$tmp[-1]\_dustmasked.fna\n";
-	print OU "\t\@gzip \$(outdir)/genome_ref/$tmp[-1]\_dustmasked.fna\n";
+	print OU "\t\@gzip -f \$(outdir)/genome_ref/$tmp[-1]\_dustmasked.fna\n";
 	print OU "\t\@rm -f \$(outdir)/genome_ref/$tmp[-1].fna\n";
 	for (my $i=100;$i>0;$i=$i-5){
 		if($num/$total*100>=$i){
