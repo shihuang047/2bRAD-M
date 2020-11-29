@@ -2,7 +2,6 @@
 use warnings;
 use strict;
 use Getopt::Long;
-use MyModule;
 use Cwd 'abs_path';
 
 my ($list,$outdir,$prefix,$mock,$control,$help);
@@ -158,7 +157,14 @@ for my $id(sort {$a cmp $b} keys %hash_specie){#循环检测到的物种
 	print OU "$print\n" if ($judge!=0 && $judge_control==0);
 }
 
-
+sub CheckDir{#创建目录
+	my $file = shift;
+	unless( -d $file ){
+		if( -d dirname($file) && -w dirname($file) ){system("mkdir $file");}
+		else{print STDERR "$file not exists and cannot be built\n";exit 1;}
+	}
+	return 1;
+}
 
 
 

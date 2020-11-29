@@ -70,6 +70,7 @@ unless($list && $database && $level && $site && $outdir){
 	&usage;
 	exit 1;
 }
+print STDOUT "COMMAND: perl $0 -l $list -d $database -t $level -s $site -o $outdir -g $g_score_threshold -v $verbose\n";
 # parameter checking
 unless($verbose eq "yes" || $verbose eq "no"){
 	&usage;
@@ -95,7 +96,6 @@ unless(-e "$database/database/$hs_site2enzyme{$site}/$level.gz"){
 	exit 1;
 }
 
-print STDOUT "COMMAND: perl $0 -l $list -d $database -t $level -s $site -o $outdir -g $g_score_threshold -v $verbose\n";
 
 &CheckDir($outdir);
 

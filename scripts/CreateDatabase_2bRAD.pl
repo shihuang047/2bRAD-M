@@ -189,7 +189,11 @@ for my $level(sort {$hs_type{$a}<=>$hs_type{$b}} keys %hs_type){ #iterate all ta
 
 	print STDOUT "###($level) Identification of taxa-specifc 2b-RAD tags -- start, ",`date`;# STDOUT
 #	&CheckDir("$outdir/$hs_site2enzyme{$site}/database");
-	open OU,"|gzip > $outdir/$hs_site2enzyme{$site}/$level.gz" or die "can not open $outdir/$hs_site2enzyme{$site}/$level.gz\n";
+	if($level eq "species"){
+		open OU,"|gzip > $outdir/$hs_site2enzyme{$site}/specie.gz" or die "can not open $outdir/$hs_site2enzyme{$site}/specie.gz\n";
+	}else{
+		open OU,"|gzip > $outdir/$hs_site2enzyme{$site}/$level.gz" or die "can not open $outdir/$hs_site2enzyme{$site}/$level.gz\n";
+	}
 	print OU join("\t",@head[0..$hs_type{$level}]),"\tTags...\n"; # output headers including taxonomies of each 2b-RAD tag
 	# compute the number of 2b-RAD tags specific to a taxon for a genome
     # output all taxa-specific 2b-RAD tags of a genome into the filepath specified
