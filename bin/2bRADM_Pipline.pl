@@ -396,7 +396,7 @@ while(<LIST>){
 		close SA;
 		&execute("perl $Bin/CreateDatabase_2bRAD.pl -l $outdir/quantitative_sdb/$sample_name/sdb.list -s $i -t $level2 -o $outdir/quantitative_sdb/$sample_name/database -c $cpu1 1> /dev/null");#建库
 		&execute("perl $Bin/CalculateRelativeAbundance_Single2bEnzyme.pl -l $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list -d $outdir/quantitative_sdb/$sample_name/ -t $level2 -s $i -o $outdir/quantitative -g 0 -v yes 1> /dev/null");#定量 不对gscore进行过滤
-#		&execute("rm -rf $outdir/quantitative_sdb/$sample_name/database");#删除数据库
+		&execute("rm -rf $outdir/quantitative_sdb/$sample_name/database");#删除数据库
 		$pm->finish;
 	}
 	$pm->wait_all_children;
