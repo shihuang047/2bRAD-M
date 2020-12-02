@@ -22,12 +22,12 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  * Install PEAR via https://anaconda.org/bioconda/pear/0.9.6/download/osx-64/pear-0.9.6-h977ceac_6.tar.bz2
  
 ## 2bRAD-M pipeline tutorial
- * [Analyze the mock community (MOCK-MSA1002)](docs/analyze_mock.md)
- * [Analyze in silico mock community](docs/snp_diversity.md)
+ * [Analyze the MOCK-MSA1002 community (sequenceing data)](docs/analyze_mock.md)
+ * [Analyze in silico mock community (synthetic data)](docs/snp_diversity.md)
  
 ## 2bRAD-M scripts for customized analyses 
  * [Extract 2b tags](docs/extract_2b.md)
- * [Build your own custom 2bTag database](docs/build_db.md)
+ * [Build your own customized 2bTag database](docs/build_db.md)
  * [Species profiling for a single sample](doc/profile_single_sample.md)
  * [Merge species profiles for multiple samples](doc/profile_single_sample.md)
  
