@@ -10,11 +10,18 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  ### Speed and memory usage
  Most steps of the program are quite fast, require < 2Gb of RAM, and are compatible with multithreading. About 20 minutes are required for loading the 2bTag     database. For a typical gut metagenome, ~1-5 minutes are required for species profiling.
  ### Download the pipeline
- Clone the latest version from GitHub (recommended): 
+ * Clone the latest version from GitHub (recommended):  
  
-`git clone https://github.com/shihuang047/2bRAD-M/`  
-
- This makes it easy to update the software in the future using `git pull` as bugs are fixed and features are added.
+   `git clone https://github.com/shihuang047/2bRAD-M/`
+   `cd 2bRAD-M`
+   
+    This makes it easy to update the software in the future using `git pull` as bugs are fixed and features are added.
+ * Directly download without installing GitHub:
+ 
+   `wget https://github.com/shihuang047/2bRAD-M/archive/master.zip`
+   `unzip master.zip`
+   `cd 2bRAD-M-master`
+   
  ### Install 2bRAD-M pipeline in a conda environment 
  * Conda installation
    [Miniconda](https://docs.conda.io/en/latest/miniconda.html) provides the conda environment and package manager, and is the recommended way to install 2bRAD-M. 
@@ -35,19 +42,23 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  
    `cpan Parallel::ForkManager`
    
- ### Construct the reference 2bTag database (required) and download the example data for tutorial
+
+ ### Construct the reference 2B-Tag database (required) and download the example data for tutorial
+ * Download the prebuild 2bRAD-M species unique marker database (2B-Tag-DB) from NCBI Refseq and Figshare:
  
  `gunzip tools/BuildstructureAndDownload.mk.gz`
  
  `make -f tools/BuildstructureAndDownload.mk`
  
  The path of 2bRAD-M pipeline can be assign by "Database_path=", for instance:
- 
- `make -f tools/BuildstructureAndDownload.mk Database_path=./2B-RAD-M-ref_db/`
+
+  `make -f tools/BuildstructureAndDownload.mk Database_path=./2B-RAD-M-ref_db/`
  
 ## 2bRAD-M pipeline tutorial
  * [Analyze the MOCK-MSA1002 community (sequenceing data)](docs/analyze_mock.md)
-
+ 
+ `make -f tools/BuildstructureAndDownload.mk Database_path=./2B-RAD-M-ref_db/`
+ 
  `perl bin/2bRADM_Pipline.pl -t 3 -l list -d 2B-RAD-M-ref_db -o output`
  
  * [Analyze in silico mock community (synthetic shogun data)](docs/snp_diversity.md)
