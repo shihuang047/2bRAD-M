@@ -14,12 +14,12 @@ The computational pipeline for microbiome analysis on 2b-RAD data
 `git clone https://github.com/shihuang047/2bRAD-M/`  
  This makes it easy to update the software in the future using `git pull` as bugs are fixed and features are added.
  ### Conda activation and 2bRAD-M pipeline installation
- (1) Installation of Conda: XXX (link)
- (2) Environment creation:
+ * Installation of Conda: XXX (link)
+ * Environment creation:
  `conda env create -n 2bRAD-M-2020.11.24 --file tools/2bRAD-M-2020.11.24-conda.yml`
- (3) Environment activation:
+ * Environment activation:
  `conda activate 2bRAD-M-2020.11.24`
- (4) Perl dependency installation:
+ * Perl dependency installation:
  `cpan Parallel::ForkManager`
  2bRAD-M environment need to be activated every time you use it by "conda activate 2bRAD-M-2020.11.24"
  ### Reference database and example data downloading
