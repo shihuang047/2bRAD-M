@@ -47,7 +47,7 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  
 ## 2bRAD-M pipeline tutorial
  * [Analyze the MOCK-MSA1002 community (sequenceing data)](docs/analyze_mock.md)
- 
+
  `perl bin/2bRADM_Pipline.pl -t 3 -l list -d 2B-RAD-M-ref_db -o output`
  
  * [Analyze in silico mock community (synthetic shogun data)](docs/snp_diversity.md)
