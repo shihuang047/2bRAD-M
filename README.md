@@ -55,7 +55,7 @@ The computational pipeline for microbiome analysis on 2b-RAD data
    
  * Activate the 2bRAD-M conda environment by running the following command:
  
-   `conda activate 2bRAD-M-2020.11.24`
+   `source activate 2bRAD-M-2020.11.24`
 
  ### Construct the reference 2B-Tag database (required) and download the example data for tutorial
  * Download the prebuild 2bRAD-M species unique marker database (2B-Tag-DB) from NCBI Refseq and Figshare:
