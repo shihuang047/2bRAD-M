@@ -15,7 +15,7 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  This makes it easy to update the software in the future using `git pull` as bugs are fixed and features are added.
  ### Install 2bRAD-M pipeline in a conda environment 
  * Conda installation
-   [(Miniconda)] (https://docs.conda.io/en/latest/miniconda.html) provides the conda environment and package manager, and is the recommended way to install 2bRAD-M. 
+   [Miniconda](https://docs.conda.io/en/latest/miniconda.html) provides the conda environment and package manager, and is the recommended way to install 2bRAD-M. 
  * Create a conda environment for 2bRAD-M pipeline:
    After installing Miniconda and opening a new terminal, make sure you’re running the latest version of conda:
    
