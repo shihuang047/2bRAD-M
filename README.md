@@ -12,7 +12,7 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  
  You can also find more details for the 2bRAD-M workflow below. 
  
- ![workflow] (2bRAD-M_workflow.png)
+ ![workflow](2bRAD-M_workflow.png)
  
  * The experimental workflow has two steps: 
  
