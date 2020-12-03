@@ -91,5 +91,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
  * [Species profiling for a single sample](doc/profile_single_sample.md)
  * [Merge species profiles for multiple samples](doc/profile_single_sample.md)
  
-## Citation
+## Acknowledgement
+
+   This work was funded by Grant 31800088 from National Natural Science Foundation and 2019M652501 from China Postdoctoral Science Foundation. S. W. acknowledges the support by Taishan Scholar Fund of Shandong Province of China. 
 
