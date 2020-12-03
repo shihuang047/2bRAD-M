@@ -21,7 +21,7 @@ The computational pipeline for microbiome analysis on 2b-RAD data
    
    `conda update conda`
    
-   Once you have Miniconda installed, create a conda environment with the yml file at the directory: `tools/2bRAD-M-2020.11.24-conda.yml`.
+   Once you have Miniconda installed, create a conda environment with the yml file *tools/2bRAD-M-2020.11.24-conda.yml*.
    
    `conda env create -n 2bRAD-M-2020.11.24 --file tools/2bRAD-M-2020.11.24-conda.yml`
    
