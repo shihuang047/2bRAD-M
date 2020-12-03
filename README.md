@@ -1,4 +1,4 @@
-# 2b-RAD-M
+# 2bRAD-M
 The computational pipeline for microbiome analysis on 2b-RAD data
 
 ## How it works
