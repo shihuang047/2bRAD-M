@@ -4,5 +4,6 @@ channels:
   - defaults
 dependencies:
   - perl=5.26.2
+  - perl-parallel-forkmanager=2.02
   - pear=0.9.6
   - blast=2.7.1
