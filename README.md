@@ -10,8 +10,10 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  ### Speed and memory usage
  Most steps of the program are quite fast, require < 2Gb of RAM, and are compatible with multithreading. About 20 minutes are required for loading the 2bTag     database. For a typical gut metagenome, ~1-5 minutes are required for species profiling.
  ### Download the pipeline
- Clone the latest version from GitHub (recommended):  
+ Clone the latest version from GitHub (recommended): 
+ 
 `git clone https://github.com/shihuang047/2bRAD-M/`  
+
  This makes it easy to update the software in the future using `git pull` as bugs are fixed and features are added.
  ### Install 2bRAD-M pipeline in a conda environment 
  * Conda installation
