@@ -11,6 +11,9 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  (3) the tag sequences can be mapped to reference genomes to reconstruct faithfully the taxonomic composition.
  
  You can also find more details for the 2bRAD-M workflow below. 
+ 
+ [!workflow] (2bRAD-M_workflow.png)
+ 
  * The experimental workflow has two steps: 
  
    (1) BcgI (a commercially available Type IIB restriction enzymes) is used, as an example, to digest total genomic DNA extracted from microbiome samples. BcgI recognizes the sequence of CGA-N6-TGC in the genomic DNA and cleaves on both upstream (12-10 bp) and downstream (10-12 bp) of this signature, producing short and iso-length DNA (32bp without sticky ends) across all loci. 
