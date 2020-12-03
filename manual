@@ -11,7 +11,7 @@
     perl bin/2bRADM_Pipline.pl -t 1 -l your_database_path/example_data/list_simulation -d your_database_path -o outdir -s1 17 -s2 17 -gsc 60
   2)MSA1002_R1.fq.gz:
     perl bin/2bRADM_Pipline.pl -t 3 -l your_database_path/example_data/list_mock -d your_database_path -o outdir
-
+    
 Note:
   You need to activate the environment each time you use it. (conda activate 2bRAD-M-2020.11.24)
 
