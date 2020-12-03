@@ -13,13 +13,16 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  * Clone the latest version from GitHub (recommended):  
  
    `git clone https://github.com/shihuang047/2bRAD-M/`
+   
    `cd 2bRAD-M`
    
     This makes it easy to update the software in the future using `git pull` as bugs are fixed and features are added.
  * Directly download without installing GitHub:
  
    `wget https://github.com/shihuang047/2bRAD-M/archive/master.zip`
+   
    `unzip master.zip`
+   
    `cd 2bRAD-M-master`
    
  ### Install 2bRAD-M pipeline in a conda environment 
@@ -37,11 +40,6 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  * Activate the 2bRAD-M conda environment by running the following command:
  
    `conda activate 2bRAD-M-2020.11.24`
-   
- * Perl dependency installation:
- 
-   `cpan Parallel::ForkManager`
-   
 
  ### Construct the reference 2B-Tag database (required) and download the example data for tutorial
  * Download the prebuild 2bRAD-M species unique marker database (2B-Tag-DB) from NCBI Refseq and Figshare:
