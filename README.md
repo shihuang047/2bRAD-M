@@ -93,5 +93,5 @@ This repository provides the computational pipeline for microbiome analysis on 2
  
 ## Acknowledgement
 
-   This work was funded by Grant 31800088 from National Natural Science Foundation and 2019M652501 from China Postdoctoral Science Foundation. S. W. acknowledges the support by Taishan Scholar Fund of Shandong Province of China. 
+   This work was funded by Grant 31800088 from National Natural Science Foundation and 2019M652501 from China Postdoctoral Science Foundation, and Taishan Scholar Fund of Shandong Province of China. 
 
