@@ -4,6 +4,7 @@ use strict;
 use Getopt::Long;
 use FindBin qw($Bin);
 use File::Basename qw(dirname basename);
+use Cwd 'abs_path';
 
 my $author="Zheng Sun, Rongchao Zhang, Shi Huang";
 my $time="2020.06.03";
@@ -48,7 +49,7 @@ Required:
                 [8]PsrI   [16]BslFI
     -o <str>    The output directory (automatically create if it does not exist)
 Optional:
-    -g <int>    The threshold of G score [$g_score_threshold, it means >=$g_score_threshold]. To control the false-positive in the species identification, G score was derived for each speciesidentified within a sample, which is a harmonious mean of read coverage of 2b-RAD markers belongs to a species and number of all possible 2b-RAD markers of this species. Therecommended/default threshold is 5.
+    -g <int>    The threshold of G score [$g_score_threshold, it means >=$g_score_threshold]. To control the false-positive in the species identification, G score was derived for each speciesidentified within a sample, which is a harmonious mean of read coverage of 2b-RAD markers belongs to a species and number of all possible 2b-RAD markers of this species. Therecommended/default threshold is $g_score_threshold.
     -v <str>    This specify if more detailed information will be shown [$verbose] (yes or no)
 AUTHOR:  $author $time\e[0m\n";
 }
@@ -67,33 +68,34 @@ my %hs_site2enzyme=(# the codes for all restriction enzymes
 
 unless($list && $database && $level && $site && $outdir){
 	&usage;
-	exit;
+	exit 1;
 }
+print STDOUT "COMMAND: perl $0 -l $list -d $database -t $level -s $site -o $outdir -g $g_score_threshold -v $verbose\n";
 # parameter checking
 unless($verbose eq "yes" || $verbose eq "no"){
 	&usage;
 	print STDERR "Parameter -v is wrong\n";
-	exit;
+	exit 1;
 }
 # check the taxonomic level of a 2b-RAD reference genome database
 unless($level eq "kingdom" || $level eq "phylum" || $level eq "class" || $level eq "order" || $level eq "family" || $level eq "genus" || $level eq "species" || $level eq "strain"){
 	&usage;
 	print STDERR "Parameter -t is wrong. Cannot get $level\n";
-	exit;
+	exit 1;
 }
-# check the parameter -s and -e
+if($level eq "species"){$level="specie";}
+# check the parameter -s and -d
 unless(exists $hs_site2enzyme{$site}){
 	&usage;
 	print STDERR "Parameter -s $site is wrong\n";
-	exit;
+	exit 1;
 }
 unless(-e "$database/database/$hs_site2enzyme{$site}/$level.gz"){
 	&usage;
 	print STDERR "$database/database/$hs_site2enzyme{$site}/$level.gz does not exist\n";
-	exit;
+	exit 1;
 }
 
-print STDOUT "COMMAND: perl $0 -l $list -d $database -t $level -s $site -o $outdir -g $g_score_threshold -v $verbose\n";
 
 &CheckDir($outdir);
 
@@ -106,7 +108,7 @@ while(<IN>){
 	my @tmp=split /\t/,$line;
 	if($.==1 && $line=~/^#Name/){
 		for my $i(0..$#tmp){
-			$tag_col_start=$i if($tmp[$i]=~/Tags\.\.\./);
+			$tag_col_start=$i if($tmp[$i]=~/Tags\.\.\./);#确定标签从第几列开始
 		}
 		$head=join("\t",@tmp[1..$tag_col_start-1]);
 		next;
@@ -127,6 +129,7 @@ while(<LI>){
 	next if(/^#/ || /^$/); # 去除注释行和空行
 	chomp;
 	my ($sample_name,$sample_data)=split /\t/;
+	$sample_data=abs_path($sample_data);
 	print STDOUT "###($sample_name) Sample identification started, ",`date`;
 	my (%hs_tag_num,%hs_detected_GCF_tag);
 	# load a single sample
@@ -244,7 +247,7 @@ sub CheckDir{
 	my $file = shift;
 	unless( -d $file ){
 		if( -d dirname($file) && -w dirname($file) ){system("mkdir $file");}
-		else{print STDERR "$file not exists and cannot be built\n";exit;}
+		else{print STDERR "$file not exists and cannot be built\n";exit 1;}
 		}
 		return 1;
 }
