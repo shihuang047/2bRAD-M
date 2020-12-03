@@ -46,18 +46,18 @@ The computational pipeline for microbiome analysis on 2b-RAD data
  ### Construct the reference 2B-Tag database (required) and download the example data for tutorial
  * Download the prebuild 2bRAD-M species unique marker database (2B-Tag-DB) from NCBI Refseq and Figshare:
  
- `gunzip tools/BuildstructureAndDownload.mk.gz`
+ `gunzip tools/DBconstruction.mk.gz`
  
- `make -f tools/BuildstructureAndDownload.mk`
+ `make -f tools/DBconstruction.mk`
  
  The path of 2bRAD-M pipeline can be assign by "Database_path=", for instance:
 
-  `make -f tools/BuildstructureAndDownload.mk Database_path=./2B-RAD-M-ref_db/`
+  `make -f tools/DBconstruction.mk Database_path=./2B-RAD-M-ref_db/`
  
 ## 2bRAD-M pipeline tutorial
  * [Analyze the MOCK-MSA1002 community (sequenceing data)](docs/analyze_mock.md)
  
- `make -f tools/BuildstructureAndDownload.mk Database_path=./2B-RAD-M-ref_db/`
+ `make -f tools/DBconstruction.mk Database_path=./2B-RAD-M-ref_db/`
  
  `perl bin/2bRADM_Pipline.pl -t 3 -l list -d 2B-RAD-M-ref_db -o output`
  
