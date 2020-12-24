@@ -1,15 +1,16 @@
 #!/usr/bin/env perl
 # Authors: Zheng Sun , Rongchao Zhang, Shi Huang
-# Last update: 2020.11.29
+# Last update: 2020.12.22
 use warnings;
 use strict;
 use Getopt::Long;
 use FindBin qw($Bin);
 use File::Basename qw(dirname basename);
 use Parallel::ForkManager;
+use Cwd 'abs_path';
 
 my $author="Zheng Sun, Rongchao Zhang, Shi Huang";
-my $time="20201129";
+my $time="20201222";
 
 #scripts path
 my $Bin="$Bin/../scripts/";
@@ -117,7 +118,7 @@ print STDERR "\e[;33;1m
 	  -c1  <int>   enzyme cpu [default: $cpu1]
 	  -c2  <int>   calculate cpu [default: $cpu2] (each CPU needs about 15~65G of memory)
 	OPTIONS of Quality Control
-	  -qc  <str>   quality control or not [default: yes] (yes or no)
+	  -qc  <str>   quality control or not [default: $qc] (yes or no)
 	  -qcn <float> Maximum Ratio of Base \"N\" [default: $qc_n]
 	  -qcq <int>   Minimum Quality Score to Keep [default: $qc_q]
 	  -qcp <int>   Minimum Percent of Bases that must have [-qcq] Quality [default: $qc_p]
@@ -153,6 +154,11 @@ unless($type && $list && $database && $outdir){
 	exit 1;
 }
 
+#转化为绝对路径
+$list=abs_path($list);
+$database=abs_path($database);
+$outdir=abs_path($outdir);
+
 #输入数据类型检测
 unless($type==1 || $type==2 || $type==3 || $type==4){
 	&usage;
@@ -161,8 +167,8 @@ unless($type==1 || $type==2 || $type==3 || $type==4){
 }
 
 #数据库文件检测
-unless(-d "$database/database" && -e "$database/abfh_classify.txt" && -d "$database/genome_ref"){
-	print STDERR "incomplete database, please check\n";
+unless(-e "$database/abfh_classify_with_speciename.txt.gz"){
+	print STDERR "incomplete database, $database/abfh_classify_with_speciename.txt.gz does not exists\n";
 	exit 1;
 }
 
@@ -175,32 +181,27 @@ unless($qual eq "no" || $qual eq "yes"){
 #定性鉴定水平检测
 unless($level1 eq "kingdom" || $level1 eq "phylum" || $level1 eq "class" || $level1 eq "order" || $level1 eq "family" || $level1 eq "genus" || $level1 eq "species" || $level1 eq "strain"){
 	&usage;
-	print STDERR "Parameter -t is wrong. Cannot get $level1\n";
+	print STDERR "Parameter -t1 is wrong. Cannot get $level1\n";
 	exit 1;
 }
 #定性酶切位点检查及数据库检测
+my %hs_site1;
 if($site1=~/17/){
 	$site1="1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16";
 }
 my @site1=split /,/,$site1;
 for my $i(@site1){
+	$hs_site1{$i}++;
 	unless(exists $hs_site2enzyme{$i}){
 		&usage;
 		print STDERR "parameter -s1 is wrong, $i does not exists\n";
 		exit 1;
 	}
-	if($level1 eq "species"){
-		unless(-e "$database/database/$hs_site2enzyme{$i}/specie.gz"){
-			&usage;
-			print STDERR "incomplete database, $database/database/$hs_site2enzyme{$i}/specie.gz does not exists";
-			exit 1;
-		}
-	}else{
-		unless(-e "$database/database/$hs_site2enzyme{$i}/$level1.gz"){
-			&usage;
-			print STDERR "incomplete database, $database/database/$hs_site2enzyme{$i}/$level1.gz does not exists";
-			exit 1;
-		}
+	#检测定性数据库并检测species数据库，用于定量(findgenome脚本)
+	unless(-e "$database/$hs_site2enzyme{$i}.$level1.fa.gz" && -e "$database/$hs_site2enzyme{$i}.species.fa.gz"){
+		&usage;
+		print STDERR "incomplete database, $database/$hs_site2enzyme{$i}.$level1.fa.gz or $database/$hs_site2enzyme{$i}.species.fa.gz does not exists\n";
+		exit 1;
 	}
 }
 
@@ -208,7 +209,7 @@ for my $i(@site1){
 #定性鉴定水平检测
 unless($level2 eq "kingdom" || $level2 eq "phylum" || $level2 eq "class" || $level2 eq "order" || $level2 eq "family" || $level2 eq "genus" || $level2 eq "species" || $level2 eq "strain"){
 	&usage;
-	print STDERR "Parameter -t is wrong. Cannot get $level2\n";
+	print STDERR "Parameter -t2 is wrong. Cannot get $level2\n";
 	exit 1;
 }
 #定性酶切位点检查
@@ -219,10 +220,14 @@ if($quan eq "yes"){
 	}
 	@site2=split /,/,$site2;
 	for my $i(@site2){
-		unless(exists $hs_site2enzyme{$i}){
+		unless(exists $hs_site2enzyme{$i}){#检测site2输入是否正确
 			&usage;
 			print STDERR "parameter -s2 is wrong, $i does not exists\n";
 			exit 1;
+		}
+		unless(exists $hs_site1{$i}){#检测site2是否包含于site1
+			&usage;
+			print STDERR "parameter -s2 is wrong, $i is not included in para -s1\n";
 		}
 	}
 }elsif($quan eq "no"){
@@ -239,7 +244,7 @@ unless($qc eq "yes" || $qc eq "no"){
 	print STDERR "Parameter -qc is wrong. Cannot get $qc\n";
 }
 
-print STDOUT "###COMMAND: perl $0 -t $type -l $list -d $database -o $outdir -p $qual -s1 $site1 -t1 $level1 -q $quan -gsc $g_score_threshold -gcf $GCF_threshold -s2 $site2 -t2 $level2 -c1 $cpu1 -c2 $cpu2 -qc $qc -qcn $qc_n -qcq $qc_q -qcp $qc_p -qcb $qc_b\n";
+print STDOUT "###COMMAND: perl $0 -t $type -l $list -d $database -o $outdir -p $qual -s1 $site1 -t1 $level1 -q $quan -gsc $g_score_threshold -gcf $GCF_threshold -s2 $site2 -t2 $level2 -c1 $cpu1 -c2 $cpu2 -qc $qc -qcn $qc_n -qcq $qc_q -qcp $qc_p -qcb $qc_b -ms $mock_sample -ncs $negative_control_sample\n";
 &CheckDir($outdir);
 #数据酶切
 &CheckDir("$outdir/enzyme_result");
@@ -394,8 +399,9 @@ while(<LIST>){
 		open SA,">$outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list" or die "cannot open $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list\n";
 		print SA "$sample_name\t$outdir/enzyme_result/$sample_name.$hs_site2enzyme{$i}.fa.gz\n";
 		close SA;
-		&execute("perl $Bin/CreateDatabase_2bRAD.pl -l $outdir/quantitative_sdb/$sample_name/sdb.list -s $i -t $level2 -o $outdir/quantitative_sdb/$sample_name/database -c $cpu1 1> /dev/null");#建库
-		&execute("perl $Bin/CalculateRelativeAbundance_Single2bEnzyme.pl -l $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list -d $outdir/quantitative_sdb/$sample_name/ -t $level2 -s $i -o $outdir/quantitative -g 0 -v yes 1> /dev/null");#定量 不对gscore进行过滤
+		&execute("perl $Bin/CreateQuanDatabase_2bRAD.pl -l $outdir/quantitative_sdb/$sample_name/sdb.list -e $database/$hs_site2enzyme{$i}.species.fa.gz -s $i -t $level2 -o $outdir/quantitative_sdb/$sample_name/database -r no 1> /dev/null");#建库
+		&execute("cp $outdir/quantitative_sdb/$sample_name/sdb.list $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt && gzip -f $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt");
+		&execute("perl $Bin/CalculateRelativeAbundance_Single2bEnzyme.pl -l $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list -d $outdir/quantitative_sdb/$sample_name/database -t $level2 -s $i -o $outdir/quantitative -g 0 -v yes 1> /dev/null");#定量 不对gscore进行过滤
 		&execute("rm -rf $outdir/quantitative_sdb/$sample_name/database");#删除数据库
 		$pm->finish;
 	}

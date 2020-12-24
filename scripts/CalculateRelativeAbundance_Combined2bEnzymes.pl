@@ -128,7 +128,7 @@ while(<LI>){#循环样品
 			chomp;
 			my $line=$_;
 			next if($line=~/^#/);
-			if($line=~/^Kingdom/){
+			if($line=~/^Kingdom/i){
 				$head=$line;
 				next;
 			}

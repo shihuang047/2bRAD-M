@@ -7,7 +7,7 @@ use File::Basename qw(dirname basename);
 use Cwd 'abs_path';
 
 my $author="Zheng Sun, Rongchao Zhang, Shi Huang";
-my $time="2020.06.03";
+my $time="2020.12.21";
 
 #set default parameters
 my $g_score_threshold ||=0;
@@ -66,11 +66,39 @@ my %hs_site2enzyme=(# the codes for all restriction enzymes
 	'15' =>  'AlfI',    '16' =>  'BslFI',
 	);
 
+my %hs_type_database=(
+	'kingdom' => '1',
+	'phylum'  => '2',
+	'class'   => '3',
+	'order'   => '4',
+	'family'  => '5',
+	'genus'   => '6',
+	'species' => '7',
+	'strain'  => '8',
+	);
+
+my @HEAD=(
+	'Kingdom',
+	'Phylum',
+	'Class',
+	'Order',
+	'Family',
+	'Genus',
+	'Species',
+	'Strain',
+	);
+
 unless($list && $database && $level && $site && $outdir){
 	&usage;
 	exit 1;
 }
-print STDOUT "COMMAND: perl $0 -l $list -d $database -t $level -s $site -o $outdir -g $g_score_threshold -v $verbose\n";
+
+#转换绝对路径
+$list=abs_path($list);
+$database=abs_path($database);
+$outdir=abs_path($outdir);
+
+
 # parameter checking
 unless($verbose eq "yes" || $verbose eq "no"){
 	&usage;
@@ -83,44 +111,63 @@ unless($level eq "kingdom" || $level eq "phylum" || $level eq "class" || $level 
 	print STDERR "Parameter -t is wrong. Cannot get $level\n";
 	exit 1;
 }
-if($level eq "species"){$level="specie";}
 # check the parameter -s and -d
 unless(exists $hs_site2enzyme{$site}){
 	&usage;
 	print STDERR "Parameter -s $site is wrong\n";
 	exit 1;
 }
-unless(-e "$database/database/$hs_site2enzyme{$site}/$level.gz"){
+#检查库文件
+unless(-e "$database/$hs_site2enzyme{$site}.$level.fa.gz" && -e "$database/abfh_classify_with_speciename.txt.gz"){
 	&usage;
-	print STDERR "$database/database/$hs_site2enzyme{$site}/$level.gz does not exist\n";
+	print STDERR "Incomplete database, please check the parameter(-d).\n";
 	exit 1;
 }
 
+print STDOUT "COMMAND: perl $0 -l $list -d $database -t $level -s $site -o $outdir -g $g_score_threshold -v $verbose\n";
 
 &CheckDir($outdir);
 
+my $head=join("\t",@HEAD[0..$hs_type_database{$level}-1]);
 # load the database
-print STDOUT "### Loading the database, $database/database/$hs_site2enzyme{$site}/$level.gz, ",`date`;
-my (%hs_tag2GCF,%hs_GCF2class,%hs_tag_theory_num,$head,$tag_col_start);
-open IN,"gzip -dc $database/database/$hs_site2enzyme{$site}/$level.gz|" or die "cannot open $database/database/$hs_site2enzyme{$site}/$level.gz\n";
-while(<IN>){
-	chomp(my $line=$_);
-	my @tmp=split /\t/,$line;
-	if($.==1 && $line=~/^#Name/){
-		for my $i(0..$#tmp){
-			$tag_col_start=$i if($tmp[$i]=~/Tags\.\.\./);#确定标签从第几列开始
-		}
-		$head=join("\t",@tmp[1..$tag_col_start-1]);
-		next;
-	}
-	my $class=join("\t",@tmp[1..$tag_col_start-1]);# all taxonomic levels
+print STDOUT "### Loading the database, $database/$hs_site2enzyme{$site}.$level.fa.gz, ",`date`;
+my (%hs_tag2GCF,%hs_GCF2class,%hs_tag_theory_num);
+my $all_genome_num;
+open LI,"gzip -dc $database/abfh_classify_with_speciename.txt.gz|" or die "cannot open $database/abfh_classify_with_speciename.txt.gz\n";
+while(<LI>){
+	next if(/^#/ || /^$/);#去掉注释行和空行
+	chomp;
+	my @tmp=split /\t/;
+	my $class=join("\t",@tmp[1..$hs_type_database{$level}]);# all taxonomic levels
 	$hs_GCF2class{$tmp[0]}=$class;# record the corresponding taxonomy for each GCF
-	for my $i($tag_col_start .. $#tmp){
-		push @{$hs_tag2GCF{$tmp[$i]}},$tmp[0]; # record GCF for each 2b tag
-		$hs_tag_theory_num{$class}{$tmp[0]}{$tmp[$i]}++;# compute the number of 2b tags of each GCF under a given taxon and record the # of all 2b tags from the same taxa
+	$all_genome_num++;
+}
+close LI;
+
+my (%hash_gcf_rank,%complete);
+$/=">";
+open IN,"gzip -dc $database/$hs_site2enzyme{$site}.$level.fa.gz|" or die "cannot open $database/$hs_site2enzyme{$site}.$level.fa.gz\n";
+<IN>;
+while(<IN>){
+	chomp;
+	my($id,$tag)=split /\n/;
+	#GCF号|基因组内部标签排序|scaffoldid|startpos|正反向酶切|是否为指定水平下unique&&noredundancy标签
+	my @tmp=split /\|/,$id;
+	$hash_gcf_rank{$tmp[0]}++;
+	next if($tmp[5]!=1);#跳过非unique标签
+	my $class=$hs_GCF2class{$tmp[0]};# all taxonomic levels
+	push @{$hs_tag2GCF{$tag}},$tmp[0];# record GCF for each 2b tag
+	$hs_tag_theory_num{$class}{$tmp[0]}{$tag}++;# compute the number of 2b tags of each GCF under a given taxon and record the # of all 2b tags from the same taxa
+	for (my $i=100;$i>0;$i=$i-1){ #每完成1%则输出进度
+		if((keys %hash_gcf_rank)/$all_genome_num*100>=$i){
+			print STDOUT "$i% " unless(exists $complete{$i});#仅没输出过的才会输出日志
+			$complete{$i}++;
+			last;
+		}
 	}
 }
 close IN;
+$/="\n";
 print STDOUT "###Loading database completed, ",`date`;
 
 # process each sample in the list file
@@ -129,7 +176,7 @@ while(<LI>){
 	next if(/^#/ || /^$/); # 去除注释行和空行
 	chomp;
 	my ($sample_name,$sample_data)=split /\t/;
-	$sample_data=abs_path($sample_data);
+	$sample_data=abs_path($sample_data);#转为绝对路径
 	print STDOUT "###($sample_name) Sample identification started, ",`date`;
 	my (%hs_tag_num,%hs_detected_GCF_tag);
 	# load a single sample
