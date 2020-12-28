@@ -393,6 +393,7 @@ while(<LIST>){
 	chomp;
 	my $sample_name=(split /\t/)[0];
 	print STDOUT "Analysis $sample_name, ",`date`;
+	&CheckDir("$outdir/quantitative_sdb/$sample_name/database");
 	&execute("cp $outdir/quantitative_sdb/$sample_name/sdb.list $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt && gzip -f $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt");
 	#精细定量开始
 	$pm=new Parallel::ForkManager($cpu2);
