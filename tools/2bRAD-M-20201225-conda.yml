@@ -1,0 +1,8 @@
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - perl=5.26.2
+  - perl-parallel-forkmanager=2.02
+  - pear=0.9.6

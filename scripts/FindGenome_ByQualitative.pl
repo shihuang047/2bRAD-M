@@ -4,10 +4,9 @@ use strict;
 use Getopt::Long;
 use FindBin qw($Bin);
 use File::Basename qw(dirname basename);
-use MyModule;
 
 my $author="Zhangrongchao";
-my $time="20200924";
+my $time="20201222";
 
 my $g_score_threshold ||=5;#对定性的合并结果，进行分类筛选 gscore阈值
 my $GCF_threshold ||=1;#鉴定到某个基因组几个标签以上，该基因组才会被纳入定量建库
@@ -46,6 +45,11 @@ print STDERR "\e[;33;1m
 }
 
 
+if(defined($help)){
+	&usage;
+	exit 0;
+}
+
 #参数检测
 unless($list && $database && $outdir && $qual_dir){
 	&usage;
@@ -54,17 +58,17 @@ unless($list && $database && $outdir && $qual_dir){
 }
 
 #数据库文件检测
-unless(-d "$database/database" && -e "$database/abfh_classify.txt" && -d "$database/genome_ref"){
-	print STDERR "incomplete database, please check.\n";
+unless(-e "$database/abfh_classify_with_speciename.txt.gz"){
+	print STDERR "incomplete database, $database/abfh_classify_with_speciename.txt.gz does not exists.\n";
 	exit 1;
 }
 
 #记录数据库中gcf转化为全部信息
 my %gcf2classify_path;
-open DB,"$database/abfh_classify.txt" or die "cannot open $database/abfh_classify.txt\n";
+open DB,"gzip -dc $database/abfh_classify_with_speciename.txt.gz|" or die "cannot open $database/abfh_classify_with_speciename.txt.gz\n";
 while(<DB>){
+	next if(/^#/ || /^$/);
 	chomp;
-	next if(/^#unique_name/); #unique_name    kingdom phylum  class   order   family  genus   specie  strain  genome_path
 	my @tmp=split /\t/;
 	$gcf2classify_path{$tmp[0]}=$_;
 }
@@ -91,13 +95,17 @@ while(<IN>){
 	while(<XI>){
 		chomp;
 		my @tmp=split /\t/;
-		next if(/^#Kingdom/);#跳过表头
+		next if(/^#Kingdom/i);#跳过表头
 		if(/^#/){#记录 合并使用的酶 组合
 			my @a=split /\s+/,$tmp[0];
 			for my $enzyme(@a){
 				$enzyme=~s/^#//;
 				next if($enzyme eq "combine");#跳过 combine字段
 				push @enzyme_use,$enzyme;
+				unless(-e "$database/$enzyme.species.fa.gz"){
+					print STDERR "incomplete database, $database/abfh_classify_with_speciename.txt.gz does not exists.\n";
+					exit 1;
+				}
 			}
 			next;
 		}
@@ -119,8 +127,9 @@ while(<IN>){
 			my @tmp=split /\t/;
 			my $class=join("\t",@tmp[0..$#tmp-4]);
 			if(exists $hs_pass_Gscore_class{$class} && $tmp[-2]>$GCF_threshold){
-				my @all_class=split /\t/,$gcf2classify_path{$tmp[-4]};
-				print OU join("\t",@all_class[0..8]),"\t$database/genome_ref/$all_class[-1]\n";
+				print OU "$gcf2classify_path{$tmp[-4]}\n";
+#				my @all_class=split /\t/,$gcf2classify_path{$tmp[-4]};
+#				print OU join("\t",@all_class[0..8]),"\t$database/genome_ref/$all_class[-1]\n";
 			}
 		}
 		close QU;
@@ -131,7 +140,14 @@ while(<IN>){
 close IN;
 
 
-
+sub CheckDir{# create the directory
+	my $file = shift;
+	unless( -d $file ){
+		if( -d dirname($file) && -w dirname($file) ){system("mkdir $file");}
+		else{print STDERR "$file not exists and cannot be built\n";exit 1;}
+		}
+		return 1;
+}
 
 
 

@@ -80,7 +80,7 @@ while(<LI>){
 	while(<IN>){
 		chomp;
 		my @tmp=split /\t/;
-		if(/^#Kingdom/){
+		if(/^#Kingdom/i){
 			for my $i(0..$#tmp){#确定分类列
 				if($tmp[$i] eq "Theoretical_Tag_Num"){
 					$classify_col=$i-1;
