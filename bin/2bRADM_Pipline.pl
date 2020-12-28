@@ -228,6 +228,7 @@ if($quan eq "yes"){
 		unless(exists $hs_site1{$i}){#检测site2是否包含于site1
 			&usage;
 			print STDERR "parameter -s2 is wrong, $i is not included in para -s1\n";
+			exit 1;
 		}
 	}
 }elsif($quan eq "no"){
@@ -392,6 +393,7 @@ while(<LIST>){
 	chomp;
 	my $sample_name=(split /\t/)[0];
 	print STDOUT "Analysis $sample_name, ",`date`;
+	&execute("cp $outdir/quantitative_sdb/$sample_name/sdb.list $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt && gzip -f $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt");
 	#精细定量开始
 	$pm=new Parallel::ForkManager($cpu2);
 	for my $i(@site2){
@@ -400,12 +402,11 @@ while(<LIST>){
 		print SA "$sample_name\t$outdir/enzyme_result/$sample_name.$hs_site2enzyme{$i}.fa.gz\n";
 		close SA;
 		&execute("perl $Bin/CreateQuanDatabase_2bRAD.pl -l $outdir/quantitative_sdb/$sample_name/sdb.list -e $database/$hs_site2enzyme{$i}.species.fa.gz -s $i -t $level2 -o $outdir/quantitative_sdb/$sample_name/database -r no 1> /dev/null");#建库
-		&execute("cp $outdir/quantitative_sdb/$sample_name/sdb.list $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt && gzip -f $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt");
 		&execute("perl $Bin/CalculateRelativeAbundance_Single2bEnzyme.pl -l $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list -d $outdir/quantitative_sdb/$sample_name/database -t $level2 -s $i -o $outdir/quantitative -g 0 -v yes 1> /dev/null");#定量 不对gscore进行过滤
-		&execute("rm -rf $outdir/quantitative_sdb/$sample_name/database");#删除数据库
 		$pm->finish;
 	}
 	$pm->wait_all_children;
+	&execute("rm -rf $outdir/quantitative_sdb/$sample_name/database");#删除数据库
 }
 close LIST;
 

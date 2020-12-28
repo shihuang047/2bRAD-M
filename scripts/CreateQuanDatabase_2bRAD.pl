@@ -245,6 +245,12 @@ while(<LI>){
 }
 close LI;
 
+if($genome_total_num==0){
+	print STDERR "[warning] There is no genome in the List file.\n";
+	exit 0;
+}
+
+
 &CheckDir("$outdir");# create the output directory
 #&CheckDir("$outdir/database");
 
