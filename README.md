@@ -70,18 +70,15 @@ This repository provides the computational pipeline for microbiome analysis on 2
    
    (2) Download the full genomes from NCBI Refseq for secondary 2b-Tag-DB construction for each sample.
  
-  `gunzip tools/DBconstruction.mk.gz`
-   
-   Execute the shell script by `make -f` and set the Database path:
- 
-  `make -f tools/DBconstruction.mk Database_path=2B-RAD-M-ref_db/`
+    `perl tools/Download_2bRADTagDB.pl your_database_path(default:./2B-RAD-M-ref_db/)`
+
  
 ## 2bRAD-M pipeline tutorial
- * [Analyze the MOCK-MSA1002 community (sequenceing data)](docs/analyze_mock.md)
+ * [Analyze the MOCK-MSA1002 community (2bRAD sequenceing data)](docs/analyze_mock.md)
  
   `perl bin/2bRADM_Pipline.pl -t 3 -l 2B-RAD-M-ref_db/example_data/list_simulation -d 2B-RAD-M-ref_db -o output`
  
- * [Analyze in silico mock community (synthetic shogun data)](docs/snp_diversity.md)
+ * [Analyze in silico mock community (synthetic shogun data)](docs/analyze_mock.md)
  
  `perl bin/2bRADM_Pipline.pl -t 1 -l 2B-RAD-M-ref_db/example_data/list_mock -d 2B-RAD-M-ref_db -o output -s1 17 -s2 17 -gsc 60`
  
