@@ -27,8 +27,8 @@ This repository provides the computational pipeline for microbiome analysis on 2
 
 ## Installation
  ### System requirements
- * Operating systems: Unix, OSX
- * Conda/Miniconda >= 3
+ #### Dependencies
+ All scripts in 2bRAD-M are written using Perl and recommended to run in a conda environment. In the Unix systems, or Mac OSX, the program should work properly as all required packages can be appropreiately download and installed in the conda environment. 
  #### Disk space
  Construction of a 2bRAD-M standard database (i.e., 2b-Tag-DB) requires approximately 10 GB of disk space. 
  #### Memory usage
