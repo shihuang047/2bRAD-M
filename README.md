@@ -92,42 +92,42 @@ DESCRIPTION
 	  We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
 
 PARAMETERS
-  -t   <int>    Type of Input File in sample list(para -l)
+  -t   <int>    The acceptable types of an input sequencing data file in the sample list file (para -l)
                 [1] Genome Data in Fasta Format
                 [2] Shotgun Data in Fastq Format(SE or PE)
                 [3] SE Platform Data in Fastq Format
                 [4] PE Platform Data in Fastq Format
-  -l   <file>   sample list file (the line which begins with # will be ignored)
+  -l   <file>   A sample list file including input sample IDs and the corresponding DNA sequence files (each line that begins with # will be ignored)
                 [1] sample<tab>sample.fa(.gz)
                 [2] sample<tab>shotgun.1.fq(.gz)(<tab>shotgun.2.fq.gz)
                 [3] sample<tab>2bsingle.fq(.gz or 2bsingle.1.fq.gz)
                 [4] sample1<tab>sample2<tab>sample3<tab>sample4<tab>sample5<tab>R1.fq(.gz)<tab>R2.fq(.gz)
-  -d   <dir>    database path
-  -o   <dir>    outdir (if not exists,it will be created)
+  -d   <dir>    The working path of 2B-Tag-DB database
+  -o   <dir>    The output directory (if not exists,it will be created)
 OPTIONS of Qualitative Analysis
-  -p   <str>   qualitative or not [default: $qual] (yes or no)
-  -s1  <str>   qualitative enzyme site. One or more of site. (comma separated) [default: $site1]
+  -p   <str>   If qualitative analysis applies or not [default: $qual] (yes or no)
+  -s1  <str>   The enzyme site(s) for the qualitative analysis. One or more of site can be specified. (comma separated) [default: $site1]
                It also represents enzymatic digestion or data splitting, and combining qualitative analysis results(for quantitative analysis).
                [1]CspCI  [5]BcgI  [9]BplI     [13]CjePI  [17]AllEnzyme
                [2]AloI   [6]CjeI  [10]FalI    [14]Hin4I
                [3]BsaXI  [7]PpiI  [11]Bsp24I  [15]AlfI
                [4]BaeI   [8]PsrI  [12]HaeIV   [16]BslFI
-  -t1  <str>   qualitative database level. One of kingdom,phylum,class,order,family,genus,species,strain. [default: $level1]
+  -t1  <str>   The taxonomic level for 2bRAD markers in the qualitative database, which should be one of following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level1]
 OPTIONS of Quantitative Analysis
-  -q   <str>   quantitative or not [default: $quan] (yes or no)
-  -gsc <int>   G score threshold of classify in qualitative analysis, it decides quantitative database. [default: $g_score_threshold, it means >$g_score_threshold]
-  -gcf <int>   detected tag threshold of GCF in qualitative analysis, it decides quantitative database. [default: $GCF_threshold, it means >$GCF_threshold]
-  -s2  <str>   quantitative enzyme site (refer to -s1) [default: $site2, must be included in para -s1]
-  -t2  <str>   quantitative database level. One of kingdom,phylum,class,order,family,genus,species,strain. [default: $level2]
+  -q   <str>   If the quantitative analysis apply or not [default: $quan] (yes or no)
+  -gsc <int>   G score threshold for identifying the condidate microbes present in a sample in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: $g_score_threshold, it means >$g_score_threshold]
+  -gcf <int>   The threshold of the 2bRAD tag number for the presence of a microbial genome (i.e., GCF) in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: $GCF_threshold, it means >$GCF_threshold]
+  -s2  <str>   The enzyme site for the quantitative analysis. (refer to -s1) [default: $site2, must be included in para -s1]
+  -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative database, which should be one of following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level2]
 OPTIONS of CPU
-  -c1  <int>   enzyme cpu [default: $cpu1]
-  -c2  <int>   calculate cpu [default: $cpu2] (each CPU needs about 15~65G of memory)
+  -c1  <int>   The number of CPUs used in the digital digestion step for multiple samples [default: $cpu1]
+  -c2  <int>   The number of CPUs used for calculating the abundance for multiple samples [default: $cpu2] (each CPU needs about 15~65G of memory)
 OPTIONS of Quality Control
-  -qc  <str>   quality control or not [default: $qc] (yes or no)
-  -qcn <float> Maximum Ratio of Base \"N\" [default: $qc_n]
-  -qcq <int>   Minimum Quality Score to Keep [default: $qc_q]
-  -qcp <int>   Minimum Percent of Bases that must have [-qcq] Quality [default: $qc_p]
-  -qcb <int>   Quality Values Base [default: $qc_b]
+  -qc  <str>   If quality control apply or not [default: $qc] (yes or no)
+  -qcn <float> The maximum ratio of base \"N\" [default: $qc_n]
+  -qcq <int>   The minimum quality score to keep [default: $qc_q]
+  -qcp <int>   The minimum percentage of bases that must have [-qcq] Quality [default: $qc_p]
+  -qcb <int>   The quality values of base [default: $qc_b]
 OPTIONS of Abundance Stat
   -ms  <str>   Mock Sample Name (separated by commas)
   -ncs <str>   Negative Control Sample Name (separated by commas)
