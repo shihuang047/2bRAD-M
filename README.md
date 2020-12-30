@@ -77,9 +77,9 @@ This repository provides the computational pipeline for microbiome analysis on 2
     It usually can take around 30 mins to save all files in the `your_database_path`, but it still depends on your internet connenction speed and stability.
  
 ## 2bRAD-M pipeline tutorial
-   * The pipeline description:
+   * The usage of the 2bRAD-M analysis pipeline:
    ```
-        DESCRIPTION
+    DESCRIPTION
 	  The streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
 
 	PARAMETERS
