@@ -92,12 +92,12 @@ DESCRIPTION
     We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
 
 PARAMETERS
-  -t   <int>    The acceptable types of an input sequencing data file in the sample list file (para -l)
+  -t   <int>    The acceptable types of an input sequencing data file. The file path should be also listed in the sample list file (para -l)
                 [1] generic genome data in a fasta format
                 [2] shotgun metagenomic data in a fastq Format(either SE or PE platform is accepted)
                 [3] 2bRAD data from a SE sequencing platform in a fastq format
                 [4] 2bRAD data from a PE sequencing platform in a fastq format
-  -l   <file>   A sample list file includes input sample IDs and the corresponding DNA sequence files in each line where each field should be separated by <tab>. A line in this file that begins with # will be ignored. Only four formats of a sample list file are accepted and should match with parameter -t: 
+  -l   <file>   Each line of a sample list file includes an input sample ID and the file path of corresponding DNA sequence data where each field should be separated by <tab>. A line in this file that begins with # will be ignored. Only four formats of a sample list file are accepted and should match with parameter -t: 
                 [1] sample<tab>sample.fa(.gz)
                 [2] sample<tab>shotgun.1.fq(.gz)(<tab>shotgun.2.fq.gz)
                 [3] sample<tab>2bsingle.fq(.gz or 2bsingle.1.fq.gz)
@@ -126,7 +126,7 @@ OPTIONS of Quality Control
   -qc  <str>   If quality control apply or not [default: $qc] (yes or no)
   -qcn <float> The maximum ratio of base \"N\" [default: $qc_n]
   -qcq <int>   The minimum quality score to keep [default: $qc_q]
-  -qcp <int>   The minimum percentage of bases that must have [-qcq] Quality [default: $qc_p]
+  -qcp <int>   The minimum percentage of bases that must have [-qcq] quality [default: $qc_p]
   -qcb <int>   The quality values of base [default: $qc_b]
 OPTIONS of Abundance Stat
   -ms  <str>   Mock Sample Name (separated by commas)
