@@ -78,11 +78,11 @@ This repository provides the computational pipeline for microbiome analysis on 2
  
 ## 2bRAD-M pipeline tutorial
    * The pipeline description:
-   `
+   ```
    DESCRIPTION
 	  The streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
 	  
-	  PARAMETERS
+   PARAMETERS
 	  
 	  -t   <int>    Type of Input File in sample list(para -l)
 	  
@@ -144,7 +144,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
 	  
 	  -c2  <int>   calculate cpu [default: $cpu2] (each CPU needs about 15~65G of memory)
 	  
-	  OPTIONS of Quality Control
+   OPTIONS of Quality Control
 	  
 	  -qc  <str>   quality control or not [default: $qc] (yes or no)
 	  
@@ -163,7 +163,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
 	  -ncs <str>   Negative Control Sample Name (separated by commas)
 	  
 	  -h|help   Print this help
-   `
+   ```
  
    * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.fa.gz`)](docs/analyze_mock.md)
  
