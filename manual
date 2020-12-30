@@ -1,5 +1,4 @@
 1.install software
-<<<<<<< HEAD
   conda env create -n 2bRAD-M-20201225 --file tools/2bRAD-M-20201225-conda.yml
   conda activate 2bRAD-M-20201225
 
@@ -11,21 +10,7 @@
     perl bin/2bRADM_Pipline.pl -t 1 -l your_database_path/list_simulation -d your_database_path -o outdir -s1 5,13 -s2 5,13 -gsc 60
   2)MSA1002_R1.fq.gz:
     perl bin/2bRADM_Pipline.pl -t 3 -l your_database_path/list_mock -d your_database_path -o outdir
-=======
-  conda env create -n 2bRAD-M-2020.11.24 --file tools/2bRAD-M-2020.11.24-conda.yml
-  conda activate 2bRAD-M-2020.11.24
 
-2.download genome, database and example data
-  gunzip tools/DBconstruction.mk.gz
-  make -f tools/DBconstruction.mk Database_path=your_database_path(default:./2B-RAD-M-ref_db/)
-
-3.test the Pipline with sample data
-  1)simulate_50.fa.gz:
-    perl bin/2bRADM_Pipline.pl -t 1 -l your_database_path/example_data/list_simulation -d your_database_path -o outdir -s1 17 -s2 17 -gsc 60
-  2)MSA1002_R1.fq.gz:
-    perl bin/2bRADM_Pipline.pl -t 3 -l your_database_path/example_data/list_mock -d your_database_path -o outdir
->>>>>>> master
-    
 Note:
   You need to activate the environment each time you use it. (conda activate 2bRAD-M-20201225)
 
