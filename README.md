@@ -29,8 +29,13 @@ This repository provides the computational pipeline for microbiome analysis on 2
  ### System requirements
  * Operating systems: Unix, OSX
  * Conda/Miniconda >= 3
- ### Speed and memory usage
- Most steps of the program are quite fast, require < 2Gb of RAM, and are compatible with multithreading. About 20 minutes are required for loading the 2bTag     database. For a typical gut metagenome, ~1-5 minutes are required for species profiling.
+ #### Disk space
+ Construction of a 2bRAD-M standard database (i.e., 2b-Tag-DB) requires approximately 10 GB of disk space. 
+ #### memory usage
+ Running the standard pipeline requires < 30Gb of RAM, and are compatible with multithreading. For example, the BcgI-derived (default) database size is 9.32 GB, and you will need more than that in RAM if you want to build the default database. In a test early on, the peak memory can reach up to 29GB
+ #### Speed 
+About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metagenome, ~40 minutes are required for species profiling.
+ 
  ### Download the pipeline
  * Clone the latest version from GitHub (recommended):  
  
@@ -57,11 +62,11 @@ This repository provides the computational pipeline for microbiome analysis on 2
    
    Once you have Miniconda installed, create a conda environment with the yml file `tools/2bRAD-M-2020.11.24-conda.yml`.
    
-   `conda env create -n 2bRAD-M-2020.11.24 --file tools/2bRAD-M-2020.11.24-conda.yml`
+   `conda env create -n 2bRAD-M-20201225 --file tools/2bRAD-M-20201225-conda.yml`
    
  * Activate the 2bRAD-M conda environment by running the following command:
  
-   `source activate 2bRAD-M-2020.11.24`
+   `source activate 2bRAD-M-20201225`
 
  ### Construct the reference 2B-Tag database (required)
  * Construct the 2bRAD-M species unique marker database (2B-Tag-DB)
