@@ -87,7 +87,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
 	
 
 
-``
+`
     DESCRIPTION
 	  We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
 
@@ -132,7 +132,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
 	  -ms  <str>   Mock Sample Name (separated by commas)
 	  -ncs <str>   Negative Control Sample Name (separated by commas)
 	  -h|help   Print this help
-   ``
+`
  
    * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.fa.gz`)](docs/analyze_mock.md)
  
