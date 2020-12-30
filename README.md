@@ -55,7 +55,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
    
    `conda update conda`
    
-   Once you have Miniconda installed, create a conda environment with the yml file ``tools/2bRAD-M-2020.11.24-conda.yml``.
+   Once you have Miniconda installed, create a conda environment with the yml file `tools/2bRAD-M-2020.11.24-conda.yml`.
    
    `conda env create -n 2bRAD-M-2020.11.24 --file tools/2bRAD-M-2020.11.24-conda.yml`
    
@@ -78,7 +78,6 @@ This repository provides the computational pipeline for microbiome analysis on 2
  
 ## 2bRAD-M pipeline tutorial
    * The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and optimized parameters for analyzing the 2bRAD or shotgun metagenomics sequencing data, which can output the most comprehensive output on each sample. The pipeline includes:
-   
    	(1) The digital restriction digestion It is required when input DNA sequences are longer than 31bp or 33bp (e.g., 150bp) from the common shotgun sequencing protocol. If input DNA sequences were produced by the 2bRAD sequencing protocol this step will be skipped. 
    
    	(2) Qualitative analysis Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt and comprehensive 2b-Tag-DB based on the NCBI Refseq (Oct., 2019).
@@ -87,7 +86,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
 	
 
 
-`
+```
     DESCRIPTION
 	  We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
 
@@ -132,7 +131,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
 	  -ms  <str>   Mock Sample Name (separated by commas)
 	  -ncs <str>   Negative Control Sample Name (separated by commas)
 	  -h|help   Print this help
-`
+```
  
    * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.fa.gz`)](docs/analyze_mock.md)
  
