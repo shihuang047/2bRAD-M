@@ -69,18 +69,21 @@ This repository provides the computational pipeline for microbiome analysis on 2
    (1) Download the prebuilt 2b-Tag-DB from Figshare based on the NCBI Refseq (Oct., 2019).
    
    (2) Download the full genomes from NCBI Refseq for secondary 2b-Tag-DB construction for each sample.
+   
+   (3) Download the example datasets for pipeline tutorial
  
     `perl tools/Download_2bRADTagDB.pl your_database_path(default:./2B-RAD-M-ref_db/)`
-
+    
+    It usually can take around 30 mins to save all files in the `your_database_path`, but it still depends on the internet connenction speed and stability.
  
 ## 2bRAD-M pipeline tutorial
- * [Analyze the MOCK-MSA1002 community (2bRAD sequenceing data)](docs/analyze_mock.md)
+ * [Analyze the MOCK-MSA1002 community (2bRAD sequenceing data: `simulate_50.fa.gz`)](docs/analyze_mock.md)
  
-  `perl bin/2bRADM_Pipline.pl -t 3 -l 2B-RAD-M-ref_db/example_data/list_simulation -d 2B-RAD-M-ref_db -o output`
+  `perl bin/2bRADM_Pipline.pl -t 1 -l your_database_path/list_simulation -d your_database_path -o outdir -s1 5,13 -s2 5,13 -gsc 60`
+
+ * [Analyze in silico mock community (synthetic shogun data: `MSA1002_R1.fq.gz`)](docs/analyze_mock.md)
  
- * [Analyze in silico mock community (synthetic shogun data)](docs/analyze_mock.md)
- 
- `perl bin/2bRADM_Pipline.pl -t 1 -l 2B-RAD-M-ref_db/example_data/list_mock -d 2B-RAD-M-ref_db -o output -s1 17 -s2 17 -gsc 60`
+  `perl bin/2bRADM_Pipline.pl -t 3 -l your_database_path/list_mock -d your_database_path -o outdir`
  
 ## 2bRAD-M scripts for customized analyses 
  * [Extract 2b tags](docs/extract_2b.md)
