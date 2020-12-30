@@ -74,7 +74,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
  
     `perl tools/Download_2bRADTagDB.pl your_database_path(default:./2B-RAD-M-ref_db/)`
     
-    It usually can take around 30 mins to save all files in the `your_database_path`, but it still depends on the internet connenction speed and stability.
+    It usually can take around 30 mins to save all files in the `your_database_path`, but it still depends on your internet connenction speed and stability.
  
 ## 2bRAD-M pipeline tutorial
  * [Analyze the MOCK-MSA1002 community (2bRAD sequenceing data: `simulate_50.fa.gz`)](docs/analyze_mock.md)
