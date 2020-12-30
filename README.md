@@ -79,17 +79,17 @@ This repository provides the computational pipeline for microbiome analysis on 2
 ## 2bRAD-M pipeline tutorial
 * The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and optimized parameters for analyzing the 2bRAD or shotgun metagenomics sequencing data, which can output the most comprehensive output on each sample. The pipeline includes:
 
-    (1) **The digital restriction digestion** It is required when input DNA sequences are longer than 31bp or 33bp (e.g., 150bp) from the common shotgun sequencing protocol. If input DNA sequences were produced by the 2bRAD sequencing protocol this step will be skipped. 
+    (1) **The digital restriction digestion** It is required when input DNA sequences are longer than 31bp or 33bp (e.g., 150bp) or derived from the common shotgun sequencing protocols. If input DNA sequences were produced by the 2bRAD sequencing protocol this step will be skipped. 
        
     (2) **Qualitative analysis** Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt and comprehensive 2b-Tag-DB based on the NCBI Refseq (Oct., 2019).
        
-    (3) **Quantitative analysis** Identify the microbes and estimate their abundances based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
+    (3) **Quantitative analysis** Identify the microbes and estimate their abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
     	
 
 
 ```
 DESCRIPTION
-	  We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
+    We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
 
 PARAMETERS
   -t   <int>    The acceptable types of an input sequencing data file in the sample list file (para -l)
@@ -112,13 +112,13 @@ OPTIONS of Qualitative Analysis
                [2]AloI   [6]CjeI  [10]FalI    [14]Hin4I
                [3]BsaXI  [7]PpiI  [11]Bsp24I  [15]AlfI
                [4]BaeI   [8]PsrI  [12]HaeIV   [16]BslFI
-  -t1  <str>   The taxonomic level for 2bRAD markers in the qualitative database, which should be one of following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level1]
+  -t1  <str>   The taxonomic level for 2bRAD markers in the qualitative database, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level1]
 OPTIONS of Quantitative Analysis
-  -q   <str>   If the quantitative analysis apply or not [default: $quan] (yes or no)
+  -q   <str>   If the quantitative analysis applies or not [default: $quan] (yes or no)
   -gsc <int>   G score threshold for identifying the condidate microbes present in a sample in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: $g_score_threshold, it means >$g_score_threshold]
   -gcf <int>   The threshold of the 2bRAD tag number for the presence of a microbial genome (i.e., GCF) in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: $GCF_threshold, it means >$GCF_threshold]
   -s2  <str>   The enzyme site for the quantitative analysis. (refer to -s1) [default: $site2, must be included in para -s1]
-  -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative database, which should be one of following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level2]
+  -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative database, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level2]
 OPTIONS of CPU
   -c1  <int>   The number of CPUs used in the digital digestion step for multiple samples [default: $cpu1]
   -c2  <int>   The number of CPUs used for calculating the abundance for multiple samples [default: $cpu2] (each CPU needs about 15~65G of memory)
