@@ -83,7 +83,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
        
     (2) **Qualitative analysis** Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt and comprehensive 2b-Tag-DB based on the NCBI Refseq (Oct., 2019).
        
-    (3) **Quantitative analysis** Identify the microbes and estimate their abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
+    (3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
     	
 
 
@@ -97,7 +97,7 @@ PARAMETERS
                 [2] shotgun metagenomic data in a fastq Format(either SE or PE platform is accepted)
                 [3] 2bRAD data from a SE sequencing platform in a fastq format
                 [4] 2bRAD data from a PE sequencing platform in a fastq format
-  -l   <file>   A sample list file including input sample IDs and the corresponding DNA sequence files (each line that begins with # will be ignored)
+  -l   <file>   A sample list file includes input sample IDs and the corresponding DNA sequence files (each line that begins with # will be ignored), where each field is separated by <tab>. Only four formats of the sample list file are accepted and should match with parameter -t: 
                 [1] sample<tab>sample.fa(.gz)
                 [2] sample<tab>shotgun.1.fq(.gz)(<tab>shotgun.2.fq.gz)
                 [3] sample<tab>2bsingle.fq(.gz or 2bsingle.1.fq.gz)
