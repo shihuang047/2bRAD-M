@@ -82,7 +82,8 @@ This repository provides the computational pipeline for microbiome analysis on 2
  
   `perl bin/2bRADM_Pipline.pl -t 1 -l your_database_path/list_simulation -d your_database_path -o outdir -s1 5,13 -s2 5,13 -gsc 60`
 
-  * [Analyze the 2bRAD sequencing data of the MOCK-MSA1002 community (`MSA1002_R1.fq.gz`)](docs/analyze_mock.md)
+  * [Analyze the 2bRAD sequencing data of a mock microbial community: MSA1002 (`MSA1002_R1.fq.gz`)](docs/analyze_mock.md)
+   [MSA1002](https://www.atcc.org/en/Global/Products/MSA-1002.aspx) comprises the genomic material from 20 microbial strains that are evenly mixed. 
  
   `perl bin/2bRADM_Pipline.pl -t 3 -l your_database_path/list_mock -d your_database_path -o outdir`
  
