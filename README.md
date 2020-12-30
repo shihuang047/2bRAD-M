@@ -93,17 +93,17 @@ DESCRIPTION
 
 PARAMETERS
   -t   <int>    The acceptable types of an input sequencing data file in the sample list file (para -l)
-                [1] Genome Data in Fasta Format
-                [2] Shotgun Data in Fastq Format(SE or PE)
-                [3] SE Platform Data in Fastq Format
-                [4] PE Platform Data in Fastq Format
+                [1] generic genome data in a fasta format
+                [2] shotgun metagenomic data in a fastq Format(either SE or PE platform is accepted)
+                [3] 2bRAD data from a SE sequencing platform in a fastq format
+                [4] 2bRAD data from a PE sequencing platform in a fastq format
   -l   <file>   A sample list file including input sample IDs and the corresponding DNA sequence files (each line that begins with # will be ignored)
                 [1] sample<tab>sample.fa(.gz)
                 [2] sample<tab>shotgun.1.fq(.gz)(<tab>shotgun.2.fq.gz)
                 [3] sample<tab>2bsingle.fq(.gz or 2bsingle.1.fq.gz)
                 [4] sample1<tab>sample2<tab>sample3<tab>sample4<tab>sample5<tab>R1.fq(.gz)<tab>R2.fq(.gz)
   -d   <dir>    The working path of 2B-Tag-DB database
-  -o   <dir>    The output directory (if not exists,it will be created)
+  -o   <dir>    The output directory (if not exists, it will be created automatically as 'outdir')
 OPTIONS of Qualitative Analysis
   -p   <str>   If qualitative analysis applies or not [default: $qual] (yes or no)
   -s1  <str>   The enzyme site(s) for the qualitative analysis. One or more of site can be specified. (comma separated) [default: $site1]
@@ -116,7 +116,7 @@ OPTIONS of Qualitative Analysis
 OPTIONS of Quantitative Analysis
   -q   <str>   If the quantitative analysis applies or not [default: $quan] (yes or no)
   -gsc <int>   G score threshold for identifying the condidate microbes present in a sample in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: $g_score_threshold, it means >$g_score_threshold]
-  -gcf <int>   The threshold of the 2bRAD tag number for the presence of a microbial genome (i.e., GCF) in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: $GCF_threshold, it means >$GCF_threshold]
+  -gcf <int>   The threshold of the 2bRAD tag number for the presence of a microbial genome (i.e., GCF) in the qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: $GCF_threshold, it means >$GCF_threshold]
   -s2  <str>   The enzyme site for the quantitative analysis. (refer to -s1) [default: $site2, must be included in para -s1]
   -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative database, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level2]
 OPTIONS of CPU
@@ -131,7 +131,7 @@ OPTIONS of Quality Control
 OPTIONS of Abundance Stat
   -ms  <str>   Mock Sample Name (separated by commas)
   -ncs <str>   Negative Control Sample Name (separated by commas)
-  -h|help   Print this help
+  -h|help   Print this help information.
 ```
  
    * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.fa.gz`)](docs/analyze_mock.md)
