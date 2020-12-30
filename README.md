@@ -77,11 +77,11 @@ This repository provides the computational pipeline for microbiome analysis on 2
     It usually can take around 30 mins to save all files in the `your_database_path`, but it still depends on your internet connenction speed and stability.
  
 ## 2bRAD-M pipeline tutorial
- * [Analyze the MOCK-MSA1002 community (2bRAD sequenceing data: `simulate_50.fa.gz`)](docs/analyze_mock.md)
+ * [Analyze the MOCK-MSA1002 community (2bRAD sequenceing data: `MSA1002_R1.fq.gz`)](docs/analyze_mock.md)
  
   `perl bin/2bRADM_Pipline.pl -t 1 -l your_database_path/list_simulation -d your_database_path -o outdir -s1 5,13 -s2 5,13 -gsc 60`
 
- * [Analyze in silico mock community (synthetic shogun data: `MSA1002_R1.fq.gz`)](docs/analyze_mock.md)
+ * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.fa.gz`)](docs/analyze_mock.md)
  
   `perl bin/2bRADM_Pipline.pl -t 3 -l your_database_path/list_mock -d your_database_path -o outdir`
  
