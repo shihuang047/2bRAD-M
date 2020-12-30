@@ -77,10 +77,14 @@ This repository provides the computational pipeline for microbiome analysis on 2
     It usually can take around 30 mins to save all files in the `your_database_path`, but it still depends on your internet connenction speed and stability.
  
 ## 2bRAD-M pipeline tutorial
-   * The usage of the 2bRAD-M analysis pipeline:
+   * The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and optimized parameters for analyzing the 2bRAD or shotgun metagenomics sequencing data, which can output the most comprehensive output on each sample. The pipeline includes:
+   	
+	** The digital restriction digestion. It is required when input DNA sequences are longer than 31bp or 33bp (e.g., 150bp) from the common shotgun sequencing protocol. If input DNA sequences were produced by the 2bRAD sequencing protocol this step will be skipped. 
+	** Qualitative analysis. Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt and comprehensive 2b-Tag-DB based on the NCBI Refseq (Oct., 2019).
+	** Quantitative analysis. Identify the microbes and estimate their abundances based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
    ```
     DESCRIPTION
-	  The streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
+	  We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
 
 	PARAMETERS
 	  -t   <int>    Type of Input File in sample list(para -l)
@@ -88,7 +92,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
 	                [2] Shotgun Data in Fastq Format(SE or PE)
 	                [3] SE Platform Data in Fastq Format
 	                [4] PE Platform Data in Fastq Format
-	  -l   <file>   sample list (the line which begins with # will be ignored)
+	  -l   <file>   sample list file (the line which begins with # will be ignored)
 	                [1] sample<tab>sample.fa(.gz)
 	                [2] sample<tab>shotgun.1.fq(.gz)(<tab>shotgun.2.fq.gz)
 	                [3] sample<tab>2bsingle.fq(.gz or 2bsingle.1.fq.gz)
