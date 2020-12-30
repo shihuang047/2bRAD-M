@@ -79,11 +79,11 @@ This repository provides the computational pipeline for microbiome analysis on 2
 ## 2bRAD-M pipeline tutorial
    * The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and optimized parameters for analyzing the 2bRAD or shotgun metagenomics sequencing data, which can output the most comprehensive output on each sample. The pipeline includes:
    
-   	* `The digital restriction digestion` It is required when input DNA sequences are longer than 31bp or 33bp (e.g., 150bp) from the common shotgun sequencing protocol. If input DNA sequences were produced by the 2bRAD sequencing protocol this step will be skipped. 
+   	(1) [The digital restriction digestion] It is required when input DNA sequences are longer than 31bp or 33bp (e.g., 150bp) from the common shotgun sequencing protocol. If input DNA sequences were produced by the 2bRAD sequencing protocol this step will be skipped. 
    
-   	* `Qualitative analysis` Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt and comprehensive 2b-Tag-DB based on the NCBI Refseq (Oct., 2019).
+   	(2) $Qualitative analysis$ Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt and comprehensive 2b-Tag-DB based on the NCBI Refseq (Oct., 2019).
    
-   	* `Quantitative analysis` Identify the microbes and estimate their abundances based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
+   	(3) <Quantitative analysis> Identify the microbes and estimate their abundances based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
 	
    
 
