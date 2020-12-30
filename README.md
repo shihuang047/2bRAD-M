@@ -76,8 +76,10 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
    (2) Download the full genomes from NCBI Refseq for secondary 2b-Tag-DB construction for each sample.
    
    (3) Download the example datasets for pipeline tutorial
- 
-    `perl tools/Download_2bRADTagDB.pl $your_database_path (default:./2B-RAD-M-ref_db/)`
+    
+    `perl tools/Download_2bRADTagDB.pl $your_database_path`
+    
+    By default, `$your_database_path=./2B-RAD-M-ref_db/`
     
     It usually can take around 30 mins to save all files in the `your_database_path`, but it still depends on your internet connenction speed and stability.
  
