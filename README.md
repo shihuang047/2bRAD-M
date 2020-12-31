@@ -113,8 +113,8 @@ PARAMETERS
   -o   <dir>    The output directory (if not exists, it will be created automatically as 'outdir')
 OPTIONS of Qualitative Analysis
   -p   <str>   If qualitative analysis applies or not [default: $qual] (yes or no)
-  -s1  <str>   The enzyme site(s) for the qualitative analysis. One or more of site can be specified. (comma separated) [default: $site1]
-               It also represents enzymatic digestion or data splitting, and combining qualitative analysis results(for quantitative analysis).
+  -s1  <str>   The enzyme site(s) for the qualitative analysis. One or more sites can be specified(comma separated) [default: $site1]
+               It represents which enzyme(s) will be used for digital restriction digestion, the contruction of 2b-Tag-DB for the following qualitative analysis and quantitative analysis).
                [1]CspCI  [5]BcgI  [9]BplI     [13]CjePI  [17]AllEnzyme
                [2]AloI   [6]CjeI  [10]FalI    [14]Hin4I
                [3]BsaXI  [7]PpiI  [11]Bsp24I  [15]AlfI
@@ -141,12 +141,12 @@ OPTIONS of Abundance Stat
   -h|help   Print this help information.
 ```
  
-   * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.fa.gz`)](docs/analyze_mock.md)
+   * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.fa.gz`)](docs/analyze_mock.md) We simulated the community
  
   `perl bin/2bRADM_Pipline.pl -t 1 -l $your_database_path/list_simulation -d $your_database_path -o outdir -s1 5,13 -s2 5,13 -gsc 60`
 
   * [Analyze the 2bRAD sequencing data of a mock microbial community: MSA1002 (`MSA1002_R1.fq.gz`)](docs/analyze_mock.md)
-   [MSA1002](https://www.atcc.org/en/Global/Products/MSA-1002.aspx) comprises the genomic material from 20 microbial strains that are evenly mixed. We sequenced the DNA in this sample using our 2bRAD protocol for optimizing and testing the bioinformatic pipeline.
+   [MSA1002](https://www.atcc.org/en/Global/Products/MSA-1002.aspx) comprises the genomic material from 20 microbial strains that are evenly mixed. We sequenced this DNA sample using our 2bRAD protocol for optimizing and testing the bioinformatic pipeline.
  
   `perl bin/2bRADM_Pipline.pl -t 3 -l $your_database_path/list_mock -d $your_database_path -o outdir`
  
