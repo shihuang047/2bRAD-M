@@ -141,7 +141,7 @@ OPTIONS of Abundance Stat
   -h|help   Print this help information.
 ```
  
-   * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.fa.gz`)](docs/analyze_mock.md) We simulated the community
+   * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.fa.gz`)](docs/analyze_mock.md) We simulated the toy sequencing data of a microbial community with 50 members using [wigsim](https://github.com/lh3/wgsim).
  
   `perl bin/2bRADM_Pipline.pl -t 1 -l $your_database_path/list_simulation -d $your_database_path -o outdir -s1 5,13 -s2 5,13 -gsc 60`
 
