@@ -127,6 +127,7 @@ print STDERR "\e[;33;1m
           -ms  <str>   The mock-community sample name(s) (separated by commas)
           -ncs <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations
           -h|help   Print this help information.
+
 	AUTHOR:  $author $time\e[0m\n";
 }
 
