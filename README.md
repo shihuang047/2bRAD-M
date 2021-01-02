@@ -124,9 +124,9 @@ USAGE
        OPTIONS of Quantitative Analysis
          -q   <str>   If the quantitative analysis applies or not [default: yes] (yes or no)
          -gsc <int>   G score threshold for identifying the condidate microbes present in a sample in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: 5, it means >5]
-         -gcf <int>   The threshold of the 2bRAD tag number for the presence of a microbial genome (i.e., GCF) in the qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: 1, it means >1]
+         -gcf <int>   The threshold of the 2bRAD tag number for the presence of a microbial genome (i.e., GCF) in the qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB in the quantitative analysis step. [default: 1, it means >1]
          -s2  <str>   The enzyme site for the quantitative analysis. (refer to -s1) [default: 5, must be included in para -s1]
-         -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative database, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: species]
+         -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative analysis, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: species]
        OPTIONS of CPU
          -c1  <int>   The number of CPUs used in the digital digestion step for multiple samples. [default: 10]
          -c2  <int>   The number of CPUs used for calculating the abundance for multiple samples. [default: 8] (each CPU needs about 15~65G of memory)
