@@ -82,7 +82,7 @@ GetOptions(
 
 sub usage{#帮助
 print STDERR "\e[;33;1m
-	DESCRIPTION
+    DESCRIPTION
         We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
     USAGE
       perl $0
