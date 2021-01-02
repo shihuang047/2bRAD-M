@@ -60,7 +60,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
    
    `conda update conda`
    
-   Once you have Miniconda installed, create a conda environment with the yml file `tools/2bRAD-M-2020.11.24-conda.yml`.
+   Once you have Miniconda installed, create a conda environment with the yml file `tools/2bRAD-M-20201225-conda.yml`.
    
    `conda env create -n 2bRAD-M-20201225 --file tools/2bRAD-M-20201225-conda.yml`
    
@@ -135,9 +135,9 @@ OPTIONS of Quality Control
   -qcq <int>   The minimum quality score to keep [default: $qc_q]
   -qcp <int>   The minimum percentage of bases that must have [-qcq] quality [default: $qc_p]
   -qcb <int>   The quality values of base [default: $qc_b]
-OPTIONS of Abundance Stat
-  -ms  <str>   Mock Sample Name (separated by commas)
-  -ncs <str>   Negative Control Sample Name (separated by commas)
+OPTIONS of Abundance Estimation
+  -ms  <str>   The mock-community sample name(s) (separated by commas)
+  -ncs <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations
   -h|help   Print this help information.
 ```
  
