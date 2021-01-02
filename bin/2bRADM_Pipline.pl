@@ -110,10 +110,10 @@ print STDERR "\e[;33;1m
           -t1  <str>   The taxonomic level for 2bRAD markers in the qualitative database, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level1]
         OPTIONS of Quantitative Analysis
           -q   <str>   If the quantitative analysis applies or not [default: $quan] (yes or no)
-          -gsc <int>   G score threshold for identifying the condidate microbes present in a sample in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: $g_score_threshold, it means >$g_score_threshold]
+          -gsc <int>   G score threshold for identifying the condidate microbes present in a sample in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB in the quantitative analysis step. [default: $g_score_threshold, it means >$g_score_threshold]
           -gcf <int>   The threshold of the 2bRAD tag number for the presence of a microbial genome (i.e., GCF) in the qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: $GCF_threshold, it means >$GCF_threshold]
           -s2  <str>   The enzyme site for the quantitative analysis. (refer to -s1) [default: $site2, must be included in para -s1]
-          -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative database, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level2]
+          -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative analysis, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level2]
         OPTIONS of CPU
           -c1  <int>   The number of CPUs used in the digital digestion step for multiple samples [default: $cpu1]
           -c2  <int>   The number of CPUs used for calculating the abundance for multiple samples [default: $cpu2] (each CPU needs about 15~65G of memory)
