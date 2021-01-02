@@ -145,7 +145,7 @@ PARAMETERS
  
    * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.fa.gz`)](docs/analyze_mock.md) We simulated the toy sequencing data of a microbial community with 50 members using [wigsim](https://github.com/lh3/wgsim).
  
-  `perl bin/2bRADM_Pipline.pl -t 1 -l $your_database_path/list_simulation -d $your_database_path -o outdir -s1 5,13 -s2 5,13 -gsc 60`
+  `perl bin/2bRADM_Pipline.pl -t 1 -l $your_database_path/list_simulation -d $your_database_path -o outdir -gsc 60 -qc no`
 
   * [Analyze the 2bRAD sequencing data of a mock microbial community: MSA1002 (`MSA1002_R1.fq.gz`)](docs/analyze_mock.md)
    [MSA1002](https://www.atcc.org/en/Global/Products/MSA-1002.aspx) comprises the genomic material from 20 microbial strains that are evenly mixed. We sequenced this DNA sample using our 2bRAD protocol for optimizing and testing the bioinformatic pipeline.
