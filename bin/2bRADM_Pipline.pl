@@ -83,16 +83,16 @@ GetOptions(
 sub usage{#帮助
 print STDERR "\e[;33;1m
 	DESCRIPTION
-    	We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
-	USAGE
-	  perl $0
-        PARAMETERS
+        We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
+    USAGE
+      perl $0
+    PARAMETERS
           -t   <int>    The acceptable types of an input sequencing data file. The file path should be also listed in the sample list file (para -l)
                         [1] generic genome data in a fasta format
                         [2] shotgun metagenomic data in a fastq format(either SE or PE platform is accepted)
                         [3] 2bRAD data from a SE sequencing platform in a fastq format
                         [4] 2bRAD data from a PE sequencing platform in a fastq format
-          -l   <file>   The filepath of the sample list. Each line includes an input sample ID and the file path of corresponding DNA sequence data where each field should be separated by <tab>. A line in this file that begins with # will be ignored. Only four formats of a sample list file are accepted and should match with parameter -t: 
+          -l   <file>   The filepath of the sample list. Each line includes an input sample ID and the file path of corresponding DNA sequence data where each field should be separated by <tab>. A line in this file that begins with # will be ignored. Only four formats of a sample list file are accepted and should match with parameter -t:
                         [1] sample<tab>sample.fa(.gz)
                         [2] sample<tab>shotgun.1.fq(.gz)(<tab>shotgun.2.fq.gz)
                         [3] sample<tab>2bsingle.fq(.gz or 2bsingle.1.fq.gz)
@@ -128,7 +128,7 @@ print STDERR "\e[;33;1m
           -ncs <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations
           -h|help   Print this help information.
 
-	AUTHOR:  $author $time\e[0m\n";
+    AUTHOR:  $author $time\e[0m\n";
 }
 
 if(defined($help)){
@@ -388,28 +388,32 @@ if($type!=4){#除2brad五标签之外其他数据处理
 }else{#2brad五标签处理
 	open LIST,"$outdir/list/2brad_5tag.list" or die "cannot open $outdir/list/2brad_5tag.list\n";
 }
+$pm=new Parallel::ForkManager($cpu2);#样品间酶切位点间多线程并行
+my $rm;
 while(<LIST>){
-	next if(/^#/ || /^$/);
-	chomp;
-	my $sample_name=(split /\t/)[0];
-	print STDOUT "Analysis $sample_name, ",`date`;
-	&CheckDir("$outdir/quantitative_sdb/$sample_name/database");
-	&execute("cp $outdir/quantitative_sdb/$sample_name/sdb.list $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt && gzip -f $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt");
-	#精细定量开始
-	$pm=new Parallel::ForkManager($cpu2);
-	for my $i(@site2){
-		my $pid=$pm->start and next;
-		open SA,">$outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list" or die "cannot open $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list\n";
-		print SA "$sample_name\t$outdir/enzyme_result/$sample_name.$hs_site2enzyme{$i}.fa.gz\n";
-		close SA;
-		&execute("perl $Bin/CreateQuanDatabase_2bRAD.pl -l $outdir/quantitative_sdb/$sample_name/sdb.list -e $database/$hs_site2enzyme{$i}.species.fa.gz -s $i -t $level2 -o $outdir/quantitative_sdb/$sample_name/database -r no 1> /dev/null");#建库
-		&execute("perl $Bin/CalculateRelativeAbundance_Single2bEnzyme.pl -l $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list -d $outdir/quantitative_sdb/$sample_name/database -t $level2 -s $i -o $outdir/quantitative -g 0 -v yes 1> /dev/null");#定量 不对gscore进行过滤
-		$pm->finish;
+	my $line=$_;
+	if(/^#/ || /^$/){;}else{#去除注释行和空行
+		chomp($line);
+		my $sample_name=(split /\t/,$line)[0];
+		$rm .=" $outdir/quantitative_sdb/$sample_name/database ";
+		print STDOUT "Analysis $sample_name, ",`date`;
+		&CheckDir("$outdir/quantitative_sdb/$sample_name/database");
+		&execute("cp $outdir/quantitative_sdb/$sample_name/sdb.list $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt && gzip -f $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt");
+		#精细定量开始
+		for my $i(@site2){
+			my $pid=$pm->start and next;
+			open SA,">$outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list" or die "cannot open $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list\n";
+			print SA "$sample_name\t$outdir/enzyme_result/$sample_name.$hs_site2enzyme{$i}.fa.gz\n";
+			close SA;
+			&execute("perl $Bin/CreateQuanDatabase_2bRAD.pl -l $outdir/quantitative_sdb/$sample_name/sdb.list -e $database/$hs_site2enzyme{$i}.species.fa.gz -s $i -t $level2 -o $outdir/quantitative_sdb/$sample_name/database -r no 1> /dev/null");#建库
+			&execute("perl $Bin/CalculateRelativeAbundance_Single2bEnzyme.pl -l $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list -d $outdir/quantitative_sdb/$sample_name/database -t $level2 -s $i -o $outdir/quantitative -g 0 -v yes 1> /dev/null");#定量 不对gscore进行过滤
+			$pm->finish;
+		}
 	}
-	$pm->wait_all_children;
-	&execute("rm -rf $outdir/quantitative_sdb/$sample_name/database");#删除数据库
 }
+$pm->wait_all_children;
 close LIST;
+&execute("rm -rf $rm");#删除database
 
 #精细定量结果合并
 if($type!=4){#除2brad五标签之外其他数据处理
