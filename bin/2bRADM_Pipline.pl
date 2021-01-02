@@ -82,7 +82,6 @@ GetOptions(
 
 sub usage{#帮助
 print STDERR "\e[;33;1m
-
 	DESCRIPTION
     	We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
 	USAGE
@@ -90,7 +89,7 @@ print STDERR "\e[;33;1m
         PARAMETERS
           -t   <int>    The acceptable types of an input sequencing data file. The file path should be also listed in the sample list file (para -l)
                         [1] generic genome data in a fasta format
-                        [2] shotgun metagenomic data in a fastq Format(either SE or PE platform is accepted)
+                        [2] shotgun metagenomic data in a fastq format(either SE or PE platform is accepted)
                         [3] 2bRAD data from a SE sequencing platform in a fastq format
                         [4] 2bRAD data from a PE sequencing platform in a fastq format
           -l   <file>   The filepath of the sample list. Each line includes an input sample ID and the file path of corresponding DNA sequence data where each field should be separated by <tab>. A line in this file that begins with # will be ignored. Only four formats of a sample list file are accepted and should match with parameter -t: 
@@ -98,8 +97,8 @@ print STDERR "\e[;33;1m
                         [2] sample<tab>shotgun.1.fq(.gz)(<tab>shotgun.2.fq.gz)
                         [3] sample<tab>2bsingle.fq(.gz or 2bsingle.1.fq.gz)
                         [4] sample1<tab>sample2<tab>sample3<tab>sample4<tab>sample5<tab>R1.fq(.gz)<tab>R2.fq(.gz)
-          -d   <dir>    The working path of 2B-Tag-DB database
-          -o   <dir>    The output directory (if not exists, it will be created automatically as 'outdir')
+          -d   <dir>    The working path of 2B-Tag-DB
+          -o   <dir>    The output directory (if it doesn't exist, will be created automatically as 'outdir')
         OPTIONS of Qualitative Analysis
           -p   <str>   If qualitative analysis applies or not [default: $qual] (yes or no)
           -s1  <str>   The enzyme site(s) for the qualitative analysis. One or more sites can be specified(comma separated) [default: $site1]
