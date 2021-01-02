@@ -19,15 +19,16 @@ $outdir=abs_path($outdir);
 
 
 my @a=('abfh_classify','MSA1002','simulate_50');#分类表，实际数据，模拟数据
-#my @b=('BcgI.species');#需要下载的库文件
-my @b=('BcgI.species','CjePI.species');#需要下载的库文件
+my @b=('BcgI.species');#需要下载的库文件
+#my @b=('BcgI.species','CjePI.species');#需要下载的库文件
 
 my %hash_path=(
 	'abfh_classify'=>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25889157/abfh_classify_with_speciename.txt.gz',],
 
 	'MSA1002'      =>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25623566/MSA1002_R1.fq.gz',],
 
-	'simulate_50'  =>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25621832/simulate_50.fa.gz',],
+#	'simulate_50'  =>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25621832/simulate_50.fa.gz',],
+	'simulate_50'  =>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25915428/simulate_50.BcgI.fq.gz',],
 
 	'BcgI.species' =>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25889544/BcgI.species.fa.gz0',
 	                  'https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25889658/BcgI.species.fa.gz1',],
@@ -43,7 +44,8 @@ my %hash_md5=(
 
 	'MSA1002'      =>['bc2b189213975f6d6c0833a4ba726239',],
 
-	'simulate_50'  =>['9defe990462d3fef8eb69a2c359d72da',],
+#	'simulate_50'  =>['9defe990462d3fef8eb69a2c359d72da',],
+	'simulate_50'  =>['04cafca5b5c23c48774e9d515dde42a8',],
 
 	'BcgI.species' =>['b36cc8e85fb68f1b3cc5301c49cafe98',
 	                  '071b711730ce87e6c1f85f29319a5979',],
@@ -83,7 +85,8 @@ print OU "MSA1002\t$outdir/MSA1002_R1.fq.gz\n";
 close OU;
 
 open OU,">$outdir/list_simulation" or die "cannot open $outdir/list_simulation\n";
-print OU "simulate_50\t$outdir/simulate_50.fa.gz\n";
+#print OU "simulate_50\t$outdir/simulate_50.fa.gz\n";
+print OU "simulate_50\t$outdir/simulate_50.BcgI.fq.gz\n";
 close OU;
 
 
