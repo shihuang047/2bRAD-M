@@ -97,7 +97,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
 ```
 	DESCRIPTION
     	We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
-USAGE
+	USAGE
 	  perl bin/2bRADM_Pipline.pl
         PARAMETERS
           -t   <int>    The acceptable types of an input sequencing data file. The file path should be also listed in the sample list file (para -l).
