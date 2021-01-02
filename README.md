@@ -99,7 +99,7 @@ DESCRIPTION
 	We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
 USAGE
 	perl bin/2bRADM_Pipline.pl
-       PARAMETERS
+PARAMETERS
          -t   <int>    The acceptable types of an input sequencing data file. The file path should be also listed in the sample list file (para -l).
                        [1] generic genome data in a fasta format
                        [2] shotgun metagenomic data in a fastq format(either SE or PE platform is accepted)
