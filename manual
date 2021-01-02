@@ -6,9 +6,9 @@
   perl tools/Download_2bRADTagDB.pl your_database_path(default:./2B-RAD-M-ref_db/)
 
 3.test the Pipline with sample data
-  1)simulate_50.fa.gz:
-    perl bin/2bRADM_Pipline.pl -t 1 -l your_database_path/list_simulation -d your_database_path -o outdir -s1 5,13 -s2 5,13 -gsc 60
-  2)MSA1002_R1.fq.gz:
+  1)simulate_50:
+    perl bin/2bRADM_Pipline.pl -t 3 -l your_database_path/list_simulation -d your_database_path -o outdir -gsc 60 -qc no
+  2)MSA1002_R1:
     perl bin/2bRADM_Pipline.pl -t 3 -l your_database_path/list_mock -d your_database_path -o outdir
     
 Note:

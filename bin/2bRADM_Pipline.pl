@@ -388,28 +388,32 @@ if($type!=4){#除2brad五标签之外其他数据处理
 }else{#2brad五标签处理
 	open LIST,"$outdir/list/2brad_5tag.list" or die "cannot open $outdir/list/2brad_5tag.list\n";
 }
+$pm=new Parallel::ForkManager($cpu2);#样品间酶切位点间多线程并行
+my $rm;
 while(<LIST>){
-	next if(/^#/ || /^$/);
-	chomp;
-	my $sample_name=(split /\t/)[0];
-	print STDOUT "Analysis $sample_name, ",`date`;
-	&CheckDir("$outdir/quantitative_sdb/$sample_name/database");
-	&execute("cp $outdir/quantitative_sdb/$sample_name/sdb.list $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt && gzip -f $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt");
-	#精细定量开始
-	$pm=new Parallel::ForkManager($cpu2);
-	for my $i(@site2){
-		my $pid=$pm->start and next;
-		open SA,">$outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list" or die "cannot open $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list\n";
-		print SA "$sample_name\t$outdir/enzyme_result/$sample_name.$hs_site2enzyme{$i}.fa.gz\n";
-		close SA;
-		&execute("perl $Bin/CreateQuanDatabase_2bRAD.pl -l $outdir/quantitative_sdb/$sample_name/sdb.list -e $database/$hs_site2enzyme{$i}.species.fa.gz -s $i -t $level2 -o $outdir/quantitative_sdb/$sample_name/database -r no 1> /dev/null");#建库
-		&execute("perl $Bin/CalculateRelativeAbundance_Single2bEnzyme.pl -l $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list -d $outdir/quantitative_sdb/$sample_name/database -t $level2 -s $i -o $outdir/quantitative -g 0 -v yes 1> /dev/null");#定量 不对gscore进行过滤
-		$pm->finish;
+	my $line=$_;
+	if(/^#/ || /^$/){;}else{#去除注释行和空行
+		chomp($line);
+		my $sample_name=(split /\t/,$line)[0];
+		$rm .=" $outdir/quantitative_sdb/$sample_name/database ";
+		print STDOUT "Analysis $sample_name, ",`date`;
+		&CheckDir("$outdir/quantitative_sdb/$sample_name/database");
+		&execute("cp $outdir/quantitative_sdb/$sample_name/sdb.list $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt && gzip -f $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt");
+		#精细定量开始
+		for my $i(@site2){
+			my $pid=$pm->start and next;
+			open SA,">$outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list" or die "cannot open $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list\n";
+			print SA "$sample_name\t$outdir/enzyme_result/$sample_name.$hs_site2enzyme{$i}.fa.gz\n";
+			close SA;
+			&execute("perl $Bin/CreateQuanDatabase_2bRAD.pl -l $outdir/quantitative_sdb/$sample_name/sdb.list -e $database/$hs_site2enzyme{$i}.species.fa.gz -s $i -t $level2 -o $outdir/quantitative_sdb/$sample_name/database -r no 1> /dev/null");#建库
+			&execute("perl $Bin/CalculateRelativeAbundance_Single2bEnzyme.pl -l $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list -d $outdir/quantitative_sdb/$sample_name/database -t $level2 -s $i -o $outdir/quantitative -g 0 -v yes 1> /dev/null");#定量 不对gscore进行过滤
+			$pm->finish;
+		}
 	}
-	$pm->wait_all_children;
-	&execute("rm -rf $outdir/quantitative_sdb/$sample_name/database");#删除数据库
 }
+$pm->wait_all_children;
 close LIST;
+&execute("rm -rf $rm");#删除database
 
 #精细定量结果合并
 if($type!=4){#除2brad五标签之外其他数据处理
