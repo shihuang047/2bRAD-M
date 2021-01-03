@@ -79,7 +79,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
    `perl tools/Download_2bRADTagDB.pl $your_database_path`
    
    It usually can take around 30 mins to save all files in the `$your_database_path`, but it still depends on your internet connenction speed and stability.
- 
+
 ## 2bRAD-M pipeline tutorial
 
 ### **Overview**  
@@ -179,8 +179,8 @@ perl bin/2bRADM_Pipline.pl \
 1 to 7- The taxonomic ranks for a microbial taxon identified: 1 - "Kingdom"; 2 - "Phylum"; 3 - "Class"; 4 - "Order"; 5 - "Family"; 6 - "Genus"; 7 - "Species"  
 8 - "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory  
 9 - "Sequenced_Tag_Num": Number of 2bRAD marker tags detected in the sequencing data under this taxon  
-10 -  "Percent": The percent of sequenced 2bRAD marker tags under this taxon  
-11 -  "Sequenced_Reads_Num": Total number of sequenced reads  
+10 - "Percent": The percent of sequenced 2bRAD marker tags under this taxon  
+11 - "Sequenced_Reads_Num": Total number of sequenced reads  
 12 - "Sequenced_Reads_Num/Theoretical_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Theoretical_Tag_Num"， which further used for calculating "relative abundance" of this taxon within a sample via a normalization by the column-wise sum  
 13 - "Sequenced_Reads_Num/Sequenced_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Sequenced_Tag_Num"  
 14 - "Sequenced_Tag_Num(depth>1)": Number of sequenced tags that have >1 sequencing coverage  
