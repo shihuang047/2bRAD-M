@@ -27,10 +27,15 @@ This repository provides the computational pipeline for microbiome analysis on 2
 
 ## Installation
  ### System requirements
- * Operating systems: Unix, OSX
- * Conda/Miniconda >= 3
- ### Speed and memory usage
- Most steps of the program are quite fast, require < 2Gb of RAM, and are compatible with multithreading. About 20 minutes are required for loading the 2bTag     database. For a typical gut metagenome, ~1-5 minutes are required for species profiling.
+ #### Dependencies
+ All scripts in 2bRAD-M are written using Perl and recommended to run in a conda environment. In the Unix systems, or Mac OSX, the program should work properly as all required packages can be appropreiately download and installed in the conda environment. 
+ #### Disk space
+ Construction of a 2bRAD-M standard database (i.e., 2b-Tag-DB) requires approximately 10 GB of disk space. 
+ #### Memory usage
+ Running the standard pipeline requires < 30Gb of RAM, which is also compatible with multithreading. For example, the BcgI-derived (default) database size is 9.32 GB, and you will need more than that in RAM if you want to build the default database. In a test early on, the peak memory can reach up to 29GB.
+ #### Speed 
+About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metagenome, ~40 minutes are required for species profiling.
+ 
  ### Download the pipeline
  * Clone the latest version from GitHub (recommended):  
  
@@ -55,13 +60,13 @@ This repository provides the computational pipeline for microbiome analysis on 2
    
    `conda update conda`
    
-   Once you have Miniconda installed, create a conda environment with the yml file ``tools/2bRAD-M-2020.11.24-conda.yml``.
+   Once you have Miniconda installed, create a conda environment with the yml file `tools/2bRAD-M-20201225-conda.yml`.
    
-   `conda env create -n 2bRAD-M-2020.11.24 --file tools/2bRAD-M-2020.11.24-conda.yml`
+   `conda env create -n 2bRAD-M-20201225 --file tools/2bRAD-M-20201225-conda.yml`
    
  * Activate the 2bRAD-M conda environment by running the following command:
  
-   `source activate 2bRAD-M-2020.11.24`
+   `source activate 2bRAD-M-20201225`
 
  ### Construct the reference 2B-Tag database (required)
  * Construct the 2bRAD-M species unique marker database (2B-Tag-DB)
@@ -69,21 +74,83 @@ This repository provides the computational pipeline for microbiome analysis on 2
    (1) Download the prebuilt 2b-Tag-DB from Figshare based on the NCBI Refseq (Oct., 2019).
    
    (2) Download the full genomes from NCBI Refseq for secondary 2b-Tag-DB construction for each sample.
- 
-  `gunzip tools/DBconstruction.mk.gz`
    
-   Execute the shell script by `make -f` and set the Database path:
- 
-  `make -f tools/DBconstruction.mk Database_path=2B-RAD-M-ref_db/`
+   (3) Download the example datasets for pipeline tutorial
+    
+    `perl tools/Download_2bRADTagDB.pl $your_database_path`
+    
+    By default, `$your_database_path=./2B-RAD-M-ref_db/`
+    
+    It usually can take around 30 mins to save all files in the `$your_database_path`, but it still depends on your internet connenction speed and stability.
  
 ## 2bRAD-M pipeline tutorial
- * [Analyze the MOCK-MSA1002 community (sequenceing data)](docs/analyze_mock.md)
+* The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and optimized parameters for analyzing the 2bRAD or shotgun metagenomics sequencing data, which can output the most comprehensive output on each sample. The pipeline includes:
+
+    (1) **The digital restriction digestion** It is required when input DNA sequences are longer than 31bp or 33bp (e.g., 150bp) or derived from the common shotgun sequencing protocols. If input DNA sequences were produced by the 2bRAD sequencing protocol this step will be skipped. 
+       
+    (2) **Qualitative analysis** Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt and comprehensive 2b-Tag-DB based on the NCBI Refseq (Oct., 2019).
+       
+    (3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
+    	
+
+
+```
+DESCRIPTION
+	We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
+USAGE
+	perl bin/2bRADM_Pipline.pl
+PARAMETERS
+         -t   <int>    The acceptable types of an input sequencing data file. The file path should be also listed in the sample list file (para -l).
+                       [1] generic genome data in a fasta format
+                       [2] shotgun metagenomic data in a fastq format(either SE or PE platform is accepted)
+                       [3] 2bRAD data from a SE sequencing platform in a fastq format
+                       [4] 2bRAD data from a PE sequencing platform in a fastq format
+         -l   <file>   The filepath of the sample list. Each line includes an input sample ID and the file path of corresponding DNA sequence data where each field should be separated by <tab>. A line in this file that begins with # will be ignored. Only four formats of a sample list file are accepted and should match with parameter -t: 
+                       [1] sample<tab>sample.fa(.gz)
+                       [2] sample<tab>shotgun.1.fq(.gz)(<tab>shotgun.2.fq.gz)
+                       [3] sample<tab>2bsingle.fq(.gz or 2bsingle.1.fq.gz)
+                       [4] sample1<tab>sample2<tab>sample3<tab>sample4<tab>sample5<tab>R1.fq(.gz)<tab>R2.fq(.gz)
+         -d   <dir>    The working path of 2B-Tag-DB.
+         -o   <dir>    The output directory (if it doesn't exist, will be created automatically as 'outdir').
+       OPTIONS of Qualitative Analysis
+         -p   <str>   If qualitative analysis applies or not [default: yes] (yes or no)
+         -s1  <str>   The enzyme site(s) for the qualitative analysis. One or more sites can be specified(comma separated) [default: 5]
+                      It represents which enzyme(s) will be used for digital restriction digestion, the contruction of 2b-Tag-DB for the following qualitative analysis and quantitative analysis).
+                      [1]CspCI  [5]BcgI  [9]BplI     [13]CjePI  [17]AllEnzyme
+                      [2]AloI   [6]CjeI  [10]FalI    [14]Hin4I
+                      [3]BsaXI  [7]PpiI  [11]Bsp24I  [15]AlfI
+                      [4]BaeI   [8]PsrI  [12]HaeIV   [16]BslFI
+         -t1  <str>   The taxonomic level for 2bRAD markers in the qualitative database, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: species]
+       OPTIONS of Quantitative Analysis
+         -q   <str>   If the quantitative analysis applies or not [default: yes] (yes or no)
+         -gsc <int>   G score threshold for identifying the condidate microbes present in a sample in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: 5, it means >5]
+         -gcf <int>   The threshold of the 2bRAD tag number for the presence of a microbial genome (i.e., GCF) in the qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB in the quantitative analysis step. [default: 1, it means >1]
+         -s2  <str>   The enzyme site for the quantitative analysis. (refer to -s1) [default: 5, must be included in para -s1]
+         -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative analysis, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: species]
+       OPTIONS of CPU
+         -c1  <int>   The number of CPUs used in the digital digestion step for multiple samples. [default: 10]
+         -c2  <int>   The number of CPUs used for calculating the abundance for multiple samples. [default: 8] (each CPU needs about 15~65G of memory)
+       OPTIONS of Quality Control
+         -qc  <str>   If quality control apply or not. [default: yes] (yes or no)
+         -qcn <float> The maximum ratio of base "N". [default: 0.08]
+         -qcq <int>   The minimum quality score to keep. [default: 30]
+         -qcp <int>   The minimum percentage of bases that must have [-qcq] quality. [default: 80]
+         -qcb <int>   The quality values of base [default: 33]
+       OPTIONS of Abundance Estimation
+         -ms  <str>   The mock-community sample name(s) (separated by commas).
+         -ncs <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations.
+         -h|help   Print this help information.
+
+```
  
-  `perl bin/2bRADM_Pipline.pl -t 3 -l 2B-RAD-M-ref_db/example_data/list_simulation -d 2B-RAD-M-ref_db -o output`
+   * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.fa.gz`)](docs/analyze_mock.md) We simulated the toy sequencing data of a microbial community with 50 members using [wigsim](https://github.com/lh3/wgsim).
  
- * [Analyze in silico mock community (synthetic shogun data)](docs/snp_diversity.md)
+  `perl bin/2bRADM_Pipline.pl -t 1 -l $your_database_path/list_simulation -d $your_database_path -o outdir -s1 5,13 -s2 5,13 -gsc 60`
+
+  * [Analyze the 2bRAD sequencing data of a mock microbial community: MSA1002 (`MSA1002_R1.fq.gz`)](docs/analyze_mock.md)
+   [MSA1002](https://www.atcc.org/en/Global/Products/MSA-1002.aspx) comprises the genomic material from 20 microbial strains that are evenly mixed. We sequenced this DNA sample using our 2bRAD protocol for optimizing and testing the bioinformatic pipeline.
  
- `perl bin/2bRADM_Pipline.pl -t 1 -l 2B-RAD-M-ref_db/example_data/list_mock -d 2B-RAD-M-ref_db -o output -s1 17 -s2 17 -gsc 60`
+  `perl bin/2bRADM_Pipline.pl -t 3 -l $your_database_path/list_mock -d $your_database_path -o outdir`
  
 ## 2bRAD-M scripts for customized analyses 
  * [Extract 2b tags](docs/extract_2b.md)
