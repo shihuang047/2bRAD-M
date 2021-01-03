@@ -90,7 +90,7 @@ The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and opt
 
 (2) **Qualitative analysis** Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt 2b-Tag-DB based on the NCBI Refseq (Oct., 2019). 
 
-(3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate prediction of relative abundance of taxa.
+(3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that were identified in a particular biolgical sample in step (2). Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate prediction of relative abundance of taxa.
 
 (4) **Merging results from multiple samples**  The sample-wise results will be automatically merged into a feature table. 
     	
