@@ -66,24 +66,31 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
    `source activate 2bRAD-M-20201225`
 
  ### Construct the reference 2B-Tag database (required)  
-   `tools/Download_2bRADTagDB.pl` is the main script used to:  
-   (1) download the prebuilt 2b-Tag-DB from Figshare based on the NCBI Refseq (Oct., 2019)  
-   (2) download the example datasets for pipeline tutorial
-    You can specify $your_database_path locally (By default, `$your_database_path=./2B-RAD-M-ref_db/`) and run the script as following:  
-    `perl tools/Download_2bRADTagDB.pl $your_database_path`  
+   
+   `tools/Download_2bRADTagDB.pl` is the main script used to:
+   * download the prebuilt 2b-Tag-DB from Figshare based on the NCBI Refseq (Oct., 2019)  
+   * download the example datasets for pipeline tutorial  
+    
+   You can specify $your_database_path locally (By default, `$your_database_path=./2B-RAD-M-ref_db/`) and run the script as following:  
+   
+   ```perl tools/Download_2bRADTagDB.pl $your_database_path```  
+   
     It usually can take around 30 mins to save all files in the `$your_database_path`, but it still depends on your internet connenction speed and stability.
  
 ## 2bRAD-M pipeline tutorial
 
 * **Overview of the 2bRAD-M pipeline**  
-    The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and optimized parameters for analyzing the 2bRAD or shotgun metagenomics sequencing data, which can output the most comprehensive output on each sample. The pipeline includes:  
+	The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and optimized parameters for analyzing the 2bRAD or shotgun metagenomics sequencing data, which can output the most comprehensive output on each sample. The pipeline includes:
+    
     (1) **The digital restriction digestion** It is required when input DNA sequences are longer than 31bp or 33bp (e.g., 150bp) or derived from the common shotgun sequencing protocols. If input DNA sequences were produced by the 2bRAD sequencing protocol this step will be skipped.   
+    
     (2) **Qualitative analysis** Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt and comprehensive 2b-Tag-DB based on the NCBI Refseq (Oct., 2019).  
+    
     (3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
     	
 * **Usage**
     
-    The main script for implementing those analysis steps is located at `bin/2bRADM_Pipline.pl`. You can check out the usage by printing the help information via `perl bin/2bRADM_Pipline.pl -h`.
+	The main script for implementing those analysis steps is located at `bin/2bRADM_Pipline.pl`. You can check out the usage by printing the help information via `perl bin/2bRADM_Pipline.pl -h`.
     
 ```
 DESCRIPTION
@@ -153,7 +160,8 @@ PARAMETERS
   
  * **Output formats** 
  
-   2bRAD-M offers a standard format of sample-wide results. You can find this standard profiling result of a single sample at `$outdir/quantitative/$sample_id.combine.xls`. Taking the `MSA1002` analysis as example, the output is located at `outdir/quantitative/MSA1002.combine.xls`. 2bRAD-M standard sample report format is tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:  
+ 	2bRAD-M offers a standard format of sample-wide results. You can find this standard profiling result of a single sample at `$outdir/quantitative/$sample_id.combine.xls`. Taking the `MSA1002` analysis as example, the output is located at `outdir/quantitative/MSA1002.combine.xls`. 2bRAD-M standard sample report format is tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:  
+   
    1 to 7- The taxonomic ranks for a microbial taxon identified: 1 - "Kingdom"; 2 - "Phylum"; 3 - "Class"; 4 - "Order"; 5 - "Family"; 6 - "Genus"; 7 - "Species"  
    8 - "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory  
    9 - "Sequenced_Tag_Num": Number of 2bRAD marker tags detected in the sequencing data under this taxon  
@@ -164,7 +172,7 @@ PARAMETERS
    14 - "Sequenced_Tag_Num(depth>1)": Number of sequenced tags that have >1 sequencing coverage  
    15 - "G_Score": the geometric mean of "Sequenced_Reads_Num" and "Sequenced_Tag_Num", which is use for controlling false positive discovery  
    
-   2bRAD-M also offer a standard format of the study-wise result. This pipeline automatically merged the abundance profiling results from multiple samples, which is located at `$outdir/quantitative/Abundance_Stat.all.xls`. If you setup the negative-control samples for filtering potential contaminations in biological samples, you can find the filtered abundance profiles in the `$outdir/quantitative/Abundance_Stat.filtered.xls`. Otherwise, these two files should be identical. The standard study report format is also tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:  
+	2bRAD-M also offer a standard format of the study-wise result. This pipeline automatically merged the abundance profiling results from multiple samples, which is located at `$outdir/quantitative/Abundance_Stat.all.xls`. If you setup the negative-control samples for filtering potential contaminations in biological samples, you can find the filtered abundance profiles in the `$outdir/quantitative/Abundance_Stat.filtered.xls`. Otherwise, these two files should be identical. The standard study report format is also tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:  
    1 to 7 - The taxonomic ranks for a microbial taxon identified: 1 - "Kingdom"; 2 - "Phylum"; 3 - "Class"; 4 - "Order"; 5 - "Family"; 6 - "Genus"; 7 - "Species"  
    8 to N - The column name indicates a sample ID in this study, where you can find the relative abundances of taxa within this sample. `N = (the number of samples) - 7`  
   
