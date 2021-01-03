@@ -182,7 +182,7 @@ perl bin/2bRADM_Pipline.pl \
 12 - "Sequenced_Reads_Num/Theoretical_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Theoretical_Tag_Num"， which further used for calculating "relative abundance" of this taxon within a sample via a normalization by the column-wise sum  
 13 - "Sequenced_Reads_Num/Sequenced_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Sequenced_Tag_Num"  
 14 - "Sequenced_Tag_Num(depth>1)": Number of sequenced tags that have >1 sequencing coverage  
-15 - "G_Score": the geometric mean of "Sequenced_Reads_Num" and "Sequenced_Tag_Num", which is use for controlling false positive discovery
+15 - "G_Score": the geometric mean of "Sequenced_Reads_Num" and "Sequenced_Tag_Num", which is used for controlling false positive discovery
 	
 
 2bRAD-M also offer a standard format of the study-wise result. This pipeline can automatically merge the abundance profiling results from multiple samples, which is located at `$outdir/quantitative/Abundance_Stat.all.xls`. If you setup the negative-control samples for filtering potential contaminations in biological samples, you can find the filtered abundance profiles in the `$outdir/quantitative/Abundance_Stat.filtered.xls`. Otherwise, these two files should be identical. The standard study report format is also tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:
