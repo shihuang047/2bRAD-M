@@ -170,8 +170,8 @@ PARAMETERS
  
    2bRAD-M offers a standard format of sample-wide results. You can find this standard profiling result of a single sample at `$outdir/quantitative/$sample_id.combine.xls`. Taking the `MSA1002` analysis as example, the output is located at `outdir/quantitative/MSA1002.combine.xls`. 2bRAD-M standard sample report format is tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:
 
-   1 to 7 - The taxonomic ranks for a microbial taxon identified: 1 - "Kingdom"; 2 - "Phylum"; 3 - "Class"; 4 - "Order"; 5 - "Family"; 6 - "Genus"; 7 - "Species"
-   8 - "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory 
+   1 to 7- The taxonomic ranks for a microbial taxon identified: 1 - "Kingdom"; 2 - "Phylum"; 3 - "Class"; 4 - "Order"; 5 - "Family"; 6 - "Genus"; 7 - "Species"
+   8- "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory 
    9 - "Sequenced_Tag_Num": Number of 2bRAD marker tags detected in the sequencing data under this taxon
    10 -  "Percent": The percent of sequenced 2bRAD marker tags under this taxon
    11 -  "Sequenced_Reads_Num": Total number of sequenced reads 
