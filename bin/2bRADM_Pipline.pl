@@ -1,6 +1,6 @@
 #!/usr/bin/env perl
 # Authors: Zheng Sun , Rongchao Zhang, Shi Huang
-# Last update: 2020.12.22
+
 use warnings;
 use strict;
 use Getopt::Long;
@@ -10,7 +10,7 @@ use Parallel::ForkManager;
 use Cwd 'abs_path';
 
 my $author="Zheng Sun, Rongchao Zhang, Shi Huang";
-my $time="20201222";
+my $time="20210102";
 
 #scripts path
 my $Bin="$Bin/../scripts/";
@@ -82,7 +82,7 @@ GetOptions(
 
 sub usage{#帮助
 print STDERR "\e[;33;1m
-	DESCRIPTION
+    DESCRIPTION
         We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
     USAGE
       perl $0
@@ -249,7 +249,7 @@ print STDOUT "###COMMAND: perl $0 -t $type -l $list -d $database -o $outdir -p $
 &CheckDir($outdir);
 #数据酶切
 &CheckDir("$outdir/enzyme_result");
-print STDOUT "###Electron digestion start, ",`date`;
+print STDOUT "###Electronic digestion started, ",`date`;
 open LIST,"$list" or die "cannot open $list\n";
 my $pm=new Parallel::ForkManager($cpu1); #多线程
 while(<LIST>){
@@ -289,7 +289,7 @@ while(<LIST>){
 }
 $pm->wait_all_children;
 close LIST;
-print STDOUT "###Electron digestion complete, ",`date`;
+print STDOUT "###Electronic digestion complete, ",`date`;
 
 
 ##整理列表
@@ -342,7 +342,7 @@ if($type==4){#2brad五标签样品名格式行转化成列
 
 ##多线程初步定性
 if($qual eq "yes"){#是否需要定性
-	print STDOUT "###Qualitative start, ",`date`;
+	print STDOUT "###Qualitative analysis started, ",`date`;
 	&CheckDir("$outdir/qualitative");
 	$pm=new Parallel::ForkManager($cpu2);
 	for my $i(@site1){
@@ -371,7 +371,7 @@ if($quan eq "no"){
 	exit 0;
 }
 #精细定量
-print STDOUT "###Quantitative start, ",`date`;
+print STDOUT "###Quantitative analysis started, ",`date`;
 
 &CheckDir("$outdir/quantitative_sdb");
 &CheckDir("$outdir/quantitative");
@@ -396,7 +396,7 @@ while(<LIST>){
 		chomp($line);
 		my $sample_name=(split /\t/,$line)[0];
 		$rm .=" $outdir/quantitative_sdb/$sample_name/database ";
-		print STDOUT "Analysis $sample_name, ",`date`;
+		print STDOUT "Analyze $sample_name, ",`date`;
 		&CheckDir("$outdir/quantitative_sdb/$sample_name/database");
 		&execute("cp $outdir/quantitative_sdb/$sample_name/sdb.list $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt && gzip -f $outdir/quantitative_sdb/$sample_name/database/abfh_classify_with_speciename.txt");
 		#精细定量开始
@@ -421,13 +421,13 @@ if($type!=4){#除2brad五标签之外其他数据处理
 }else{#2brad五标签处理
 	&execute("perl $Bin/CalculateRelativeAbundance_Combined2bEnzymes.pl -l $outdir/list/2brad_5tag.list -s $site2 -io $outdir/quantitative -m combine -g 0 1> /dev/null");#不对gscore过滤
 }
-print STDOUT "###Quantitative complete, ",`date`;
+print STDOUT "###Quantitative analysis complete, ",`date`;
 
-print STDOUT "###Abundance_Stat start, ",`date`;
+print STDOUT "###Merging abundance profiles from multiple samples started, ",`date`;
 if($type!=4){#除2brad五标签之外其他数据处理
-	&execute("perl $Bin/Abundance_Stat.pl -l $outdir/list/Abundance_Stat.list -o $outdir/quantitative -p Abundance_Stat -m $mock_sample -c $negative_control_sample");
+	&execute("perl $Bin/MergeProfilesFromMultipleSamples.pl -l $outdir/list/Abundance_Stat.list -o $outdir/quantitative -p Abundance_Stat -m $mock_sample -c $negative_control_sample");
 }else{#2brad五标签处理
-	&execute("perl $Bin/Abundance_Stat.pl -l $outdir/list/2brad_5tag.list -o $outdir/quantitative -p Abundance_Stat -m $mock_sample -c $negative_control_sample");
+	&execute("perl $Bin/MergeProfilesFromMultipleSamples.pl -l $outdir/list/2brad_5tag.list -o $outdir/quantitative -p Abundance_Stat -m $mock_sample -c $negative_control_sample");
 }
 
 print STDOUT "###Abundance_Stat complete, ",`date`;
