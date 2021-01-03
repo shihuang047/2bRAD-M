@@ -94,7 +94,7 @@ The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and opt
     	
 ### **Usage**
     
-	The main script for implementing those analysis steps is located at `bin/2bRADM_Pipline.pl`. You can check out the usage by printing the help information via `perl bin/2bRADM_Pipline.pl -h`.
+The main script for implementing those analyses is located at `bin/2bRADM_Pipline.pl`. You can check out the usage by printing the help information via `perl bin/2bRADM_Pipline.pl -h`.
     
 ```
 DESCRIPTION
