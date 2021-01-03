@@ -166,13 +166,13 @@ PARAMETERS
 
    1 to 7. The taxonomic ranks for a microbial taxon identified: 1. "Kingdom"; 2. "Phylum"; 3. "Class"; 4. "Order"; 5."Family"; 6. "Genus"; 7. "Species"
    
-   8 . "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory 
+   8. "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory 
    
-   9 . "Sequenced_Tag_Num": Number of 2bRAD marker tags detected in the sequencing data under this taxon
+   9. "Sequenced_Tag_Num": Number of 2bRAD marker tags detected in the sequencing data under this taxon
    
-   10 +  "Percent": The percent of sequenced 2bRAD marker tags under this taxon
+   10.  "Percent": The percent of sequenced 2bRAD marker tags under this taxon
    
-   11+  "Sequenced_Reads_Num": Total number of sequenced reads 
+   11.  "Sequenced_Reads_Num": Total number of sequenced reads 
    
    12. "Sequenced_Reads_Num/Theoretical_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Theoretical_Tag_Num"， which further used for calculating "relative abundance" of this taxon within a sample via a normalization by the column-wise sum
    
@@ -187,7 +187,7 @@ PARAMETERS
    1 - 7. The taxonomic ranks for a microbial taxon identified: (1) "Kingdom"; (2)"Phylum"; (3)"Class"; (4)"Order"; (5)"Family"; (6)"Genus"; (7)"Species"
    
    8 - N. The sample IDs in this study, i.e. the relative abundances of taxa within this sample. `N = (the number of samples) - 7`
-    
+  
 
 ## 2bRAD-M scripts for customized analyses 
  * [Extract 2b tags](docs/extract_2b.md)
