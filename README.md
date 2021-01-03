@@ -82,7 +82,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
  
 ## 2bRAD-M pipeline tutorial
 
-* **Overview of the 2bRAD-M pipeline**  
+### **Overview of the 2bRAD-M pipeline**  
 
 The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and optimized parameters for analyzing the 2bRAD or shotgun metagenomics sequencing data, which can output the most comprehensive output on each sample. The pipeline includes:
     
@@ -92,7 +92,7 @@ The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and opt
 
 (3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
     	
-* **Usage**
+### **Usage**
     
 	The main script for implementing those analysis steps is located at `bin/2bRADM_Pipline.pl`. You can check out the usage by printing the help information via `perl bin/2bRADM_Pipline.pl -h`.
     
@@ -145,7 +145,7 @@ PARAMETERS
 
 ```
  
-* **Example data**
+### **Example data**
 
 * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.BcgI.fq.gz`)](docs/analyze_simulate_50.md) To test the generalizability of our 2bRAD markers for microbial profiling, we designed a mock microbiome structure containing 50 microbial species from a wide range of habitats such as oral, gut and soil environments. Given a specified abundance profile, we simulated the sequencing data based on all related genomes using [wigsim](https://github.com/lh3/wgsim). The sequencing data file `simulate_50.BcgI.fq.gz` and its corresponding list file `list_simulation` will be automatically downloaded to `$your_database_path` via `tools/Download_2bRADTagDB.pl` as described above. Once all these downloaded, you can try to run the following command that will output the estimated microbial profile. 
 
@@ -170,7 +170,7 @@ perl bin/2bRADM_Pipline.pl \
 			-o outdir 
 ```
 
- * **Output formats**
+### **Output formats**
  
 2bRAD-M offers a standard format of sample-wide results. You can find this standard profiling result of a single sample at `$outdir/quantitative/$sample_id.combine.xls`. Taking the `MSA1002` analysis as example, the output is located at `outdir/quantitative/MSA1002.combine.xls`. 2bRAD-M standard sample report format is tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:
    
