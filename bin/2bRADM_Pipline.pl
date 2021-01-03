@@ -289,7 +289,7 @@ while(<LIST>){
 }
 $pm->wait_all_children;
 close LIST;
-print STDOUT "###Electronic digestion complete, ",`date`;
+print STDOUT "###Electronic digestion completed, ",`date`;
 
 
 ##整理列表
@@ -359,7 +359,7 @@ if($qual eq "yes"){#是否需要定性
 	}else{#2brad五标签处理
 		&execute("perl $Bin/CalculateRelativeAbundance_Combined2bEnzymes.pl -l $outdir/list/2brad_5tag.list -s $site1 -io $outdir/qualitative -m combine -g 0");#未对G_score过滤
 	}
-	print STDOUT "###Qualitative complete, ",`date`;
+	print STDOUT "###Qualitative completed, ",`date`;
 }else{
 	print STDOUT "All Done, ",`date`;
 	exit 0;
@@ -430,7 +430,7 @@ if($type!=4){#除2brad五标签之外其他数据处理
 	&execute("perl $Bin/MergeProfilesFromMultipleSamples.pl -l $outdir/list/2brad_5tag.list -o $outdir/quantitative -p Abundance_Stat -m $mock_sample -c $negative_control_sample");
 }
 
-print STDOUT "###Abundance_Stat complete, ",`date`;
+print STDOUT "###Merging abundance profiles completed, ",`date`;
 
 print STDOUT "All Done, ",`date`;
 
