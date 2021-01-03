@@ -142,7 +142,7 @@ PARAMETERS
          -qcq <int>   The minimum quality score to keep. [default: 30]
          -qcp <int>   The minimum percentage of bases that must have [-qcq] quality. [default: 80]
          -qcb <int>   The quality values of base [default: 33]
-       OPTIONS of Abundance Estimation
+       OPTIONS of Merging profiles
          -ms  <str>   The mock-community sample name(s) (separated by commas).
          -ncs <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations.
          -h|help   Print this help information.
@@ -160,8 +160,20 @@ PARAMETERS
  
   `perl bin/2bRADM_Pipline.pl -t 3 -l $your_database_path/list_mock -d $your_database_path -o outdir`
   
- * Output formats
- 
+ * **Output formats** 
+   2bRAD-M offers a standard format of sample-wide results. You can find the standard profiling of a single sample at `$outdir/quantitative/$sample_id.combine.xls`. Taking the `MSA1002` analysis as example, the output is located at `outdir/quantitative/MSA1002.combine.xls`. 2bRAD-M standard sample report format is tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:
+
+1 - 7. The taxonomic ranks for a microbial taxon identified: (1) "Kingdom"; (2)"Phylum"; (3)"Class"; (4)"Order"; (5)"Family"; (6)"Genus"; (7)"Species"
+8. "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory 
+9. "Sequenced_Tag_Num": Number of 2bRAD marker tags detected in the sequencing data under this taxon
+10. "Percent": The percent of sequenced 2bRAD marker tags under this taxon
+11. "Sequenced_Reads_Num": Total number of sequenced reads 
+12. "Sequenced_Reads_Num/Theoretical_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Theoretical_Tag_Num"， which further used for calculating "relative abundance" of this taxon within a sample via a normalization by column-wise sum
+13. "Sequenced_Reads_Num/Sequenced_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Sequenced_Tag_Num"
+14. "Sequenced_Tag_Num(depth>1)": Number of sequenced tags that have >1 sequencing coverage.
+15. "G_Score": the geometric mean of "Sequenced_Reads_Num" and "Sequenced_Tag_Num", which is use for controlling false positive discovery
+
+
 ## 2bRAD-M scripts for customized analyses 
  * [Extract 2b tags](docs/extract_2b.md)
  * [Build your own customized 2bTag database](docs/build_db.md)
