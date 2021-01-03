@@ -149,7 +149,7 @@ PARAMETERS
  
 ### **Example data**
 
-* [Analyze a in silico mock community (synthetic sequencing data: `simulate_50.BcgI.fq.gz`)] To test the generalizability of our 2bRAD markers for microbial profiling, we designed a mock microbiome structure containing 50 microbial species from a wide range of habitats such as oral, gut and soil environments. Given a specified abundance profile, we simulated the sequencing data based on all related genomes using [wigsim](https://github.com/lh3/wgsim). The sequencing data file `simulate_50.BcgI.fq.gz` and its corresponding list file `list_simulation` will be automatically downloaded to `$your_database_path` via `tools/Download_2bRADTagDB.pl` as described above. Once all these downloaded, you can try to run the following command that will output the estimated microbial profile. 
+* **Analyze a in silico mock community** (synthetic data: `simulate_50.BcgI.fq.gz`) To test the generalizability of our 2bRAD markers for microbial profiling, we designed a mock microbiome structure containing 50 microbial species from a wide range of habitats such as oral, gut and soil environments. Given a specified abundance profile, we simulated the sequencing data based on all related genomes using [wigsim](https://github.com/lh3/wgsim). The sequencing data file `simulate_50.BcgI.fq.gz` and its corresponding list file `list_simulation` will be automatically downloaded to `$your_database_path` via `tools/Download_2bRADTagDB.pl` as described above. Once all these downloaded, you can try to run the following command that will output the estimated microbial profile. 
 
 ```
 perl bin/2bRADM_Pipline.pl \
@@ -161,7 +161,7 @@ perl bin/2bRADM_Pipline.pl \
 			-qc no
 ```
 
-* [Analyze a mock microbial community: MSA1002 (sequencing data: `MSA1002_R1.fq.gz`)]
+* **Analyze a mock microbial community: MSA1002** (sequencing data: `MSA1002_R1.fq.gz`)
    [MSA1002](https://www.atcc.org/en/Global/Products/MSA-1002.aspx) comprises the genomic material from 20 microbial strains that are evenly mixed. We sequenced this DNA sample using our 2bRAD protocol for optimizing and testing the bioinformatic pipeline. The sequencing data file `MSA1002_R1.fq.gz` and its corresponding list file `list_mock` will be automatically downloaded to `$your_database_path` via `tools/Download_2bRADTagDB.pl` as described above. Once all these downloaded, you can try to run the following command that will output the estimated microbial profile.
 
 ```
