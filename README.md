@@ -154,11 +154,11 @@ PARAMETERS
    * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.BcgI.fq.gz`)](docs/analyze_simulate_50.md) To test the generalizability of our 2bRAD markers for microbial profiling, we designed a mock microbiome structure containing 50 microbial species from a wide range of habitats such as oral, gut and soil environments. Given a specified abundance profile, we simulated the sequencing data based on all related genomes using [wigsim](https://github.com/lh3/wgsim). The sequencing data file `simulate_50.BcgI.fq.gz` and its corresponding list file `list_simulation` will be automatically downloaded to `$your_database_path` via `tools/Download_2bRADTagDB.pl` as described above. Once all these downloaded, you can try to run the following command that will output the estimated microbial profile.   
  
   ```
-  perl bin/2bRADM_Pipline.pl  -t 1 \
-   			      -l $your_database_path/list_simulation \
-			      -d $your_database_path -o outdir \
-			      -gsc 60 \
-			      -qc no
+  perl bin/2bRADM_Pipline.pl	-t 1 \
+				-l $your_database_path/list_simulation \
+				-d $your_database_path -o outdir \
+				-gsc 60 \
+				-qc no
    ```
 
   * [Analyze the 2bRAD sequencing data of a mock microbial community: MSA1002 (`MSA1002_R1.fq.gz`)](docs/analyze_mock.md)
@@ -171,27 +171,18 @@ PARAMETERS
    2bRAD-M offers a standard format of sample-wide results. You can find this standard profiling result of a single sample at `$outdir/quantitative/$sample_id.combine.xls`. Taking the `MSA1002` analysis as example, the output is located at `outdir/quantitative/MSA1002.combine.xls`. 2bRAD-M standard sample report format is tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:
 
    1 to 7 - The taxonomic ranks for a microbial taxon identified: 1 - "Kingdom"; 2 - "Phylum"; 3 - "Class"; 4 - "Order"; 5 - "Family"; 6 - "Genus"; 7 - "Species"
-   
    8 - "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory 
-   
    9 - "Sequenced_Tag_Num": Number of 2bRAD marker tags detected in the sequencing data under this taxon
-   
    10 -  "Percent": The percent of sequenced 2bRAD marker tags under this taxon
-   
    11 -  "Sequenced_Reads_Num": Total number of sequenced reads 
-   
    12 - "Sequenced_Reads_Num/Theoretical_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Theoretical_Tag_Num"， which further used for calculating "relative abundance" of this taxon within a sample via a normalization by the column-wise sum
-   
    13 - "Sequenced_Reads_Num/Sequenced_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Sequenced_Tag_Num"
-   
    14 - "Sequenced_Tag_Num(depth>1)": Number of sequenced tags that have >1 sequencing coverage.
-   
    15 - "G_Score": the geometric mean of "Sequenced_Reads_Num" and "Sequenced_Tag_Num", which is use for controlling false positive discovery
    
    2bRAD-M also offer a standard format of the study-wise result. This pipeline automatically merged the abundance profiling results from multiple samples, which is located at `$outdir/quantitative/Abundance_Stat.all.xls`. If you setup the negative-control samples for filtering potential contaminations in biological samples, you can find the filtered abundance profiles in the `$outdir/quantitative/Abundance_Stat.filtered.xls`. Otherwise, these two files should be identical. The standard study report format is also tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:
    
    1 to 7 - The taxonomic ranks for a microbial taxon identified: 1 - "Kingdom"; 2 - "Phylum"; 3 - "Class"; 4 - "Order"; 5 - "Family"; 6 - "Genus"; 7 - "Species"
-   
    8 to N - The column name indicates a sample ID in this study, where you can find the relative abundances of taxa within this sample. `N = (the number of samples) - 7`
   
 
