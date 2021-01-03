@@ -196,7 +196,8 @@ perl bin/2bRADM_Pipline.pl \
 ## 2bRAD-M scripts for customized analyses 
  * [Extract 2b tags](scripts/2bRADExtraction.pl) 
  * [Build your own customized 2b-Tag-DB](scripts/CreateQualDatabase_2bRAD.pl)
- * [Species profiling for a single sample](scripts/CalculateRelativeAbundance_Combined2bEnzymes.pl)
+ * [Species profiling for a single sample based on 2bRAD markers of a single enzyme](scripts/CalculateRelativeAbundance_Combined2bEnzymes.pl)
+ * [Species profiling for a single sample based on 2bRAD markers of multiple enzymes](scripts/CalculateRelativeAbundance_Single2bEnzymes.pl)
  * [Merge species profiles for multiple samples](scripts/MergeProfilesFromMultipleSamples.pl)
  
 ## Reference
