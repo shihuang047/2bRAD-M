@@ -164,29 +164,29 @@ PARAMETERS
  
    2bRAD-M offers a standard format of sample-wide results. You can find this standard profiling result of a single sample at `$outdir/quantitative/$sample_id.combine.xls`. Taking the `MSA1002` analysis as example, the output is located at `outdir/quantitative/MSA1002.combine.xls`. 2bRAD-M standard sample report format is tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:
 
-   1 to 7. The taxonomic ranks for a microbial taxon identified: 1. "Kingdom"; 2. "Phylum"; 3. "Class"; 4. "Order"; 5."Family"; 6. "Genus"; 7. "Species"
+   1 to 7. The taxonomic ranks for a microbial taxon identified: 1 - "Kingdom"; 2 - "Phylum"; 3 - "Class"; 4 - "Order"; 5 - "Family"; 6 - "Genus"; 7 - "Species"
    
-   8. "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory 
+   8 - "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory 
    
-   9. "Sequenced_Tag_Num": Number of 2bRAD marker tags detected in the sequencing data under this taxon
+   9 - "Sequenced_Tag_Num": Number of 2bRAD marker tags detected in the sequencing data under this taxon
    
-   10.  "Percent": The percent of sequenced 2bRAD marker tags under this taxon
+   10 -  "Percent": The percent of sequenced 2bRAD marker tags under this taxon
    
-   11.  "Sequenced_Reads_Num": Total number of sequenced reads 
+   11 -  "Sequenced_Reads_Num": Total number of sequenced reads 
    
-   12. "Sequenced_Reads_Num/Theoretical_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Theoretical_Tag_Num"， which further used for calculating "relative abundance" of this taxon within a sample via a normalization by the column-wise sum
+   12 - "Sequenced_Reads_Num/Theoretical_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Theoretical_Tag_Num"， which further used for calculating "relative abundance" of this taxon within a sample via a normalization by the column-wise sum
    
-   13. "Sequenced_Reads_Num/Sequenced_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Sequenced_Tag_Num"
+   13 - "Sequenced_Reads_Num/Sequenced_Tag_Num": The ratio of "Sequenced_Reads_Num" and "Sequenced_Tag_Num"
    
-   14. "Sequenced_Tag_Num(depth>1)": Number of sequenced tags that have >1 sequencing coverage.
+   14 - "Sequenced_Tag_Num(depth>1)": Number of sequenced tags that have >1 sequencing coverage.
    
-   15. "G_Score": the geometric mean of "Sequenced_Reads_Num" and "Sequenced_Tag_Num", which is use for controlling false positive discovery
+   15 - "G_Score": the geometric mean of "Sequenced_Reads_Num" and "Sequenced_Tag_Num", which is use for controlling false positive discovery
    
    2bRAD-M also offer a standard format of the study-wise result. This pipeline automatically merged the abundance profiling results from multiple samples, which is located at `$outdir/quantitative/Abundance_Stat.all.xls`. If you setup the negative-control samples for filtering potential contaminations in biological samples, you can find the filtered abundance profiles in the `$outdir/quantitative/Abundance_Stat.filtered.xls`. Otherwise, these two files should be identical. The standard study report format is also tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:
    
-   1 - 7. The taxonomic ranks for a microbial taxon identified: (1) "Kingdom"; (2)"Phylum"; (3)"Class"; (4)"Order"; (5)"Family"; (6)"Genus"; (7)"Species"
+   1 to 7 - The taxonomic ranks for a microbial taxon identified: (1) "Kingdom"; (2)"Phylum"; (3)"Class"; (4)"Order"; (5)"Family"; (6)"Genus"; (7)"Species"
    
-   8 - N. The sample IDs in this study, i.e. the relative abundances of taxa within this sample. `N = (the number of samples) - 7`
+   8 to N - The column name indicates a sample ID in this study, where you can find the relative abundances of taxa within this sample. `N = (the number of samples) - 7`
   
 
 ## 2bRAD-M scripts for customized analyses 
