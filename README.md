@@ -96,7 +96,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
     (3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
     	
 
-* **How to use this pipeline?**
+* **Usage**
     
     The main script for implementing those analysis steps is located at `bin/2bRADM_Pipline.pl`. You can check out the usage by printing the help information via `perl bin/2bRADM_Pipline.pl -h`.
     
@@ -166,9 +166,9 @@ PARAMETERS
 
    1 - 7. The taxonomic ranks for a microbial taxon identified: (1) "Kingdom"; (2)"Phylum"; (3)"Class"; (4)"Order"; (5)"Family"; (6)"Genus"; (7)"Species"
    
-   8. "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory 
+   8 - "Theoretical_Tag_Num": Average number of all 2bRAD marker tags of genomes under this taxon in theory 
    
-   9. "Sequenced_Tag_Num": Number of 2bRAD marker tags detected in the sequencing data under this taxon
+   9 -  "Sequenced_Tag_Num": Number of 2bRAD marker tags detected in the sequencing data under this taxon
    
    10. "Percent": The percent of sequenced 2bRAD marker tags under this taxon
    
