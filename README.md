@@ -194,10 +194,10 @@ perl bin/2bRADM_Pipline.pl \
 
 
 ## 2bRAD-M scripts for customized analyses 
- * [Extract 2b tags](docs/extract_2b.md)
- * [Build your own customized 2bTag database](docs/build_db.md)
- * [Species profiling for a single sample](doc/profile_single_sample.md)
- * [Merge species profiles for multiple samples](doc/merge_profile_multiple_samples.md)
+ * [Extract 2b tags](scripts/2bRADExtraction.pl) 
+ * [Build your own customized 2b-Tag-DB](scripts/CreateQualDatabase_2bRAD.pl)
+ * [Species profiling for a single sample](scripts/CalculateRelativeAbundance_Combined2bEnzymes.pl)
+ * [Merge species profiles for multiple samples](scripts/MergeProfilesFromMultipleSamples.pl)
  
 ## Reference
  * Wang S, Meyer E, McKay JK, Matz MV. 2b-RAD: a simple and flexible method for genome-wide genotyping. Nat Methods. 2012 May 20;9(8):808-10. doi: 10.1038/nmeth.2023. PMID: 22609625.
