@@ -27,7 +27,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
  ### System requirements
  
  #### Dependencies
- All scripts in 2bRAD-M are written using Perl and recommended to run in a conda environment. In the Unix systems, or Mac OSX, the program should work properly as all required packages can be appropreiately download and installed in the conda environment. 
+ All scripts in 2bRAD-M are written using Perl and recommended to run in a conda environment. This program should work properly in the Unix systems, or Mac OSX, as all required packages can be appropreiately download and installed. 
  
  #### Disk space
  Construction of a 2bRAD-M standard database (i.e., 2b-Tag-DB) requires approximately 10 GB of disk space. 
@@ -82,7 +82,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
  
 ## 2bRAD-M pipeline tutorial
 
-### **Overview of the 2bRAD-M pipeline**  
+### **Overview**  
 
 The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and optimized parameters for analyzing the 2bRAD or shotgun metagenomics sequencing data, which can output the most comprehensive output on each sample. The pipeline includes:
     
@@ -90,7 +90,9 @@ The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and opt
 
 (2) **Qualitative analysis** Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt and comprehensive 2b-Tag-DB based on the NCBI Refseq (Oct., 2019). 
 
-(3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
+(3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate prediction of relative abundance of taxa.
+
+(4) **Merging results from multiple samples**  The sample-wise results will be automatically merged into a feature table. 
     	
 ### **Usage**
     
@@ -130,8 +132,8 @@ PARAMETERS
          -s2  <str>   The enzyme site for the quantitative analysis. (refer to -s1) [default: 5, must be included in para -s1]
          -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative analysis, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: species]
        OPTIONS of CPU
-         -c1  <int>   The number of CPUs used in the digital digestion step for multiple samples. [default: 10]
-         -c2  <int>   The number of CPUs used for calculating the abundance for multiple samples and enzymes. [default: 8] (each CPU needs about 15~65G of memory)
+         -c1  <int>   The number of CPUs used for parallelization of the digital digestion step for multiple samples. [default: 10]
+         -c2  <int>   The number of CPUs used for parallelization of abundance profiling for multiple samples using a single enzymatic site and combining results from multiple enzymatic sites have been set via -s1. [default: 8] (each CPU needs about 15~65G of memory)
        OPTIONS of Quality Control
          -qc  <str>   If quality control apply or not. [default: yes] (yes or no)
          -qcn <float> The maximum ratio of base "N". [default: 0.08]
