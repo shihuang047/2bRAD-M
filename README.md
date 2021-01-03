@@ -129,7 +129,7 @@ PARAMETERS
          -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative analysis, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: species]
        OPTIONS of CPU
          -c1  <int>   The number of CPUs used in the digital digestion step for multiple samples. [default: 10]
-         -c2  <int>   The number of CPUs used for calculating the abundance for multiple samples. [default: 8] (each CPU needs about 15~65G of memory)
+         -c2  <int>   The number of CPUs used for calculating the abundance for multiple samples and enzymes. [default: 8] (each CPU needs about 15~65G of memory)
        OPTIONS of Quality Control
          -qc  <str>   If quality control apply or not. [default: yes] (yes or no)
          -qcn <float> The maximum ratio of base "N". [default: 0.08]

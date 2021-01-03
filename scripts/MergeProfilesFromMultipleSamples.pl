@@ -18,17 +18,18 @@ GetOptions(
 sub usage{
 	print STDERR "\e[;33;1m
 	DESCRIPTION
-		2b微生物丰度计算程序
+		Merge the abundance profiles from mulitple samples and filter potential contaminations in each biological samples using negative control samples.
 	USAGE
 		perl $0
 	PARAMETERS
-		-l <file> list
-		          eg:sample<tab>qualitative/quantitative_file
+		-l <file> list file
+		          e.g., sample<tab>qualitative/quantitative_file
 		-o <dir>  outdir file
 		-p <str>  output prefix
 	OPTIONS
-		-m <str>  mock sample (separated by commas)
-		-c <str>  negative control sample (separated by commas)
+        -m <str>   The mock-community sample name(s) (separated by commas).
+        -c <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations.
+    
 		-h|help   help
 	AUTHOR:  ZRC 2020.09.14
 	\e[0m\n";
@@ -122,7 +123,7 @@ for my $id(sort {$a cmp $b} keys %hash_specie){#循环检测到的物种
 close OU;
 
 #输出 删除mock和阴性对照样品，以及阴性对照检测出来的菌 的结果
-open OU,">$outdir/$prefix.filter.xls" or die "cannot open $outdir/$prefix.filter.xls\n";
+open OU,">$outdir/$prefix.filtered.xls" or die "cannot open $outdir/$prefix.filtered.xls\n";
 #表头处理
 print OU "$head";
 for(@sample_sort){
