@@ -5,7 +5,7 @@ This repository provides the computational pipeline for microbiome analysis on 2
 [Species-resolved sequencing of low-biomass microbiomes by 2bRAD-M](https://www.biorxiv.org/content/10.1101/2020.12.01.405647v1) by Zheng Sun, Shi Huang, Pengfei Zhu, Lam Tzehau, Helen Zhao, Jia Lv, Rongchao Zhang, Lisha Zhou, Qianya Niu, Xiuping Wang, Meng Zhang, Gongchao Jing, Zhenmin Bao, Jiquan Liu, Shi Wang, Jian Xu. BioRxiv, doi: https://doi.org/10.1101/2020.12.01.405647
 
 ## How it works
- The principle of 2bRAD-M on microbiome analyses on low-biomass samples:  
+ The principle of 2bRAD-M on microbiome analyses:  
  (1) reliable enzyme-digested sequence tags can be derived that are specific to high-resolution taxa (e.g., species or strain) yet universally applicable for a broad range or all of bacterial, archaeal and fungal genomes;  
  (2) these taxa-specific, iso-length sequence tags can be evenly amplified and sequenced;  
  (3) the tag sequences can be mapped to reference genomes to reconstruct faithfully the taxonomic composition.
@@ -198,6 +198,10 @@ perl bin/2bRADM_Pipline.pl \
  * [Build your own customized 2bTag database](docs/build_db.md)
  * [Species profiling for a single sample](doc/profile_single_sample.md)
  * [Merge species profiles for multiple samples](doc/merge_profile_multiple_samples.md)
+ 
+## Reference
+ * Wang S, Meyer E, McKay JK, Matz MV. 2b-RAD: a simple and flexible method for genome-wide genotyping. Nat Methods. 2012 May 20;9(8):808-10. doi: 10.1038/nmeth.2023. PMID: 22609625.
+ * Wang S, Liu P, Lv J, Li Y, Cheng T, Zhang L, Xia Y, Sun H, Hu X, Bao Z. Serial sequencing of isolength RAD tags for cost-efficient genome-wide profiling of genetic and epigenetic variations. Nat Protoc. 2016 Nov;11(11):2189-2200. doi: 10.1038/nprot.2016.133. Epub 2016 Oct 6. PMID: 27711051.
  
 ## Acknowledgement
 
