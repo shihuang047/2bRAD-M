@@ -69,7 +69,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
 
  ### Construct the reference 2B-Tag database (required)
 
-   The script `tools/Download_2bRADTagDB.pl` can be used to:
+   The script `tools/Download_2bRADTagDB.pl` in this repo can be used to:
    
    * download the prebuilt 2b-Tag-DB from Figshare based on the NCBI Refseq (Oct., 2019)  
    * download the example datasets for pipeline tutorial 
@@ -88,7 +88,7 @@ The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and opt
     
 (1) **The digital restriction digestion** It is required when input DNA sequences are longer than 31bp or 33bp (e.g., 150bp) or derived from the common shotgun sequencing protocols. If input DNA sequences were produced by the 2bRAD sequencing protocol this step will be skipped.   
 
-(2) **Qualitative analysis** Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt and comprehensive 2b-Tag-DB based on the NCBI Refseq (Oct., 2019). 
+(2) **Qualitative analysis** Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt 2b-Tag-DB based on the NCBI Refseq (Oct., 2019). 
 
 (3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate prediction of relative abundance of taxa.
 
@@ -96,7 +96,7 @@ The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and opt
     	
 ### **Usage**
     
-The main script for implementing those analyses is located at `bin/2bRADM_Pipline.pl`. You can check out the usage by printing the help information via `perl bin/2bRADM_Pipline.pl -h`.
+The main script for implementing those analyses is `bin/2bRADM_Pipline.pl` in this repo. You can check out the usage by printing the help information via `perl bin/2bRADM_Pipline.pl -h`.
     
 ```
 DESCRIPTION
@@ -118,28 +118,28 @@ PARAMETERS
          -o   <dir>    The output directory (if it doesn't exist, will be created automatically as 'outdir').
        OPTIONS of Qualitative Analysis
          -p   <str>   If qualitative analysis applies or not [default: yes] (yes or no)
-         -s1  <str>   The enzyme site(s) for the qualitative analysis. One or more sites can be specified(comma separated) [default: 5]
-                      It represents which enzyme(s) will be used for digital restriction digestion, the contruction of 2b-Tag-DB for the following qualitative analysis and quantitative analysis).
+         -s1  <str>   The enzymatic site(s) for the qualitative analysis. One or more sites can be specified(comma separated) [default: 5]
+                      It represents which enzymatic recognition site(s) will be used for digital restriction digestion, and contructing 2b-Tag-DB for the following qualitative analysis and quantitative analysis.
                       [1]CspCI  [5]BcgI  [9]BplI     [13]CjePI  [17]AllEnzyme
                       [2]AloI   [6]CjeI  [10]FalI    [14]Hin4I
                       [3]BsaXI  [7]PpiI  [11]Bsp24I  [15]AlfI
                       [4]BaeI   [8]PsrI  [12]HaeIV   [16]BslFI
-         -t1  <str>   The taxonomic level for 2bRAD markers in the qualitative database, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: species]
+         -t1  <str>   The taxonomic rank for 2bRAD markers in the qualitative database, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: species]
        OPTIONS of Quantitative Analysis
          -q   <str>   If the quantitative analysis applies or not [default: yes] (yes or no)
          -gsc <int>   G score threshold for identifying the condidate microbes present in a sample in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB in the quantitative analysis step. [default: 5, it means >5]
          -gcf <int>   The threshold of the 2bRAD tag number for the presence of a microbial genome (i.e., GCF) in the qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB in the quantitative analysis step. [default: 1, it means >1]
          -s2  <str>   The enzyme site for the quantitative analysis. (refer to -s1) [default: 5, must be included in para -s1]
-         -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative analysis, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: species]
+         -t2  <str>   The taxonomic rank for 2bRAD markers in the quantitative analysis, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: species]
        OPTIONS of CPU
-         -c1  <int>   The number of CPUs used for parallelization of the digital digestion step for multiple samples. [default: 10]
-         -c2  <int>   The number of CPUs used for parallelization of abundance profiling for multiple samples using a single enzymatic site and combining results from multiple enzymatic sites have been set via -s1. [default: 8] (each CPU needs about 15~65G of memory)
+         -c1  <int>   The number of CPUs used for parallelizing the digital digestion step for multiple samples. [default: 10]
+         -c2  <int>   The number of CPUs used for parallelizing abundance profiling for multiple samples based on a single enzyme and combining results from multiple enzymes have been set via -s1. [default: 8] (each CPU needs about 15~65G of memory)
        OPTIONS of Quality Control
          -qc  <str>   If quality control apply or not. [default: yes] (yes or no)
          -qcn <float> The maximum ratio of base "N". [default: 0.08]
          -qcq <int>   The minimum quality score to keep. [default: 30]
          -qcp <int>   The minimum percentage of bases that must have [-qcq] quality. [default: 80]
-         -qcb <int>   The quality values of base [default: 33]
+         -qcb <int>   ASCII+33 or ASCII+64 quality scores as Phred scores [default: 33]
        OPTIONS of Merging profiles
          -ms  <str>   The mock-community sample name(s) (separated by commas). The specified samples will be removed from the merged output table.
          -ncs <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations.
@@ -187,11 +187,11 @@ perl bin/2bRADM_Pipline.pl \
 15 - "G_Score": the geometric mean of "Sequenced_Reads_Num" and "Sequenced_Tag_Num", which is used for controlling false positive discovery
 	
 
-2bRAD-M also offer a standard format of the study-wise result. This pipeline can automatically merge the abundance profiling results from multiple samples, which is located at `$outdir/quantitative/Abundance_Stat.all.xls`. If you setup the negative-control samples for filtering potential contaminations in biological samples, you can find the filtered abundance profiles in the `$outdir/quantitative/Abundance_Stat.filtered.xls`. Otherwise, these two files should be identical. The standard study report format is also tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:
+2bRAD-M also offer a standard format of the study-wise result. If you provided multiple sample IDs and corresponding fasta/fastq file names in the list file, this pipeline can automatically merge the abundance profiling results from multiple samples, which is located at `$outdir/quantitative/Abundance_Stat.all.xls`. If you setup the negative-control samples for filtering potential contaminations in biological samples, you can find the filtered abundance profiles in the `$outdir/quantitative/Abundance_Stat.filtered.xls`. Otherwise, these two files should be identical. The standard study report format is also tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:
   
 1 to 7 - The taxonomic ranks for a microbial taxon identified: 1 - "Kingdom"; 2 - "Phylum"; 3 - "Class"; 4 - "Order"; 5 - "Family"; 6 - "Genus"; 7 - "Species"  
 8 to N - The column name indicates a sample ID in this study, where you can find the relative abundances of taxa within this sample. `N = (the number of samples) - 7`  
-  
+
 
 ## 2bRAD-M scripts for customized analyses 
  * [Extract 2b tags](docs/extract_2b.md)
