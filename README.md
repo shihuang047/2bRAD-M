@@ -98,7 +98,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
 
 * **How to use this pipeline?**
     
-    The main script for implementing those analysis steps is located at `bin/2bRADM_Pipline.pl`. 
+    The main script for implementing those analysis steps is located at `bin/2bRADM_Pipline.pl`. You can check out the usage by printing the help information via `perl bin/2bRADM_Pipline.pl -h`.
     
 ```
 DESCRIPTION
