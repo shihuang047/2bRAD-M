@@ -85,7 +85,8 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
  
 ## 2bRAD-M pipeline tutorial
 
-* Overview of the 2bRAD-M pipeline
+* **Overview of the 2bRAD-M pipeline**
+
     The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and optimized parameters for analyzing the 2bRAD or shotgun metagenomics sequencing data, which can output the most comprehensive output on each sample. The pipeline includes:
 
     (1) **The digital restriction digestion** It is required when input DNA sequences are longer than 31bp or 33bp (e.g., 150bp) or derived from the common shotgun sequencing protocols. If input DNA sequences were produced by the 2bRAD sequencing protocol this step will be skipped. 
@@ -95,8 +96,10 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
     (3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB that contains only condidate genomes that identified in the given biolgical sample. Given the sample-specific 2b-Tag-DB is more compact, it produces more species-specific 2bRAD markers than the original 2b-Tag-DB and results in more accurate modeling of relative abundance of taxa.
     	
 
-* How to use this pipeline?
+* **How to use this pipeline?**
+    
     The main script for implementing those analysis steps is located at `bin/2bRADM_Pipline.pl`. 
+    
 ```
 DESCRIPTION
 	We here provided a streamlined 2bRAD pipeline for analyzing microbial compositions from the 2bRAD/shotgun metagenomics data based on the species-specific 2bRAD markers.
@@ -146,7 +149,8 @@ PARAMETERS
 
 ```
  
-* Example data
+* **Example data**
+
    * [Analyze in silico mock community (synthetic 2bRAD sequencing data: `simulate_50.BcgI.fq.gz`)](docs/analyze_mock.md) To test the generalizability of our 2bRAD markers for microbial profiling, we designed a mock microbiome structure containing 50 microbial species from a wide range of habitats such as oral, gut and soil environments. Given a specified abundance profile, we simulated the sequencing data based on all related genomes using [wigsim](https://github.com/lh3/wgsim). The sequencing data file `simulate_50.BcgI.fq.gz` and its corresponding list file `list_simulation` will be automatically downloaded to `$your_database_path` via `tools/Download_2bRADTagDB.pl` as described above. Once all these downloaded, you can try to run the following command that will output the estimated microbial profile.   
  
   `perl bin/2bRADM_Pipline.pl -t 1 -l $your_database_path/list_simulation -d $your_database_path -o outdir -gsc 60 -qc no`
