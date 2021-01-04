@@ -88,9 +88,9 @@ The 2bRAD-M analysis pipeline comprises a combination of 2bRAD-M scripts and opt
     
 (1) **The digital restriction digestion** It is required when input DNA sequences are longer than 31bp or 33bp (e.g., 150bp) or derived from the common shotgun sequencing protocols. If input DNA sequences were produced by the 2bRAD sequencing protocol this step will be skipped.   
 
-(2) **Qualitative analysis** Identify the microbes and estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt 2b-Tag-DB based on the NCBI Refseq (Oct., 2019). 
+(2) **Qualitative analysis** Identify the microbes and preliminarily estimate their abundances based on the 2bRAD (such as. BcgI derived) species-specific markers of a prebuilt 2b-Tag-DB based on the NCBI Refseq (Oct., 2019). 
 
-(3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB. Firstly, we fetch condidate genomes from NCBI Refseq that were identified in a particular biolgical sample in step (2) to construct a sample-specific 2b-Tag-DB. Next, we mapped the reads to this more compact 2b-Tag-DB to estimate the abundance of all detected taxa and used G score to filter potential false positive discovery of microbial features.
+(3) **Quantitative analysis** Estimate the microbial abundances more precisely based on the 2bRAD species-specific markers in a sample-specific 2b-Tag-DB. Firstly, we fetch condidate genomes that were identified in a particular biolgical sample in step (2) from NCBI Refseq to construct a sample-targeted 2b-Tag-DB. Next, we remapped the sequencing reads to this more concise 2b-Tag-DB to estimate the abundance of all detected taxa and used G score to filter potential false positive discovery of microbial features.
 
 (4) **Merging results from multiple samples**  The sample-wise results will be automatically merged into a feature table. 
     	
