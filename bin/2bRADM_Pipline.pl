@@ -102,7 +102,7 @@ print STDERR "\e[;33;1m
         OPTIONS of Qualitative Analysis
           -p   <str>   If qualitative analysis applies or not [default: $qual] (yes or no)
           -s1  <str>   The enzyme site(s) for the qualitative analysis. One or more sites can be specified(comma separated) [default: $site1]
-                       It represents which enzyme(s) will be used for digital restriction digestion, the contruction of 2b-Tag-DB for the following qualitative analysis and quantitative analysis).
+                       It represents which enzymatic recognition site(s) will be used for digital restriction digestion, and contructing 2b-Tag-DB for the following qualitative analysis and quantitative analysis.
                        [1]CspCI  [5]BcgI  [9]BplI     [13]CjePI  [17]AllEnzyme
                        [2]AloI   [6]CjeI  [10]FalI    [14]Hin4I
                        [3]BsaXI  [7]PpiI  [11]Bsp24I  [15]AlfI
@@ -122,11 +122,11 @@ print STDERR "\e[;33;1m
           -qcn <float> The maximum ratio of base \"N\" [default: $qc_n]
           -qcq <int>   The minimum quality score to keep [default: $qc_q]
           -qcp <int>   The minimum percentage of bases that must have [-qcq] quality [default: $qc_p]
-          -qcb <int>   The quality values of base [default: $qc_b]
+          -qcb <int>   ASCII+33 or ASCII+64 quality scores as Phred scores [default: $qc_b]
         OPTIONS of Abundance Estimation
-          -ms  <str>   The mock-community sample name(s) (separated by commas)
-          -ncs <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations
-          -h|help   Print this help information.
+          -ms  <str>   The mock-community sample name(s) (separated by commas). The specified samples will be removed from the merged output table.
+          -ncs <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations.
+          -h | help   Print this help information.
 
     AUTHOR:  $author $time\e[0m\n";
 }
