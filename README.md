@@ -190,7 +190,7 @@ perl bin/2bRADM_Pipline.pl \
 2bRAD-M also offer a standard format of the study-wise result. If you provided multiple sample IDs and corresponding fasta/fastq file names in the list file, this pipeline can automatically merge the abundance profiling results from multiple samples, which is located at `$outdir/quantitative/Abundance_Stat.all.xls`. If you setup the negative-control samples for filtering potential contaminations in biological samples, you can find the filtered abundance profiles in the `$outdir/quantitative/Abundance_Stat.filtered.xls`. Otherwise, these two files should be identical. The standard study report format is also tab-delimited with one line per taxon. The fields of the output, from left-to-right, are as follows:
   
 1 to 7 - The taxonomic ranks for a microbial taxon identified: 1 - "Kingdom"; 2 - "Phylum"; 3 - "Class"; 4 - "Order"; 5 - "Family"; 6 - "Genus"; 7 - "Species"  
-8 to N - The column name indicates a sample ID in this study, where you can find the relative abundances of taxa within this sample. `N = (the number of samples) - 7`  
+8 to N - The column name indicates a sample ID in this study, where you can find the relative abundances of taxa within this sample. `N = (the number of samples) + 7`  
 
 
 ## 2bRAD-M scripts for customized analyses 
