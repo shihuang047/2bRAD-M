@@ -198,7 +198,7 @@ perl bin/2bRADM_Pipline.pl \
  * [Build your own customized 2b-Tag-DB](scripts/CreateQualDatabase_2bRAD.pl) This script constructs the taxa-specific 2b-RAD reference genome database from a whole-genome reference database.
  * [Species profiling for a single sample based on 2bRAD markers of a single enzyme](scripts/CalculateRelativeAbundance_Combined2bEnzymes.pl) This script computes the relative abundance of taxa identified from each of 2b-RAD samples using a precalcuated taxa-specific 2b-RAD reference database by one or multiple type 2b restriction enzymes.
  * [Species profiling for a single sample based on 2bRAD markers of multiple enzymes](scripts/CalculateRelativeAbundance_Single2bEnzymes.pl) This script computes the relative abundance of taxa identified from each of 2b-RAD samples using a precalcuated taxa-specific 2b-RAD reference database by a single type 2b restriction enzyme.
- * [Merge species profiles for multiple samples](scripts/MergeProfilesFromMultipleSamples.pl) This script can merge the abundance profiles from mulitple samples and filter potential contaminations in each biological samples using negative control samples.
+ * [Merge species profiles for multiple samples](scripts/MergeProfilesFromMultipleSamples.pl) This script can merge the abundance profiles from mulitple samples and filter potential contaminations in each biological sample using negative control samples.
  
 ## Reference
  * Wang S, Meyer E, McKay JK, Matz MV. 2b-RAD: a simple and flexible method for genome-wide genotyping. Nat Methods. 2012 May 20;9(8):808-10. doi: 10.1038/nmeth.2023. PMID: 22609625.
