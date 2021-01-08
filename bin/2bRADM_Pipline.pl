@@ -101,32 +101,32 @@ print STDERR "\e[;33;1m
           -o   <dir>    The output directory (if it doesn't exist, will be created automatically as 'outdir')
         OPTIONS of Qualitative Analysis
           -p   <str>   If qualitative analysis applies or not [default: $qual] (yes or no)
-          -s1  <str>   The enzyme site(s) for the qualitative analysis. One or more sites can be specified(comma separated) [default: $site1]
-                       It represents which enzyme(s) will be used for digital restriction digestion, the contruction of 2b-Tag-DB for the following qualitative analysis and quantitative analysis).
+          -s1  <str>   The enzymatic site(s) for the qualitative analysis. One or more sites can be specified(comma separated) [default: $site1]
+                       It represents which enzymatic recognition site(s) will be used for digital restriction digestion, and contructing 2b-Tag-DB for the following qualitative analysis and quantitative analysis.
                        [1]CspCI  [5]BcgI  [9]BplI     [13]CjePI  [17]AllEnzyme
                        [2]AloI   [6]CjeI  [10]FalI    [14]Hin4I
                        [3]BsaXI  [7]PpiI  [11]Bsp24I  [15]AlfI
                        [4]BaeI   [8]PsrI  [12]HaeIV   [16]BslFI
           -t1  <str>   The taxonomic level for 2bRAD markers in the qualitative database, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level1]
         OPTIONS of Quantitative Analysis
-          -q   <str>   If the quantitative analysis applies or not [default: $quan] (yes or no)
+          -q   <str>   If quantitative analysis applies or not [default: $quan] (yes or no)
           -gsc <int>   G score threshold for identifying the condidate microbes present in a sample in qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB in the quantitative analysis step. [default: $g_score_threshold, it means >$g_score_threshold]
           -gcf <int>   The threshold of the 2bRAD tag number for the presence of a microbial genome (i.e., GCF) in the qualitative analysis, which also determines the membership of sample-specific 2B-Tag-DB database in the quantitative analysis step. [default: $GCF_threshold, it means >$GCF_threshold]
-          -s2  <str>   The enzyme site for the quantitative analysis. (refer to -s1) [default: $site2, must be included in para -s1]
+          -s2  <str>   The enzymatic site for the quantitative analysis. (refer to -s1) [default: $site2, must be included in para -s1]
           -t2  <str>   The taxonomic level for 2bRAD markers in the quantitative analysis, which should be one of the following: kingdom,phylum,class,order,family,genus,species,strain. [default: $level2]
         OPTIONS of CPU
-          -c1  <int>   The number of CPUs used in the digital digestion step for multiple samples [default: $cpu1]
-          -c2  <int>   The number of CPUs used for calculating the abundance for multiple samples [default: $cpu2] (each CPU needs about 15~65G of memory)
-        OPTIONS of Quality Control
+          -c1  <int>   The number of CPUs used for parallelizing the digital digestion step for multiple samples. [default: 10]
+          -c2  <int>   The number of CPUs used for parallelizing abundance profiling for multiple samples based on a single enzyme and combining results from multiple enzymes have been set via -s1. [default: 8] (each CPU needs about 15~65G of memory)
+	OPTIONS of Quality Control
           -qc  <str>   If quality control apply or not [default: $qc] (yes or no)
           -qcn <float> The maximum ratio of base \"N\" [default: $qc_n]
           -qcq <int>   The minimum quality score to keep [default: $qc_q]
           -qcp <int>   The minimum percentage of bases that must have [-qcq] quality [default: $qc_p]
-          -qcb <int>   The quality values of base [default: $qc_b]
-        OPTIONS of Abundance Estimation
-          -ms  <str>   The mock-community sample name(s) (separated by commas)
-          -ncs <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations
-          -h|help   Print this help information.
+          -qcb <int>   ASCII+33 or ASCII+64 quality scores as Phred scores [default: $qc_b]
+        OPTIONS of Merging profiles
+          -ms  <str>   The mock-community sample name(s) (separated by commas). The specified samples will be removed from the merged output table.
+          -ncs <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations.
+          -h | help   Print this help information.
 
     AUTHOR:  $author $time\e[0m\n";
 }
@@ -289,7 +289,7 @@ while(<LIST>){
 }
 $pm->wait_all_children;
 close LIST;
-print STDOUT "###Electronic digestion complete, ",`date`;
+print STDOUT "###Electronic digestion completed, ",`date`;
 
 
 ##整理列表
@@ -359,7 +359,7 @@ if($qual eq "yes"){#是否需要定性
 	}else{#2brad五标签处理
 		&execute("perl $Bin/CalculateRelativeAbundance_Combined2bEnzymes.pl -l $outdir/list/2brad_5tag.list -s $site1 -io $outdir/qualitative -m combine -g 0");#未对G_score过滤
 	}
-	print STDOUT "###Qualitative complete, ",`date`;
+	print STDOUT "###Qualitative completed, ",`date`;
 }else{
 	print STDOUT "All Done, ",`date`;
 	exit 0;
@@ -430,7 +430,7 @@ if($type!=4){#除2brad五标签之外其他数据处理
 	&execute("perl $Bin/MergeProfilesFromMultipleSamples.pl -l $outdir/list/2brad_5tag.list -o $outdir/quantitative -p Abundance_Stat -m $mock_sample -c $negative_control_sample");
 }
 
-print STDOUT "###Abundance_Stat complete, ",`date`;
+print STDOUT "###Merging abundance profiles completed, ",`date`;
 
 print STDOUT "All Done, ",`date`;
 
