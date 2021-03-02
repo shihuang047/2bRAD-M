@@ -19,8 +19,8 @@ $outdir=abs_path($outdir);
 
 
 my @a=('abfh_classify','MSA1002','simulate_50');#分类表，实际数据，模拟数据
-my @b=('BcgI.species');#需要下载的库文件
-#my @b=('BcgI.species','CjePI.species');#需要下载的库文件
+#my @b=('BcgI.species');#需要下载的库文件
+my @b=('BcgI.species','CjePI.species');#需要下载的库文件
 
 my %hash_path=(
 	'abfh_classify'=>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25889157/abfh_classify_with_speciename.txt.gz',],
