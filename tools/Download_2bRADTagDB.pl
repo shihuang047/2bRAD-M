@@ -133,7 +133,9 @@ sub CheckDir{
 	my $file = shift;
 	unless( -d $file ){
 		if( -d dirname($file) && -w dirname($file) ){system("mkdir $file");}
-		else{print STDERR "$file not exists and cannot be built\n";exit 1;}
+		else{
+		print STDERR "$file does not exist and can't be built\n";exit 1;
+		}
 	}
 	return 1;
 }
