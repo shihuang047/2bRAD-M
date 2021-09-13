@@ -45,7 +45,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
    `cd 2bRAD-M`
    
     This makes it easy to update the software in the future using `git pull` as bugs are fixed and features are added.
- * Directly download without installing GitHub:
+ * Alternatively, directly download the whole GitHub repo without installing GitHub:
  
    `wget https://github.com/shihuang047/2bRAD-M/archive/master.zip`  
    `unzip master.zip`  
@@ -73,7 +73,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
    
    * download the prebuilt 2b-Tag-DB from Figshare based on the NCBI Refseq (Oct., 2019)  
    * download the example datasets for pipeline tutorial 
-   
+ 
    You can specify $your_database_path locally (By default, `$your_database_path=./2B-RAD-M-ref_db/`) and run the script as following:  
    
    `perl tools/Download_2bRADTagDB.pl $your_database_path`
