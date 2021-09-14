@@ -24,10 +24,10 @@ sub usage{
 		perl $0
 		
 	PARAMETERS
-		-l <file> list file
-		          e.g., sample<tab>qualitative/quantitative_file
-		-o <dir>  outdir file
-		-p <str>  output prefix
+		-l <file> A list file indicating the 
+		          e.g., sample_id<tab>qualitative/$sample_id/$sample_id.combine.xls
+		-o <dir>  The output directory
+		-p <str>  The output prefix
 	OPTIONS
         -m <str>   The mock-community sample name(s) (separated by commas).
         -c <str>   The sample name(s) (separated by commas) of negative control that can be used for filtering potential contaminations.
