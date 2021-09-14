@@ -18,9 +18,11 @@ GetOptions(
 sub usage{
 	print STDERR "\e[;33;1m
 	DESCRIPTION
-		Merge the abundance profiles from mulitple samples and filter potential contaminations in each biological samples using negative control samples.
+		Merge the abundance profiles from mulitple samples. If negative control samples were provided, 
+		this script can also filter all taxa in negative control samples (i.e., potential contaminations) for each biological sample.
 	USAGE
 		perl $0
+		
 	PARAMETERS
 		-l <file> list file
 		          e.g., sample<tab>qualitative/quantitative_file
