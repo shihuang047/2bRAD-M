@@ -155,7 +155,7 @@ PARAMETERS
 perl bin/2bRADM_Pipline.pl \
 			-t 3 \
 			-l $your_database_path/list_simulation \
-			-d $your_database_path/ 
+			-d $your_database_path/ \
 			-o outdir \
 			-gsc 60 \
 			-qc no
