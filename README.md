@@ -69,7 +69,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
 
  ### Construct the reference 2B-Tag database (required)
 
-   The script `tools/Download_2bRADTagDB.pl` in this repo can be used to:
+   The script `tools/Download_2bRADTagDB_NCBI.pl` in this repo can be used to:
    
    * download the prebuilt 2b-Tag-DB from Figshare based on the NCBI Refseq (Oct., 2019)  
    * download the example datasets for pipeline tutorial 
