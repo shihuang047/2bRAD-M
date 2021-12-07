@@ -74,7 +74,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
    * download the prebuilt 2b-Tag-DB from Figshare based on the NCBI Refseq (Oct., 2019) or GTDB  
    * download the example datasets for pipeline tutorial 
  
-   You can specify $your_database_path locally (By default, `$your_database_path=./2B-RAD-M-ref_db_NCBI/` or `$your_database_path=./2B-RAD-M-ref_db_GTDB/`) and run the script as following:  
+   You can specify $your_database_path locally (`$your_database_path=./2B-RAD-M-ref_db_NCBI/` or `$your_database_path=./2B-RAD-M-ref_db_GTDB/`) and run the script as following:  
    
    `perl tools/Download_2bRADTagDB_NCBI.pl $your_database_path` or
    
