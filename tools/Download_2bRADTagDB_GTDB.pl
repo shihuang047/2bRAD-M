@@ -5,7 +5,7 @@ use warnings;
 use File::Basename qw(dirname basename);
 use Cwd 'abs_path';
 
-$ARGV[0] ||="2B-RAD-M-ref_db";
+$ARGV[0] ||="2B-RAD-M-ref_db_GTDB";
 
 #if($#ARGV!=0){
 #	print STDERR "perl $0 outdir\n";
@@ -23,48 +23,54 @@ my @a=('abfh_classify','MSA1002','simulate_50');#分类表，实际数据，模�
 my @b=('BcgI.species','CjePI.species');#需要下载的库文件
 
 my %hash_path=(
-	'abfh_classify'=>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25889157/abfh_classify_with_speciename.txt.gz',],
+	'abfh_classify'=>['https://figshare.com/ndownloader/files/31653170/abfh_classify_with_speciename.txt.gz',],
 
-	'MSA1002'      =>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25623566/MSA1002_R1.fq.gz',],
+	'MSA1002'      =>['https://figshare.com/ndownloader/files/25623566/MSA1002_R1.fq.gz',],
 
 #	'simulate_50'  =>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25621832/simulate_50.fa.gz',],
-	'simulate_50'  =>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25915428/simulate_50.BcgI.fq.gz',],
+	'simulate_50'  =>['https://figshare.com/ndownloader/files/25915428/simulate_50.BcgI.fq.gz',],
 
-	'BcgI.species' =>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25889544/BcgI.species.fa.gz0',
-	                  'https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25889658/BcgI.species.fa.gz1',],
+	'BcgI.species' =>['https://figshare.com/ndownloader/files/31653911/BcgI.species.fa.gz0',
+	                  'https://figshare.com/ndownloader/files/31659299/BcgI.species.fa.gz1',
+	                  'https://figshare.com/ndownloader/files/31653614/BcgI.species.fa.gz2',],
 
-	'CjePI.species'=>['https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25891653/CjePI.species.fa.gz0',
-	                  'https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25890987/CjePI.species.fa.gz1',
-	                  'https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25890996/CjePI.species.fa.gz2',
-	                  'https://s3-eu-west-1.amazonaws.com/pfigshare-u-files/25891002/CjePI.species.fa.gz3',],
+	'CjePI.species'=>['https://figshare.com/ndownloader/files/31660241/CjePI.species.fa.gz0',
+	                  'https://figshare.com/ndownloader/files/31660358/CjePI.species.fa.gz1',
+	                  'https://figshare.com/ndownloader/files/31662320/CjePI.species.fa.gz2',
+	                  'https://figshare.com/ndownloader/files/31662794/CjePI.species.fa.gz3',
+	                  'https://figshare.com/ndownloader/files/31659818/CjePI.species.fa.gz4',],
 	);
 
 my %hash_md5=(
-	'abfh_classify'=>['25f3a20babb56fd9f2a61eeddb82151a',],
+	'abfh_classify'=>['c2faa9ae97b704b3d0705709cf22ecb4',],
 
 	'MSA1002'      =>['bc2b189213975f6d6c0833a4ba726239',],
 
 #	'simulate_50'  =>['9defe990462d3fef8eb69a2c359d72da',],
 	'simulate_50'  =>['04cafca5b5c23c48774e9d515dde42a8',],
 
-	'BcgI.species' =>['b36cc8e85fb68f1b3cc5301c49cafe98',
-	                  '071b711730ce87e6c1f85f29319a5979',],
+	'BcgI.species' =>['a1b70d0de71093a0bb9bedbadab641b0',
+	                  '383fd8c85a23aee4a48d48aa41845f17',
+	                  'd19a5ce115fac8708fb0919f619ddf19',],
 	
-	'CjePI.species'=>['a32c1998d0d800fe336d9f03756b8409',
-	                  '1eb528474f89a6550f69c160d0885dd8',
-	                  'b803ea6b0e2bca1c6381b2a15a76876d',
-	                  'a3d5f018fb3410b507759f2eabee4d04',]
+	'CjePI.species'=>['8b1c62c80bdf3b05182f2fe47d0f0751',
+	                  '4662c85ef0e12a749d8b9284302e2a18',
+	                  'ed3d3a27df05b7c0eb97140f78f54a75',
+	                  '063b3c362f41889037b3bb15d8a0617f',
+	                  '021a06a6e926b4ba91acba0c398877d7',]
 	);
 
 #合并后文件md5
 my %complete_md5=(
-	'BcgI.species' =>'75171aabcb754e827e5824ae755d06af',
-	'CjePI.species'=>'bcfdef3722dfc763e09fd185f580198d',
+	'BcgI.species' =>'eea6b5ec34b00a749d45199a91fd3e34',
+	'CjePI.species'=>'3d9913da22ac340357d4e708a7506de8',
 	);
 
 #download abfh_classify && MSA1002 && simulate_50
 for my $i(@a){
-	my $name=(split /\//,$hash_path{$i}[0])[-1];
+	my @tmp=split /\//,$hash_path{$i}[0];
+	my $url=join("/",@tmp[0..$#tmp-1]);
+	my $name=$tmp[-1];
 	my $file_md5;#下载的文件的MD5值
 	while(1){
 		if(-e "$outdir/$name"){
@@ -75,7 +81,7 @@ for my $i(@a){
 			print STDOUT "File $name has been downloaded.\n";
 			last;
 		}else{
-			`wget -t 0 -O $outdir/$name $hash_path{$i}[0]`;
+			`wget -t 0 -O $outdir/$name $url`;
 		}
 	}
 }
@@ -106,7 +112,9 @@ for my $i(@b){
 			last;
 		}else{
 			for my $j(0..$#{$hash_path{$i}}){#循环每个文件
-				my $name=(split /\//,$hash_path{$i}[$j])[-1];
+				my @tmp=split /\//,$hash_path{$i}[$j];
+				my $url=join("/",@tmp[0..$#tmp-1]);
+				my $name=$tmp[-1];
 				my $file_md5;#下载的文件的MD5值
 				while(1){
 					if(-e "$outdir/$name"){
@@ -118,7 +126,7 @@ for my $i(@b){
 						$cat .=" $outdir/$name";
 						last;
 					}else{
-						`wget -t 0 -O $outdir/$name $hash_path{$i}[$j]`;
+						`wget -t 0 -O $outdir/$name $url`;
 					}
 				}
 			}
@@ -127,15 +135,13 @@ for my $i(@b){
 	}
 }
 
-
+print STDOUT "Congratulations! All databases have been downloaded.\n";
 
 sub CheckDir{
 	my $file = shift;
 	unless( -d $file ){
 		if( -d dirname($file) && -w dirname($file) ){system("mkdir $file");}
-		else{
-		print STDERR "$file does not exist and can't be built\n";exit 1;
-		}
+		else{print STDERR "$file not exists and cannot be built\n";exit 1;}
 	}
 	return 1;
 }

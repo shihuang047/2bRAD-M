@@ -3,7 +3,8 @@
   conda activate 2bRAD-M-20201225
 
 2.download genome, database and example data
-  perl tools/Download_2bRADTagDB.pl your_database_path(default:./2B-RAD-M-ref_db/)
+  for NCBI database: perl tools/Download_2bRADTagDB_NCBI.pl your_database_path(default:./2B-RAD-M-ref_db_NCBI/)
+  for GTDB database: perl tools/Download_2bRADTagDB_GTDB.pl your_database_path(default:./2B-RAD-M-ref_db_GTDB/)
 
 3.test the Pipline with sample data
   1)simulate_50:
