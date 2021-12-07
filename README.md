@@ -77,6 +77,7 @@ About 20 minutes are required for loading the 2b-Tag-DB. For a typical gut metag
    You can specify $your_database_path locally (By default, `$your_database_path=./2B-RAD-M-ref_db_NCBI/` or `$your_database_path=./2B-RAD-M-ref_db_GTDB/`) and run the script as following:  
    
    `perl tools/Download_2bRADTagDB_NCBI.pl $your_database_path` or
+   
    `perl tools/Download_2bRADTagDB_GTDB.pl $your_database_path`
    
    It usually can take around 30 mins to save all files in the `$your_database_path`, but it still depends on your internet connenction speed and stability.
