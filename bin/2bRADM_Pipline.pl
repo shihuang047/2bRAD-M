@@ -361,8 +361,10 @@ if($qual eq "yes"){#是否需要定性
 	}
 	print STDOUT "###Qualitative completed, ",`date`;
 }else{
-	print STDOUT "All Done, ",`date`;
-	exit 0;
+	if($quan eq "no"){
+		print STDOUT "All Done, ",`date`;
+		exit 0;
+	}
 }
 
 
@@ -405,8 +407,16 @@ while(<LIST>){
 			open SA,">$outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list" or die "cannot open $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list\n";
 			print SA "$sample_name\t$outdir/enzyme_result/$sample_name.$hs_site2enzyme{$i}.fa.gz\n";
 			close SA;
-			&execute("perl $Bin/CreateQuanDatabase_2bRAD.pl -l $outdir/quantitative_sdb/$sample_name/sdb.list -e $database/$hs_site2enzyme{$i}.species.fa.gz -s $i -t $level2 -o $outdir/quantitative_sdb/$sample_name/database -r no 1> /dev/null");#建库
-			&execute("perl $Bin/CalculateRelativeAbundance_Single2bEnzyme.pl -l $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list -d $outdir/quantitative_sdb/$sample_name/database -t $level2 -s $i -o $outdir/quantitative -g 0 -v yes 1> /dev/null");#定量 不对gscore进行过滤
+			if(-e "$outdir/quantitative_sdb/$sample_name/sdb.list"){#检测sdb.list文件
+				my $file_wc="$outdir/quantitative_sdb/$sample_name/sdb.list";
+				my @wc_l=split /\s+/,`wc -l $file_wc`;#检测sdb.list文件 基因组行数
+				if($wc_l[0]!=0){#list中有基因组
+					&execute("perl $Bin/CreateQuanDatabase_2bRAD.pl -l $outdir/quantitative_sdb/$sample_name/sdb.list -e $database/$hs_site2enzyme{$i}.species.fa.gz -s $i -t $level2 -o $outdir/quantitative_sdb/$sample_name/database -r no 1> /dev/null");#建库
+					&execute("perl $Bin/CalculateRelativeAbundance_Single2bEnzyme.pl -l $outdir/quantitative_sdb/$sample_name/$hs_site2enzyme{$i}.list -d $outdir/quantitative_sdb/$sample_name/database -t $level2 -s $i -o $outdir/quantitative -g 0 -v yes 1> /dev/null");#定量 不对gscore进行过滤
+				}else{#list中无基因组
+					print STDERR "[ERROR] $outdir/quantitative_sdb/$sample_name/sdb.list does not exist or the content is empty, Sample $sample_name could not be quantitatively analyzed.\n";
+				}
+			}
 			$pm->finish;
 		}
 	}
