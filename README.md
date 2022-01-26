@@ -2,8 +2,8 @@
 ----------------------------
 This repository provides the 2bRAD-M computational pipeline for microbiome analysis, which has been partially presented in the paper below:
 
-[Species-resolved sequencing of low-biomass microbiomes by 2bRAD-M](https://www.biorxiv.org/content/10.1101/2020.12.01.405647v1) by Zheng Sun, Shi Huang, Pengfei Zhu, Lam Tzehau, Helen Zhao, Jia Lv, Rongchao Zhang, Lisha Zhou, Qianya Niu, Xiuping Wang, Meng Zhang, Gongchao Jing, Zhenmin Bao, Jiquan Liu, Shi Wang, Jian Xu. BioRxiv, doi: https://doi.org/10.1101/2020.12.01.405647
-
+[Species-resolved sequencing of low-biomass or degraded microbiomes using 2bRAD-M](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-021-02576-9
+) by Zheng Sun, Shi Huang, Pengfei Zhu, Lam Tzehau, Helen Zhao, Jia Lv, Rongchao Zhang, Lisha Zhou, Qianya Niu, Xiuping Wang, Meng Zhang, Gongchao Jing, Zhenmin Bao, Jiquan Liu, Shi Wang, Jian Xu. Genome Biology, doi: https://doi.org/10.1186/s13059-021-02576-9
 ## How it works
  The principle of 2bRAD-M on microbiome analyses:  
  (1) reliable enzyme-digested sequence tags can be derived that are specific to high-resolution taxa (e.g., species or strain) yet universally applicable for a broad range or all of bacterial, archaeal and fungal genomes;  
