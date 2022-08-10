@@ -25,7 +25,7 @@ sub usage{
 		
 	PARAMETERS
 		-l <file> A list file indicating the sample_id and corresponding output files from the last step.
-		          e.g., sample_id<tab>qualitative/$sample_id/$sample_id.combine.xls
+		          e.g., sample_id<tab>qualitative/sample_id/sample_id.combine.xls
 		-o <dir>  The output directory
 		-p <str>  The output prefix
 	OPTIONS
